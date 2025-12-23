@@ -1,0 +1,66 @@
+{
+  "id": "evt_1IkvA9LkdCRSWJJx0iFuOBBj",
+  "object": "event",
+  "api_version": "2020-08-27",
+  "created": 1619615909,
+  "data": {
+    "object": {
+      "id": "cs_test_a1JiUKGSTVK4BE5033xrRjZERfGvTOUmCzXA3YlAJU1DPCo9QGgEipVK2i",
+      "object": "checkout.session",
+      "after_expiration": null,
+      "allow_promotion_codes": null,
+      "amount_subtotal": 2000,
+      "amount_total": 2000,
+      "automatic_tax": {
+        "enabled": false,
+        "status": null
+      },
+      "billing_address_collection": null,
+      "cancel_url": "https://example.com/cancel",
+      "client_reference_id": null,
+      "consent": null,
+      "consent_collection": null,
+      "currency": "usd",
+      "customer": "cus_JEjUGVj5tpnQjv",
+      "customer_creation": "always",
+      "customer_details": {
+        "email": "customer@example.com",
+        "phone": null,
+        "tax_exempt": "none",
+        "tax_ids": null
+      },
+      "customer_email": null,
+      "expires_at": 1619702309,
+      "livemode": false,
+      "locale": null,
+      "metadata": {},
+      "mode": "payment",
+      "payment_intent": "pi_1IkvA8LkdCRSWJJxHBUQFbZz",
+      "payment_method_options": {},
+      "payment_method_types": [
+        "card"
+      ],
+      "payment_status": "paid",
+      "recovered_from": null,
+      "setup_intent": null,
+      "shipping": null,
+      "shipping_address_collection": null,
+      "submit_type": null,
+      "subscription": null,
+      "success_url": "https://example.com/success",
+      "total_details": {
+        "amount_discount": 0,
+        "amount_shipping": 0,
+        "amount_tax": 0
+      },
+      "url": null
+    }
+  },
+  "livemode": false,
+  "pending_webhooks": 1,
+  "request": {
+    "id": null,
+    "idempotency_key": null
+  },
+  "type": "checkout.session.completed"
+}

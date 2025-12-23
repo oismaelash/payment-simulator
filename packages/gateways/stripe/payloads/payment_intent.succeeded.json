@@ -1,0 +1,74 @@
+{
+  "id": "evt_1234567890",
+  "object": "event",
+  "api_version": "2020-08-27",
+  "created": 1589204864,
+  "data": {
+    "object": {
+      "id": "pi_1234567890",
+      "object": "payment_intent",
+      "amount": 2000,
+      "amount_capturable": 0,
+      "amount_received": 2000,
+      "application": null,
+      "application_fee_amount": null,
+      "canceled_at": null,
+      "cancellation_reason": null,
+      "capture_method": "automatic",
+      "charges": {
+        "object": "list",
+        "data": [
+          {
+            "id": "ch_1234567890",
+            "object": "charge",
+            "amount": 2000,
+            "balance_transaction": "txn_1234567890",
+            "payment_method": "pm_1234567890",
+            "payment_method_details": {
+              "card": {
+                "brand": "visa",
+                "checks": {
+                  "address_line1_check": null,
+                  "address_postal_code_check": null,
+                  "cvc_check": "pass"
+                },
+                "country": "US",
+                "exp_month": 8,
+                "exp_year": 2024,
+                "fingerprint": "abc123",
+                "funding": "credit",
+                "installments": null,
+                "last4": "4242",
+                "network": "visa",
+                "three_d_secure": null,
+                "wallet": null
+              },
+              "type": "card"
+            },
+            "status": "succeeded"
+          }
+        ]
+      },
+      "client_secret": "pi_1234567890_secret_1234567890",
+      "confirmation_method": "automatic",
+      "created": 1589204864,
+      "currency": "usd",
+      "customer": "cus_1234567890",
+      "description": "Payment for invoice 123",
+      "last_payment_error": null,
+      "livemode": false,
+      "metadata": {},
+      "next_action": null,
+      "payment_method": "pm_1234567890",
+      "payment_method_types": [
+        "card"
+      ],
+      "receipt_email": null,
+      "setup_future_usage": null,
+      "shipping": null,
+      "status": "succeeded"
+    }
+  },
+  "livemode": false,
+  "type": "payment_intent.succeeded"
+}

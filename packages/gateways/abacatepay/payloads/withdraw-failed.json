@@ -1,0 +1,20 @@
+{
+  "id": "log_12345abcdef",
+  "data": {
+    "transaction": {
+      "id": "tran_789012",
+      "status": "CANCELLED",
+      "devMode": false,
+      "receiptUrl": "https://abacatepay.com/receipt/tran_789012",
+      "kind": "WITHDRAW",
+      "amount": 3000,
+      "platformFee": 0,
+      "externalId": "withdraw-5678",
+      "createdAt": "2025-03-24T22:00:20.772Z",
+      "updatedAt": "2025-03-24T22:05:20.772Z"
+    }
+  },
+  "devMode": false,
+  "event": "withdraw.failed"
+}
+

@@ -1,0 +1,80 @@
+{
+  "id": "evt_1234567890",
+  "object": "event",
+  "api_version": "2020-08-27",
+  "created": 1589204864,
+  "data": {
+    "object": {
+      "id": "sub_sched_1234567890",
+      "object": "subscription_schedule",
+      "canceled_at": 1589204864,
+      "completed_at": null,
+      "created": 1589204864,
+      "current_phase": {
+        "end_date": 1591881600,
+        "start_date": 1589204864,
+        "trial_end": null
+      },
+      "customer": "cus_1234567890",
+      "default_settings": {
+        "application_fee_percent": null,
+        "automatic_tax": {
+          "enabled": false
+        },
+        "billing_cycle_anchor": "automatic",
+        "billing_thresholds": null,
+        "collection_method": "charge_automatically",
+        "default_payment_method": null,
+        "default_source": null,
+        "description": null,
+        "invoice_settings": {
+          "account_tax_ids": null,
+          "days_until_due": null
+        },
+        "transfer_data": null
+      },
+      "end_behavior": "release",
+      "livemode": false,
+      "metadata": {},
+      "phases": [
+        {
+          "application_fee_percent": null,
+          "automatic_tax": {
+            "enabled": false
+          },
+          "billing_cycle_anchor": null,
+          "collection_method": null,
+          "coupon": null,
+          "currency": "usd",
+          "default_payment_method": null,
+          "default_tax_rates": [],
+          "end_date": 1591881600,
+          "invoice_settings": {
+            "account_tax_ids": null,
+            "days_until_due": null
+          },
+          "items": [
+            {
+              "billing_thresholds": null,
+              "price": "price_1234567890",
+              "quantity": 1,
+              "tax_rates": []
+            }
+          ],
+          "metadata": {},
+          "proration_behavior": "create_prorations",
+          "start_date": 1589204864,
+          "transfer_data": null,
+          "trial_end": null
+        }
+      ],
+      "released_at": null,
+      "released_subscription": null,
+      "status": "not_started",
+      "subscription": "sub_1234567890"
+    }
+  },
+  "livemode": false,
+  "type": "subscription_schedule.aborted"
+}
+

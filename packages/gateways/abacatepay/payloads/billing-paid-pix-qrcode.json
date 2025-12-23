@@ -1,0 +1,18 @@
+{
+  "id": "log_12345abcdef",
+  "data": {
+    "payment": {
+      "amount": 1000,
+      "fee": 80,
+      "method": "PIX"
+    },
+    "pixQrCode": {
+      "amount": 1000,
+      "id": "pix_char_mXTWdj6sABWnc4uL2Rh1r6tb",
+      "kind": "PIX",
+      "status": "PAID"
+    }
+  },
+  "devMode": false,
+  "event": "billing.paid"
+}

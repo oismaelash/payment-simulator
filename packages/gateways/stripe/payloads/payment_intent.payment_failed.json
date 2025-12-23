@@ -1,0 +1,60 @@
+{
+  "id": "evt_1234567890",
+  "object": "event",
+  "api_version": "2020-08-27",
+  "created": 1589204864,
+  "data": {
+    "object": {
+      "id": "pi_1234567890",
+      "object": "payment_intent",
+      "amount": 2000,
+      "amount_capturable": 0,
+      "amount_received": 0,
+      "application": null,
+      "application_fee_amount": null,
+      "canceled_at": null,
+      "cancellation_reason": null,
+      "capture_method": "automatic",
+      "charges": {
+        "object": "list",
+        "data": [],
+        "has_more": false,
+        "total_count": 0,
+        "url": "/v1/charges?payment_intent=pi_1234567890"
+      },
+      "client_secret": "pi_1234567890_secret_1234567890",
+      "confirmation_method": "automatic",
+      "created": 1589204864,
+      "currency": "usd",
+      "customer": "cus_1234567890",
+      "description": "Payment for invoice 123",
+      "last_payment_error": {
+        "charge": null,
+        "code": "card_declined",
+        "decline_code": "generic_decline",
+        "doc_url": "https://stripe.com/docs/error-codes/card-declined",
+        "message": "Your card was declined.",
+        "param": null,
+        "payment_method": {
+          "id": "pm_1234567890",
+          "object": "payment_method"
+        },
+        "type": "card_error"
+      },
+      "livemode": false,
+      "metadata": {},
+      "next_action": null,
+      "payment_method": "pm_1234567890",
+      "payment_method_types": [
+        "card"
+      ],
+      "receipt_email": null,
+      "setup_future_usage": null,
+      "shipping": null,
+      "status": "requires_payment_method"
+    }
+  },
+  "livemode": false,
+  "type": "payment_intent.payment_failed"
+}
+

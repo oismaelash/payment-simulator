@@ -1,0 +1,18 @@
+{
+  "name": "payment-simulator",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "packages/gateways/*"
+  ],
+  "scripts": {
+    "dev": "npm run build --workspace=@payment-simulator/core && npm run build --workspace=@payment-simulator/gateway-stripe && npm run build --workspace=@payment-simulator/gateway-abacatepay && npm run dev --workspace=@payment-simulator/ui",
+    "build": "npm run build --workspace=@payment-simulator/core && npm run build --workspace=@payment-simulator/gateway-stripe && npm run build --workspace=@payment-simulator/gateway-abacatepay && npm run build --workspace=@payment-simulator/ui",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}
+
