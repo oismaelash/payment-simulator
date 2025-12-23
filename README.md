@@ -2,6 +2,14 @@
 
 An open-source developer tool for simulating payment gateway webhooks locally. This MVP focuses on simulating successful payment webhooks with user-configured webhook URLs.
 
+## Quickstart (Docker)
+
+```bash
+curl -fsSL https://paymentsimulator.com/install | bash
+```
+
+Then open `http://localhost:4001`.
+
 ## Features
 
 - **Gateway-agnostic core**: Understands only the canonical `payment.succeeded` event

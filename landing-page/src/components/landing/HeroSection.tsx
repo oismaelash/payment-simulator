@@ -57,23 +57,14 @@ const HeroSection = () => {
             <div className="p-6 text-left">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <span className="text-primary">$</span>
-                <span className="text-foreground">npx payment-simulator start</span>
+                <span className="text-foreground">curl -fsSL https://paymentsimulator.com/install | bash</span>
               </div>
               <div className="mt-4 space-y-1 text-sm">
                 <p className="text-muted-foreground">
-                  <span className="text-success">✓</span> Starting Payment Simulator v1.2.0
-                </p>
-                <p className="text-muted-foreground">
-                  <span className="text-success">✓</span> Pix gateway initialized
-                </p>
-                <p className="text-muted-foreground">
-                  <span className="text-success">✓</span> Credit card gateway initialized
-                </p>
-                <p className="text-muted-foreground">
-                  <span className="text-success">✓</span> Webhook sender ready
+                  <span className="text-success">✓</span> Starting Payment Simulator v1.0.0
                 </p>
                 <p className="text-foreground mt-4">
-                  <span className="text-primary">→</span> Dashboard: <span className="text-primary underline">http://localhost:4000</span>
+                  <span className="text-primary">→</span> Dashboard: <span className="text-primary underline">http://localhost:4001</span>
                 </p>
               </div>
             </div>
