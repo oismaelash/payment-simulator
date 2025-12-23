@@ -2,12 +2,6 @@
 
 import { useState, useEffect } from "react";
 import ResponseViewModal from "./ResponseViewModal";
-import {
-  getStoredLogs,
-  saveLogs,
-  clearStoredLogs,
-  mergeLogs,
-} from "@/lib/logs-storage";
 
 interface WebhookLog {
   gateway: string;
@@ -30,39 +24,21 @@ export default function Logs() {
   const fetchLogs = async () => {
     setLoading(true);
     try {
-      // Load stored logs first
-      const storedLogs = getStoredLogs();
-
       // Fetch from server
       const response = await fetch("/api/logs");
       const data = await response.json();
       const serverLogs = data.logs || [];
-
-      // Merge server logs with stored logs
-      const mergedLogs = mergeLogs(serverLogs, storedLogs);
-
-      // Save merged logs back to localStorage
-      saveLogs(mergedLogs);
-
-      setLogs(mergedLogs);
+      setLogs(serverLogs);
     } catch (error) {
       console.error("Failed to fetch logs", error);
-      // Fallback to stored logs if server fails
-      const storedLogs = getStoredLogs();
-      setLogs(storedLogs);
+      setLogs([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    // Load logs from localStorage immediately on mount
-    const storedLogs = getStoredLogs();
-    if (storedLogs.length > 0) {
-      setLogs(storedLogs);
-    }
-
-    // Then fetch from server and merge
+    // Fetch logs from server
     fetchLogs();
 
     // Listen for refresh events
@@ -78,15 +54,10 @@ export default function Logs() {
       // Clear server logs
       await fetch("/api/logs", { method: "POST" });
       
-      // Clear stored logs
-      clearStoredLogs();
-      
       // Update UI
       setLogs([]);
     } catch (error) {
       console.error("Failed to reset logs", error);
-      // Still clear localStorage even if server fails
-      clearStoredLogs();
       setLogs([]);
     } finally {
       setResetting(false);

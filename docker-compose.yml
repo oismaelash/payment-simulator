@@ -1,0 +1,49 @@
+version: '3.8'
+
+# Para configurar a porta da UI, defina a variável de ambiente UI_PORT antes de executar docker-compose:
+# export UI_PORT=3000
+# docker-compose up -d
+# Ou crie um arquivo .env na raiz do projeto com: UI_PORT=3000
+
+services:
+  ui:
+    image: ghcr.io/oismaelash/payment-simulator-ui:latest
+    container_name: payment-simulator-ui
+    ports:
+      - "${UI_PORT:-4001}:${UI_PORT:-4001}"
+    environment:
+      - NODE_ENV=production
+      - SQLITE_PATH=/data/payment-simulator.sqlite
+      - PORT=${UI_PORT:-4001}
+    volumes:
+      - payment_simulator_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "sh", "-c", "node -e \"require('http').get('http://localhost:' + (process.env.PORT || 4001) + '/api/meta', (r) => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))\""]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  webhook-received:
+    build:
+      context: ./webhook-received
+      dockerfile: Dockerfile
+    container_name: payment-simulator-webhook-receiver
+    ports:
+      - "4002:4002"
+    environment:
+      - NODE_ENV=production
+      - PORT=4002
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:4002/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  payment_simulator_data:
+    driver: local
+

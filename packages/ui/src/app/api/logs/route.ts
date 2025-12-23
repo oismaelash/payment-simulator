@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
-import { state } from "@/state";
+import { webhookLogs } from "@/db/sqlite";
 
 export async function GET() {
-  const logs = state.getLogs();
+  const logs = webhookLogs.getAll();
   return NextResponse.json({ logs });
 }
 
 export async function POST() {
-  state.clearLogs();
+  webhookLogs.clear();
   return NextResponse.json({ success: true });
 }
 

@@ -2,16 +2,11 @@
 
 import { useState, useEffect } from "react";
 import PayloadEditorModal from "./PayloadEditorModal";
+import type { WebhookTemplate } from "@/lib/templates";
 import {
-  getTemplatesForEvent,
-  saveTemplate,
-  deleteTemplate,
-  type WebhookTemplate,
-} from "@/lib/templates";
-import {
-  getGatewayConfig,
   buildWebhookUrl,
   headersArrayToRecord,
+  headersRecordToArray,
 } from "@/lib/webhook-config";
 
 interface GatewayMeta {
@@ -112,10 +107,17 @@ export default function EventSimulator() {
           setMessage({ type: "error", text: "Failed to load payload" });
         });
 
-      // Load templates for this gateway+event
-      const eventTemplates = getTemplatesForEvent(selectedGateway, selectedEvent);
-      setTemplates(eventTemplates);
-      setSelectedTemplateId("");
+      // Load templates for this gateway+event from server
+      fetch(`/api/templates?gateway=${selectedGateway}&event=${selectedEvent}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setTemplates(data.templates || []);
+          setSelectedTemplateId("");
+        })
+        .catch(() => {
+          setTemplates([]);
+          setSelectedTemplateId("");
+        });
     } else {
       setBasePayload("");
       setCurrentPayload(null);
@@ -167,15 +169,11 @@ export default function EventSimulator() {
     setMessage(null);
 
     try {
-      // Get webhook config for selected gateway
-      const gatewayConfig = getGatewayConfig(selectedGateway);
-      const finalUrl = buildWebhookUrl(gatewayConfig);
-      const customHeaders = headersArrayToRecord(gatewayConfig.headers);
-
-      // Fallback to legacy webhookUrl if new config is empty
-      const savedWebhookUrl = finalUrl || localStorage.getItem("webhookUrl")?.trim() || "";
-
-      if (!savedWebhookUrl) {
+      // Get webhook config for selected gateway from server
+      const configResponse = await fetch(`/api/config/webhook?gateway=${selectedGateway}`);
+      const configData = await configResponse.json();
+      
+      if (!configData.urlBase && !configData.url) {
         setMessage({
           type: "error",
           text: "Webhook URL not configured. Please configure it in Webhook Configuration panel.",
@@ -184,22 +182,40 @@ export default function EventSimulator() {
         return;
       }
 
+      // Build config object from server response
+      const gatewayConfig = {
+        urlBase: configData.urlBase || configData.url || "",
+        queryParams: [] as Array<{ key: string; value: string }>,
+        headers: headersRecordToArray(configData.headers || {}),
+      };
+
+      // Parse URL to extract query params if url is provided
+      if (configData.url && !configData.urlBase) {
+        try {
+          const url = new URL(configData.url);
+          url.searchParams.forEach((value, key) => {
+            gatewayConfig.queryParams.push({ key, value });
+          });
+          gatewayConfig.urlBase = `${url.protocol}//${url.host}${url.pathname}`;
+        } catch {
+          gatewayConfig.urlBase = configData.url;
+        }
+      }
+
+      const finalUrl = buildWebhookUrl(gatewayConfig);
+      const customHeaders = headersArrayToRecord(gatewayConfig.headers);
+
       const body: any = {
         gateway: selectedGateway,
         event: selectedEvent,
       };
 
-      // Always send webhookUrl from client config (client is source of truth)
-      // Use finalUrl if available, otherwise fallback to legacy
+      // Always send webhookUrl from server config
       if (finalUrl) {
         body.webhookUrl = finalUrl;
-      } else if (savedWebhookUrl) {
-        // Legacy fallback
-        body.webhookUrl = savedWebhookUrl;
       }
 
-      // Always send extraHeaders from client config (even if empty object)
-      // This allows clearing old headers by saving empty headers
+      // Always send extraHeaders from server config (even if empty object)
       body.extraHeaders = customHeaders;
 
       // If currentPayload exists (edited or from template), send it as override
@@ -240,7 +256,7 @@ export default function EventSimulator() {
     setSelectedTemplateId(""); // Clear template selection when manually editing
   };
 
-  const handleSaveTemplate = () => {
+  const handleSaveTemplate = async () => {
     if (!templateName.trim() || !currentPayload) {
       setMessage({ type: "error", text: "Please enter a template name" });
       return;
@@ -248,18 +264,30 @@ export default function EventSimulator() {
 
     setSavingTemplate(true);
     try {
-      saveTemplate({
-        name: templateName.trim(),
-        gateway: selectedGateway,
-        event: selectedEvent,
-        payload: currentPayload,
+      const response = await fetch("/api/templates", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: templateName.trim(),
+          gateway: selectedGateway,
+          event: selectedEvent,
+          payload: currentPayload,
+        }),
       });
-      // Reload templates
-      const eventTemplates = getTemplatesForEvent(selectedGateway, selectedEvent);
-      setTemplates(eventTemplates);
-      setTemplateName("");
-      setShowSaveTemplateDialog(false);
-      setMessage({ type: "success", text: "Template saved successfully" });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Reload templates
+        const templatesResponse = await fetch(`/api/templates?gateway=${selectedGateway}&event=${selectedEvent}`);
+        const templatesData = await templatesResponse.json();
+        setTemplates(templatesData.templates || []);
+        setTemplateName("");
+        setShowSaveTemplateDialog(false);
+        setMessage({ type: "success", text: "Template saved successfully" });
+      } else {
+        setMessage({ type: "error", text: data.error || "Failed to save template" });
+      }
     } catch (error) {
       setMessage({ type: "error", text: "Failed to save template" });
     } finally {
@@ -267,14 +295,28 @@ export default function EventSimulator() {
     }
   };
 
-  const handleDeleteTemplate = () => {
+  const handleDeleteTemplate = async () => {
     if (!selectedTemplateId) return;
     if (confirm("Are you sure you want to delete this template?")) {
-      deleteTemplate(selectedTemplateId);
-      const eventTemplates = getTemplatesForEvent(selectedGateway, selectedEvent);
-      setTemplates(eventTemplates);
-      setSelectedTemplateId("");
-      setMessage({ type: "success", text: "Template deleted" });
+      try {
+        const response = await fetch(`/api/templates?id=${selectedTemplateId}`, {
+          method: "DELETE",
+        });
+
+        if (response.ok) {
+          // Reload templates
+          const templatesResponse = await fetch(`/api/templates?gateway=${selectedGateway}&event=${selectedEvent}`);
+          const templatesData = await templatesResponse.json();
+          setTemplates(templatesData.templates || []);
+          setSelectedTemplateId("");
+          setMessage({ type: "success", text: "Template deleted" });
+        } else {
+          const data = await response.json();
+          setMessage({ type: "error", text: data.error || "Failed to delete template" });
+        }
+      } catch (error) {
+        setMessage({ type: "error", text: "Failed to delete template" });
+      }
     }
   };
 

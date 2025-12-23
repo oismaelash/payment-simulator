@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { simulate } from "@payment-simulator/core";
-import { state } from "@/state";
+import { webhookConfig, webhookLogs } from "@/db/sqlite";
 import { getGatewayAdapter } from "@/gateways";
 
 export async function POST(request: NextRequest) {
@@ -31,17 +31,20 @@ export async function POST(request: NextRequest) {
 
     // Client is source of truth: always prefer client-provided config when available
     let webhookUrl: string | null = null;
+    let urlBase: string | null = null;
 
     if (typeof webhookUrlFromClient === "string" && webhookUrlFromClient.trim().length > 0) {
       // Client provided URL - use it and update server state
       webhookUrl = webhookUrlFromClient.trim();
-      state.setWebhookUrlForGateway(gateway, webhookUrl);
+      urlBase = webhookUrl; // Default urlBase to url if not provided separately
+      // Note: We'll save this after we get the full config
     } else {
       // Fallback to server state if client didn't provide
-      webhookUrl =
-        state.getWebhookUrlForGateway(gateway) ||
-        state.getWebhookUrl() ||
-        null;
+      const config = webhookConfig.get(gateway);
+      if (config) {
+        webhookUrl = config.url;
+        urlBase = config.urlBase;
+      }
     }
 
     if (!webhookUrl) {
@@ -61,10 +64,16 @@ export async function POST(request: NextRequest) {
     ) {
       // Client provided headers (even if empty object) - use them and update server state
       extraHeaders = extraHeadersFromClient;
-      state.setWebhookHeadersForGateway(gateway, extraHeaders);
+      // Save config to DB if client provided URL or headers
+      if (webhookUrlFromClient) {
+        webhookConfig.set(gateway, webhookUrl, urlBase || webhookUrl, extraHeaders);
+      }
     } else {
       // Fallback to server state if client didn't provide
-      extraHeaders = state.getWebhookHeadersForGateway(gateway);
+      const config = webhookConfig.get(gateway);
+      if (config) {
+        extraHeaders = config.headers;
+      }
     }
 
     let result;
@@ -231,7 +240,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Log the result
-    state.addLog({
+    webhookLogs.add({
       gateway,
       event,
       timestamp: new Date().toISOString(),

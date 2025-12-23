@@ -2,12 +2,10 @@
 
 import { useState, useEffect } from "react";
 import {
-  getWebhookConfig,
-  getGatewayConfig,
-  saveGatewayConfig,
-  migrateLegacyUrlForGateways,
   buildWebhookUrl,
   type WebhookGatewayConfig,
+  headersRecordToArray,
+  headersArrayToRecord,
 } from "@/lib/webhook-config";
 
 interface GatewayMeta {
@@ -37,8 +35,6 @@ export default function WebhookConfig() {
         setGateways(data.gateways);
         const gatewayNames = Object.keys(data.gateways);
         if (gatewayNames.length > 0) {
-          // Migrate legacy config if needed
-          migrateLegacyUrlForGateways(gatewayNames);
           // Select first gateway
           setSelectedGateway(gatewayNames[0]);
         }
@@ -51,8 +47,49 @@ export default function WebhookConfig() {
   // Load config when gateway changes
   useEffect(() => {
     if (selectedGateway) {
-      const gatewayConfig = getGatewayConfig(selectedGateway);
-      setConfig(gatewayConfig);
+      // Fetch config from server
+      fetch(`/api/config/webhook?gateway=${selectedGateway}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.urlBase) {
+            // Parse URL to extract base and query params
+            try {
+              const url = new URL(data.urlBase);
+              const queryParams: Array<{ key: string; value: string }> = [];
+              url.searchParams.forEach((value, key) => {
+                queryParams.push({ key, value });
+              });
+              
+              setConfig({
+                urlBase: `${url.protocol}//${url.host}${url.pathname}`,
+                queryParams,
+                headers: headersRecordToArray(data.headers || {}),
+              });
+            } catch {
+              // If URL parsing fails, use as-is
+              setConfig({
+                urlBase: data.urlBase || "",
+                queryParams: [],
+                headers: headersRecordToArray(data.headers || {}),
+              });
+            }
+          } else {
+            // No config found, use defaults
+            setConfig({
+              urlBase: "",
+              queryParams: [],
+              headers: [],
+            });
+          }
+        })
+        .catch(() => {
+          // On error, use defaults
+          setConfig({
+            urlBase: "",
+            queryParams: [],
+            headers: [],
+          });
+        });
       
       // Sync gateway selection with Event Simulator
       window.dispatchEvent(
@@ -128,21 +165,13 @@ export default function WebhookConfig() {
     setMessage(null);
 
     try {
-      // Save to localStorage
-      saveGatewayConfig(selectedGateway, config);
-
       // Build final URL with query params
       const finalUrl = buildWebhookUrl(config);
 
       // Convert headers array to record
-      const headersRecord: Record<string, string> = {};
-      for (const header of config.headers) {
-        if (header.key.trim()) {
-          headersRecord[header.key.trim()] = header.value.trim();
-        }
-      }
+      const headersRecord = headersArrayToRecord(config.headers);
 
-      // Sync with server
+      // Save to server
       const response = await fetch("/api/config/webhook", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

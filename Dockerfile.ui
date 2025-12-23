@@ -1,0 +1,78 @@
+# Multi-stage build for UI (Next.js monorepo)
+# Para construir a imagem: docker build -f Dockerfile.ui -t payment-simulator-ui:latest .
+FROM node:20-alpine AS base
+
+# Install build dependencies for better-sqlite3
+RUN apk add --no-cache python3 make g++
+
+# Install dependencies only when needed
+FROM base AS deps
+WORKDIR /app
+
+# Copy package files
+COPY package.json package-lock.json ./
+COPY packages/core/package.json ./packages/core/
+COPY packages/ui/package.json ./packages/ui/
+COPY packages/gateways/stripe/package.json ./packages/gateways/stripe/
+COPY packages/gateways/abacatepay/package.json ./packages/gateways/abacatepay/
+COPY packages/gateways/asaas/package.json ./packages/gateways/asaas/
+COPY packages/gateways/mercadopago/package.json ./packages/gateways/mercadopago/
+COPY packages/gateways/pagarme/package.json ./packages/gateways/pagarme/
+
+# Install dependencies
+RUN npm ci
+
+# Build stage
+FROM base AS builder
+WORKDIR /app
+
+# Copy dependencies
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/packages ./packages
+
+# Copy source code
+COPY package.json package-lock.json tsconfig.json ./
+COPY packages/core ./packages/core
+COPY packages/ui ./packages/ui
+COPY packages/gateways ./packages/gateways
+
+# Build all packages
+RUN npm run build
+
+# Production stage
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV SQLITE_PATH=/data/payment-simulator.sqlite
+ENV PORT=4001
+ENV NEXT_TELEMETRY_DISABLED=1
+# PORT can be overridden via docker-compose environment variable
+
+# Install runtime dependencies for better-sqlite3
+RUN apk add --no-cache libc6-compat
+
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Create data directory for SQLite
+RUN mkdir -p /data && chown -R nextjs:nodejs /data
+
+# Copy built application
+COPY --from=builder --chown=nextjs:nodejs /app/packages/ui/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/packages/ui/.next/static ./packages/ui/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/packages/ui/public ./packages/ui/public
+
+# Set correct permissions
+RUN chown -R nextjs:nodejs /app
+
+USER nextjs
+
+EXPOSE 4001
+# PORT is configurable via environment variable at runtime
+
+ENV HOSTNAME="0.0.0.0"
+
+CMD ["node", "packages/ui/server.js"]
+

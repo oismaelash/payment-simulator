@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { state } from "@/state";
+import { webhookConfig } from "@/db/sqlite";
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,23 +17,20 @@ export async function POST(request: NextRequest) {
       }
 
       // url is the final URL (with query params), urlBase is optional
-      state.setWebhookUrlForGateway(gateway, url);
-
-      // Save headers if provided
-      if (headers && typeof headers === "object" && !Array.isArray(headers)) {
-        state.setWebhookHeadersForGateway(gateway, headers);
-      }
+      const finalUrlBase = urlBase || url;
+      webhookConfig.set(gateway, url, finalUrlBase, headers || {});
 
       return NextResponse.json({
         success: true,
         gateway,
         url,
-        urlBase: urlBase || url,
+        urlBase: finalUrlBase,
         headers: headers || {},
       });
     } else if (url && typeof url === "string") {
-      // Legacy format (backward compatibility)
-      state.setWebhookUrl(url);
+      // Legacy format (backward compatibility) - save to a default gateway
+      // We'll use "default" as the gateway name for legacy URLs
+      webhookConfig.set("default", url, url, {});
       return NextResponse.json({ success: true, url });
     } else {
       return NextResponse.json(
@@ -56,20 +53,27 @@ export async function GET(request: NextRequest) {
 
     if (gateway) {
       // Return config for specific gateway
-      const url = state.getWebhookUrlForGateway(gateway);
-      const headers = state.getWebhookHeadersForGateway(gateway);
-      return NextResponse.json({
-        gateway,
-        url,
-        headers,
-      });
+      const config = webhookConfig.get(gateway);
+      if (config) {
+        return NextResponse.json({
+          gateway,
+          url: config.url,
+          urlBase: config.urlBase,
+          headers: config.headers,
+        });
+      } else {
+        return NextResponse.json({
+          gateway,
+          url: null,
+          urlBase: null,
+          headers: {},
+        });
+      }
     } else {
-      // Return all gateway configs (for debugging)
-      // Note: This requires access to gateway list, which we don't have here
-      // For now, return legacy URL if exists
-      const legacyUrl = state.getWebhookUrl();
+      // Return all gateway configs
+      const allConfigs = webhookConfig.getAll();
       return NextResponse.json({
-        legacyUrl,
+        configs: allConfigs,
         message: "Use ?gateway=<name> to get specific gateway config",
       });
     }
