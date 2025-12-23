@@ -1,24 +1,24 @@
-import { readFileSync } from "fs";
+import { existsSync, readFileSync, readdirSync } from "fs";
 import { resolve } from "path";
 import type { GatewayAdapter } from "@payment-simulator/core";
 import { CANONICAL_EVENT } from "@payment-simulator/core";
 
 function getRepoRoot(): string {
+  // When running via npm workspaces, INIT_CWD points to the original invocation directory (repo root).
+  // Fallback for local execution from packages/ui.
   return process.env.INIT_CWD ?? resolve(process.cwd(), "../..");
+}
+
+function getAbacatePayPayloadsDir(): string {
+  return resolve(getRepoRoot(), "packages/gateways/abacatepay/payloads");
 }
 
 /**
  * AbacatePay gateway adapter
- * Supports: billing.paid variants (PIX QR Code, PIX Billing) and withdraw events
+ * Supports any event that has a corresponding payload JSON file in:
+ *   packages/gateways/abacatepay/payloads/{event}.json
  */
 export class AbacatePayAdapter implements GatewayAdapter {
-  private readonly supportedEvents = [
-    "billing.paid.pix.qrcode",
-    "billing.paid.pix.billing",
-    "withdraw.done",
-    "withdraw.failed",
-  ];
-
   private headers: Record<string, string> = {};
 
   constructor() {
@@ -41,32 +41,28 @@ export class AbacatePayAdapter implements GatewayAdapter {
   }
 
   getSupportedEvents(): string[] {
-    return this.supportedEvents;
+    try {
+      const dir = getAbacatePayPayloadsDir();
+      if (!existsSync(dir)) return [];
+
+      return readdirSync(dir, { withFileTypes: true })
+        .filter((d) => d.isFile())
+        .map((d) => d.name)
+        .filter((name) => name.endsWith(".json"))
+        .filter((name) => name !== ".gitkeep")
+        .map((name) => name.replace(/\.json$/, ""))
+        .sort((a, b) => a.localeCompare(b));
+    } catch {
+      return [];
+    }
   }
 
   getEventDefinition(event: string) {
-    if (!this.supportedEvents.includes(event)) {
-      return null;
-    }
-
-    // Map event names to payload file names
-    const payloadFileMap: Record<string, string> = {
-      "billing.paid.pix.qrcode": "billing.paid.pix.qrcode.json",
-      "billing.paid.pix.billing": "billing.paid.pix.billing.json",
-      "withdraw.done": "withdraw.done.json",
-      "withdraw.failed": "withdraw.failed.json",
-    };
-
-    const payloadFileName = payloadFileMap[event];
-    if (!payloadFileName) {
-      return null;
-    }
-
     const payloadFile = resolve(
-      getRepoRoot(),
-      "packages/gateways/abacatepay/payloads",
-      payloadFileName
+      getAbacatePayPayloadsDir(),
+      `${event}.json`
     );
+    if (!existsSync(payloadFile)) return null;
 
     return {
       canonicalEvent: CANONICAL_EVENT,
