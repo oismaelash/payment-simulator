@@ -1,76 +1,76 @@
-# Guia de Contribuição
+# Contributing Guide
 
-Este guia explica como adicionar um novo gateway de pagamento ou atualizar um gateway existente no Payment Gateway Webhook Simulator.
+This guide explains how to add a new payment gateway or update an existing gateway in the Payment Gateway Webhook Simulator.
 
-## Visão Geral da Arquitetura
+## Architecture Overview
 
-O projeto segue uma arquitetura modular com separação clara de responsabilidades:
+The project follows a modular architecture with clear separation of responsibilities:
 
-- **Core (`packages/core`)**: Define o contrato `GatewayAdapter` e a função `simulate()` que envia webhooks. O core é gateway-agnóstico e entende apenas o evento canônico `payment.succeeded`.
+- **Core (`packages/core`)**: Defines the `GatewayAdapter` contract and the `simulate()` function that sends webhooks. The core is gateway-agnostic and understands only the canonical `payment.succeeded` event.
 
-- **Gateways (`packages/gateways/*`)**: Cada gateway implementa um adapter que:
-  - Lista os eventos suportados
-  - Mapeia eventos para arquivos de payload
-  - Fornece headers padrão
-  - Opcionalmente define o método HTTP (`GET` ou `POST`)
+- **Gateways (`packages/gateways/*`)**: Each gateway implements an adapter that:
+  - Lists supported events
+  - Maps events to payload files
+  - Provides default headers
+  - Optionally defines the HTTP method (`GET` or `POST`)
 
-- **UI (`packages/ui`)**: Mantém um registry de adapters em `packages/ui/src/gateways.ts` e fornece uma interface web para configurar e simular webhooks.
+- **UI (`packages/ui`)**: Maintains an adapter registry in `packages/ui/src/gateways.ts` and provides a web interface for configuring and simulating webhooks.
 
-### Contrato GatewayAdapter
+### GatewayAdapter Contract
 
-Todo gateway deve implementar a interface `GatewayAdapter`:
+Every gateway must implement the `GatewayAdapter` interface:
 
 ```typescript
 interface GatewayAdapter {
   getSupportedEvents(): string[];
   getEventDefinition(event: string): {
     canonicalEvent: CanonicalEvent;
-    payloadFile: string;  // Caminho absoluto para o arquivo JSON
+    payloadFile: string;  // Absolute path to the JSON file
     headers: Record<string, string>;
-    method?: "GET" | "POST";  // Opcional, padrão é "POST"
+    method?: "GET" | "POST";  // Optional, default is "POST"
   } | null;
 }
 ```
 
-## Checklist Rápido: Adicionar Novo Gateway
+## Quick Checklist: Adding a New Gateway
 
-- [ ] Criar estrutura de diretórios em `packages/gateways/<gateway>/`
-- [ ] Criar `events.ts` implementando `GatewayAdapter`
-- [ ] Criar `headers.json` com headers padrão
-- [ ] Criar `index.ts` exportando o adapter
-- [ ] Criar `package.json` com dependências e scripts
-- [ ] Criar `tsconfig.json` estendendo o config raiz
-- [ ] Adicionar arquivos de payload em `payloads/`
-- [ ] Registrar o adapter em `packages/ui/src/gateways.ts`
-- [ ] Atualizar scripts `dev` e `build` no `package.json` raiz
-- [ ] (Opcional) Atualizar documentação no `README.md`
+- [ ] Create directory structure in `packages/gateways/<gateway>/`
+- [ ] Create `events.ts` implementing `GatewayAdapter`
+- [ ] Create `headers.json` with default headers
+- [ ] Create `index.ts` exporting the adapter
+- [ ] Create `package.json` with dependencies and scripts
+- [ ] Create `tsconfig.json` extending the root config
+- [ ] Add payload files in `payloads/`
+- [ ] Register the adapter in `packages/ui/src/gateways.ts`
+- [ ] Update `dev` and `build` scripts in root `package.json`
+- [ ] (Optional) Update documentation in `README.md`
 
-## Adicionar um Novo Gateway
+## Adding a New Gateway
 
-### Passo 1: Criar Estrutura de Diretórios
+### Step 1: Create Directory Structure
 
-Crie a seguinte estrutura em `packages/gateways/<gateway>/`:
+Create the following structure in `packages/gateways/<gateway>/`:
 
 ```
 packages/gateways/<gateway>/
-├── events.ts          # Implementação do adapter
-├── headers.json       # Headers padrão do gateway
-├── index.ts          # Exporta o adapter
-├── package.json      # Configuração do pacote
-├── tsconfig.json     # Configuração TypeScript
-└── payloads/         # Arquivos JSON de payload
+├── events.ts          # Adapter implementation
+├── headers.json       # Gateway default headers
+├── index.ts          # Exports the adapter
+├── package.json      # Package configuration
+├── tsconfig.json     # TypeScript configuration
+└── payloads/         # JSON payload files
     └── <event>.json
 ```
 
-**Exemplo**: Para adicionar um gateway chamado "paypal":
+**Example**: To add a gateway called "paypal":
 
 ```bash
 mkdir -p packages/gateways/paypal/payloads
 ```
 
-### Passo 2: Criar `package.json`
+### Step 2: Create `package.json`
 
-Crie um `package.json` seguindo o padrão dos outros gateways:
+Create a `package.json` following the pattern of other gateways:
 
 ```json
 {
@@ -91,11 +91,11 @@ Crie um `package.json` seguindo o padrão dos outros gateways:
 }
 ```
 
-**Importante**: O nome do pacote deve seguir o padrão `@payment-simulator/gateway-<nome>`.
+**Important**: The package name must follow the pattern `@payment-simulator/gateway-<name>`.
 
-### Passo 3: Criar `tsconfig.json`
+### Step 3: Create `tsconfig.json`
 
-Crie um `tsconfig.json` que estende a configuração raiz:
+Create a `tsconfig.json` that extends the root configuration:
 
 ```json
 {
@@ -109,9 +109,9 @@ Crie um `tsconfig.json` que estende a configuração raiz:
 }
 ```
 
-### Passo 4: Criar `headers.json`
+### Step 4: Create `headers.json`
 
-Crie um arquivo `headers.json` com os headers padrão que serão enviados com todos os webhooks deste gateway:
+Create a `headers.json` file with default headers that will be sent with all webhooks from this gateway:
 
 ```json
 {
@@ -120,17 +120,17 @@ Crie um arquivo `headers.json` com os headers padrão que serão enviados com to
 }
 ```
 
-**Nota**: Se o gateway não requer headers específicos, use um objeto vazio `{}`.
+**Note**: If the gateway doesn't require specific headers, use an empty object `{}`.
 
-### Passo 5: Implementar o Adapter (`events.ts`)
+### Step 5: Implement the Adapter (`events.ts`)
 
-Existem dois padrões principais para implementar o adapter:
+There are two main patterns for implementing the adapter:
 
-#### Padrão 1: Eventos Dinâmicos (Recomendado)
+#### Pattern 1: Dynamic Events (Recommended)
 
-Este padrão lê automaticamente os arquivos `.json` do diretório `payloads/` e usa o nome do arquivo (sem extensão) como nome do evento. É usado por Stripe, Asaas, Pagar.me e Mercado Pago.
+This pattern automatically reads `.json` files from the `payloads/` directory and uses the file name (without extension) as the event name. Used by Stripe, Asaas, Pagar.me, and Mercado Pago.
 
-**Exemplo** (`packages/gateways/paypal/events.ts`):
+**Example** (`packages/gateways/paypal/events.ts`):
 
 ```typescript
 import { existsSync, readFileSync, readdirSync } from "fs";
@@ -139,8 +139,8 @@ import type { GatewayAdapter } from "@payment-simulator/core";
 import { CANONICAL_EVENT } from "@payment-simulator/core";
 
 function getRepoRoot(): string {
-  // Quando executado via npm workspaces, INIT_CWD aponta para o diretório raiz do repo.
-  // Fallback para execução local.
+  // When executed via npm workspaces, INIT_CWD points to the repo root directory.
+  // Fallback for local execution.
   return process.env.INIT_CWD ?? resolve(process.cwd(), "../..");
 }
 
@@ -150,7 +150,7 @@ function getPayPalPayloadsDir(): string {
 
 /**
  * PayPal gateway adapter
- * Suporta qualquer evento que tenha um arquivo JSON correspondente em:
+ * Supports any event that has a corresponding JSON file in:
  *   packages/gateways/paypal/payloads/{event}.json
  */
 export class PayPalAdapter implements GatewayAdapter {
@@ -169,7 +169,7 @@ export class PayPalAdapter implements GatewayAdapter {
       const headersContent = readFileSync(headersPath, "utf-8");
       this.headers = JSON.parse(headersContent);
     } catch (error) {
-      // Se headers.json não existir ainda, usa objeto vazio
+      // If headers.json doesn't exist yet, use empty object
       this.headers = {};
     }
   }
@@ -207,11 +207,11 @@ export class PayPalAdapter implements GatewayAdapter {
 }
 ```
 
-#### Padrão 2: Mapeamento Explícito
+#### Pattern 2: Explicit Mapping
 
-Use este padrão quando os nomes dos eventos não correspondem diretamente aos nomes dos arquivos. É usado por AbacatePay.
+Use this pattern when event names don't directly correspond to file names. Used by AbacatePay.
 
-**Exemplo** (`packages/gateways/abacatepay/events.ts`):
+**Example** (`packages/gateways/abacatepay/events.ts`):
 
 ```typescript
 import { readFileSync } from "fs";
@@ -259,7 +259,7 @@ export class AbacatePayAdapter implements GatewayAdapter {
       return null;
     }
 
-    // Mapeia nomes de eventos para nomes de arquivos
+    // Maps event names to file names
     const payloadFileMap: Record<string, string> = {
       "billing.paid.pix.qrcode": "billing.paid.pix.qrcode.json",
       "billing.paid.pix.billing": "billing.paid.pix.billing.json",
@@ -287,11 +287,11 @@ export class AbacatePayAdapter implements GatewayAdapter {
 }
 ```
 
-#### Suporte a Métodos GET e POST
+#### Support for GET and POST Methods
 
-Por padrão, todos os webhooks são enviados como `POST` com JSON no body. Se o gateway usar IPN (Instant Payment Notification) ou redirecionamentos que requerem `GET`, você pode especificar o método:
+By default, all webhooks are sent as `POST` with JSON in the body. If the gateway uses IPN (Instant Payment Notification) or redirects that require `GET`, you can specify the method:
 
-**Exemplo** (Mercado Pago usa `GET` para eventos IPN):
+**Example** (Mercado Pago uses `GET` for IPN events):
 
 ```typescript
 getEventDefinition(event: string) {
@@ -301,8 +301,8 @@ getEventDefinition(event: string) {
   );
   if (!existsSync(payloadFile)) return null;
 
-  // Eventos IPN usam GET com querystring
-  // Outros eventos usam POST com JSON body
+  // IPN events use GET with querystring
+  // Other events use POST with JSON body
   const method: "GET" | "POST" = event.startsWith("ipn.") ? "GET" : "POST";
 
   return {
@@ -314,21 +314,21 @@ getEventDefinition(event: string) {
 }
 ```
 
-**Nota**: Quando `method: "GET"` é especificado, o payload JSON é convertido automaticamente em query string na URL.
+**Note**: When `method: "GET"` is specified, the JSON payload is automatically converted to a query string in the URL.
 
-### Passo 6: Criar `index.ts`
+### Step 6: Create `index.ts`
 
-Crie um arquivo `index.ts` que exporta o adapter:
+Create an `index.ts` file that exports the adapter:
 
 ```typescript
 export * from "./events";
 ```
 
-### Passo 7: Adicionar Arquivos de Payload
+### Step 7: Add Payload Files
 
-Adicione arquivos JSON no diretório `payloads/` com os payloads reais do gateway. O nome do arquivo deve corresponder ao nome do evento (sem extensão `.json`).
+Add JSON files in the `payloads/` directory with the actual gateway payloads. The file name must match the event name (without the `.json` extension).
 
-**Exemplo**: Para o evento `payment.capture.completed`, crie `packages/gateways/paypal/payloads/payment.capture.completed.json`:
+**Example**: For the `payment.capture.completed` event, create `packages/gateways/paypal/payloads/payment.capture.completed.json`:
 
 ```json
 {
@@ -347,11 +347,11 @@ Adicione arquivos JSON no diretório `payloads/` com os payloads reais do gatewa
 }
 ```
 
-**Importante**: Os payloads são enviados exatamente como estão (sem modificação ou validação).
+**Important**: Payloads are sent exactly as-is (without modification or validation).
 
-### Passo 8: Registrar o Gateway na UI
+### Step 8: Register the Gateway in the UI
 
-Edite `packages/ui/src/gateways.ts` e adicione o import e registro do novo adapter:
+Edit `packages/ui/src/gateways.ts` and add the import and registration of the new adapter:
 
 ```typescript
 import { StripeAdapter } from "@payment-simulator/gateway-stripe";
@@ -359,7 +359,7 @@ import { AbacatePayAdapter } from "@payment-simulator/gateway-abacatepay";
 import { AsaasAdapter } from "@payment-simulator/gateway-asaas";
 import { MercadoPagoAdapter } from "@payment-simulator/gateway-mercadopago";
 import { PagarmeAdapter } from "@payment-simulator/gateway-pagarme";
-import { PayPalAdapter } from "@payment-simulator/gateway-paypal"; // Novo
+import { PayPalAdapter } from "@payment-simulator/gateway-paypal"; // New
 import type { GatewayAdapter } from "@payment-simulator/core";
 
 export const gatewayAdapters: Record<string, GatewayAdapter> = {
@@ -368,15 +368,15 @@ export const gatewayAdapters: Record<string, GatewayAdapter> = {
   asaas: new AsaasAdapter(),
   mercadopago: new MercadoPagoAdapter(),
   pagarme: new PagarmeAdapter(),
-  paypal: new PayPalAdapter(), // Novo
+  paypal: new PayPalAdapter(), // New
 };
 ```
 
-**Importante**: A chave no objeto `gatewayAdapters` será usada como identificador do gateway na UI e nas APIs.
+**Important**: The key in the `gatewayAdapters` object will be used as the gateway identifier in the UI and APIs.
 
-### Passo 9: Atualizar Scripts de Build
+### Step 9: Update Build Scripts
 
-Edite o `package.json` na raiz do projeto e adicione o novo gateway aos scripts `dev` e `build`:
+Edit the root `package.json` and add the new gateway to the `dev` and `build` scripts:
 
 ```json
 {
@@ -387,70 +387,70 @@ Edite o `package.json` na raiz do projeto e adicione o novo gateway aos scripts 
 }
 ```
 
-### Passo 10: Testar
+### Step 10: Test
 
-1. **Instalar dependências**:
+1. **Install dependencies**:
    ```bash
    npm install
    ```
 
-2. **Buildar o projeto**:
+2. **Build the project**:
    ```bash
    npm run build
    ```
 
-3. **Iniciar o servidor de desenvolvimento**:
+3. **Start the development server**:
    ```bash
    npm run dev
    ```
 
-4. **Verificar na UI**:
-   - Acesse `http://localhost:3000`
-   - O novo gateway deve aparecer na lista de gateways
-   - Os eventos devem aparecer na lista de eventos do gateway
+4. **Verify in the UI**:
+   - Access `http://localhost:4001`
+   - The new gateway should appear in the gateway list
+   - Events should appear in the gateway's event list
 
-5. **Verificar via API**:
-   - Acesse `http://localhost:3000/api/meta`
-   - O novo gateway e seus eventos devem aparecer na resposta JSON
+5. **Verify via API**:
+   - Access `http://localhost:4001/api/meta`
+   - The new gateway and its events should appear in the JSON response
 
-### Passo 11: (Opcional) Atualizar Documentação
+### Step 11: Update Documentation
 
-Se você adicionou um gateway público conhecido, considere atualizar a seção "Supported Gateways" no `README.md` para documentar os eventos suportados.
+If you added a well-known public gateway, consider updating the "Supported Gateways" section in `README.md` to document the supported events.
 
-## Atualizar um Gateway Existente
+## Updating an Existing Gateway
 
-### Adicionar Novos Eventos
+### Adding New Events
 
-#### Para Gateways com Eventos Dinâmicos
+#### For Gateways with Dynamic Events
 
-Simplesmente adicione um novo arquivo JSON em `packages/gateways/<gateway>/payloads/`:
+Simply add a new JSON file in `packages/gateways/<gateway>/payloads/`:
 
 ```bash
-# Exemplo: adicionar evento payment.refunded para Stripe
+# Example: add payment.refunded event for Stripe
 touch packages/gateways/stripe/payloads/payment.refunded.json
 ```
 
-Edite o arquivo com o payload real do evento. O evento será automaticamente detectado na próxima vez que o servidor iniciar.
+Edit the file with the actual event payload. The event will be automatically detected the next time the server starts.
 
-#### Para Gateways com Mapeamento Explícito
+#### For Gateways with Explicit Mapping
 
-1. Adicione o arquivo de payload em `payloads/`
-2. Adicione o nome do evento ao array `supportedEvents` em `events.ts`
-3. Adicione o mapeamento no objeto `payloadFileMap` em `getEventDefinition()`
+1. Add the payload file in `payloads/`
+2. Add the event name to the `supportedEvents` array in `events.ts`
+3. Add the mapping in the `payloadFileMap` object in `getEventDefinition()`
 
-**Exemplo** (adicionar evento `billing.refunded` ao AbacatePay):
+**Example** (adding `billing.refunded` event to AbacatePay):
 
 ```typescript
-// 1. Adicionar ao array de eventos suportados
+// 1. Add to supported events array
 private readonly supportedEvents = [
   "billing.paid.pix.qrcode",
   "billing.paid.pix.billing",
   "withdraw.done",
   "withdraw.failed",
-  "billing.refunded", // Novo
+  "billing.refunded", // New
 ];
 
-// 2. Adicionar ao mapeamento
+// 2. Add to mapping
 getEventDefinition(event: string) {
   // ...
   const payloadFileMap: Record<string, string> = {
@@ -458,28 +458,28 @@ getEventDefinition(event: string) {
     "billing.paid.pix.billing": "billing.paid.pix.billing.json",
     "withdraw.done": "withdraw.done.json",
     "withdraw.failed": "withdraw.failed.json",
-    "billing.refunded": "billing.refunded.json", // Novo
+    "billing.refunded": "billing.refunded.json", // New
   };
   // ...
 }
 ```
 
-### Atualizar Headers
+### Updating Headers
 
-Edite o arquivo `headers.json` do gateway:
+Edit the gateway's `headers.json` file:
 
 ```json
 {
-  "X-Custom-Header": "novo-valor",
-  "X-Outro-Header": "outro-valor"
+  "X-Custom-Header": "new-value",
+  "X-Another-Header": "another-value"
 }
 ```
 
-Os headers são recarregados quando o adapter é instanciado (a cada inicialização do servidor).
+Headers are reloaded when the adapter is instantiated (on each server startup).
 
-### Alterar Método HTTP (GET/POST)
+### Changing HTTP Method (GET/POST)
 
-Edite o método `getEventDefinition()` em `events.ts` para retornar `method: "GET"` ou `method: "POST"` conforme necessário:
+Edit the `getEventDefinition()` method in `events.ts` to return `method: "GET"` or `method: "POST"` as needed:
 
 ```typescript
 getEventDefinition(event: string) {
@@ -488,81 +488,80 @@ getEventDefinition(event: string) {
     canonicalEvent: CANONICAL_EVENT,
     payloadFile,
     headers: { ...this.headers },
-    method: "GET", // ou "POST"
+    method: "GET", // or "POST"
   };
 }
 ```
 
-### Dicas de Debug
+### Debugging Tips
 
-1. **Verificar eventos suportados**:
-   - Acesse `http://localhost:3000/api/meta` para ver todos os gateways e eventos
-   - Ou verifique diretamente no código chamando `adapter.getSupportedEvents()`
+1. **Check supported events**:
+   - Access `http://localhost:4001/api/meta` to see all gateways and events
+   - Or check directly in code by calling `adapter.getSupportedEvents()`
 
-2. **Testar envio de webhook**:
-   - Use a UI em `http://localhost:3000`
-   - Configure a URL do webhook
-   - Selecione o gateway e evento
-   - Clique em "Send Webhook"
-   - Verifique os logs na seção "Logs"
+2. **Test webhook sending**:
+   - Use the UI at `http://localhost:4001`
+   - Configure the webhook URL
+   - Select the gateway and event
+   - Click "Send Webhook"
+   - Check the logs in the "Logs" section
 
-3. **Verificar logs**:
-   - Os logs mostram gateway, evento, timestamp, status HTTP e sucesso/falha
-   - Clique em "Refresh" para atualizar os logs
+3. **Check logs**:
+   - Logs show gateway, event, timestamp, HTTP status, and success/failure
+   - Click "Refresh" to update logs
 
-4. **Verificar build**:
-   - Execute `npm run build` e verifique se não há erros de TypeScript
-   - Execute `npm run type-check` para verificar tipos sem buildar
+4. **Check build**:
+   - Run `npm run build` and verify there are no TypeScript errors
+   - Run `npm run type-check` to check types without building
 
-5. **Verificar caminhos de arquivos**:
-   - Certifique-se de que `getRepoRoot()` está retornando o caminho correto
-   - Use caminhos absolutos para `payloadFile` usando `resolve()`
+5. **Check file paths**:
+   - Make sure `getRepoRoot()` is returning the correct path
+   - Use absolute paths for `payloadFile` using `resolve()`
 
-## Estrutura de Arquivos de Referência
+## Reference File Structure
 
-Para referência, aqui está a estrutura completa de um gateway existente (Stripe):
+For reference, here's the complete structure of an existing gateway (Stripe):
 
 ```
 packages/gateways/stripe/
-├── events.ts                    # Implementação do adapter
-├── headers.json                 # Headers padrão
-├── index.ts                     # Exporta o adapter
-├── package.json                 # Configuração do pacote
-├── tsconfig.json                # Configuração TypeScript
-└── payloads/                    # Arquivos de payload
+├── events.ts                    # Adapter implementation
+├── headers.json                 # Default headers
+├── index.ts                     # Exports the adapter
+├── package.json                 # Package configuration
+├── tsconfig.json                # TypeScript configuration
+└── payloads/                    # Payload files
     ├── charge.succeeded.json
     ├── payment_intent.succeeded.json
-    └── ... (outros eventos)
+    └── ... (other events)
 ```
 
-## Perguntas Frequentes
+## Frequently Asked Questions
 
-**P: Posso modificar os payloads antes de enviá-los?**  
-R: Não. Os payloads são enviados exatamente como estão nos arquivos JSON, sem modificação. Se você precisar de modificações dinâmicas, considere usar a funcionalidade `payloadOverride` na API.
+**Q: Can I modify payloads before sending them?**  
+A: No. Payloads are sent exactly as they are in the JSON files, without modification. If you need dynamic modifications, consider using the `payloadOverride` functionality in the API.
 
-**P: Como adiciono validação de assinatura de webhook?**  
-R: Os headers de assinatura devem ser configurados em `headers.json` ou via UI. O simulador não valida assinaturas - ele apenas as envia como parte do webhook.
+**Q: How do I add webhook signature validation?**  
+A: Signature headers should be configured in `headers.json` or via UI. The simulator doesn't validate signatures - it only sends them as part of the webhook.
 
-**P: Posso adicionar múltiplos gateways ao mesmo tempo?**  
-R: Sim, desde que cada um tenha um nome único e siga a estrutura descrita neste guia.
+**Q: Can I add multiple gateways at the same time?**  
+A: Yes, as long as each has a unique name and follows the structure described in this guide.
 
-**P: O que acontece se eu esquecer de atualizar os scripts de build?**  
-R: O novo gateway não será buildado automaticamente, mas você pode buildá-lo manualmente com `npm run build --workspace=@payment-simulator/gateway-<nome>`.
+**Q: What happens if I forget to update the build scripts?**  
+A: The new gateway won't be built automatically, but you can build it manually with `npm run build --workspace=@payment-simulator/gateway-<name>`.
 
-**P: Posso usar nomes de eventos com caracteres especiais?**  
-R: Sim, mas evite caracteres que possam causar problemas em nomes de arquivos (como `/`, `\`, `:`, `*`, `?`, `"`, `<`, `>`, `|`). Use pontos (`.`) ou hífens (`-`) como separadores.
+**Q: Can I use event names with special characters?**  
+A: Yes, but avoid characters that might cause problems in file names (such as `/`, `\`, `:`, `*`, `?`, `"`, `<`, `>`, `|`). Use dots (`.`) or hyphens (`-`) as separators.
 
-## Próximos Passos
+## Next Steps
 
-Após adicionar ou atualizar um gateway:
+After adding or updating a gateway:
 
-1. Teste todos os eventos suportados
-2. Verifique se os headers estão corretos
-3. Confirme que os payloads são válidos JSON
-4. Atualize a documentação se necessário
-5. Considere adicionar testes (se o projeto tiver suporte a testes no futuro)
+1. Test all supported events
+2. Verify headers are correct
+3. Confirm payloads are valid JSON
+4. Update documentation if necessary
+5. Consider adding tests (if the project has test support in the future)
 
 ---
 
-Se você tiver dúvidas ou encontrar problemas, abra uma issue no repositório do projeto.
-
+If you have questions or encounter issues, open an issue in the project repository.

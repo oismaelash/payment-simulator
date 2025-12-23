@@ -1,29 +1,29 @@
 # Webhook Receiver
 
-Um servidor HTTP simples para receber e logar webhooks, útil para testar o Payment Gateway Webhook Simulator.
+A simple HTTP server for receiving and logging webhooks, useful for testing the Payment Gateway Webhook Simulator.
 
-## Funcionalidades
+## Features
 
-- Recebe webhooks via `POST /webhook`
-- Loga headers e body (raw) no console
-- Sempre retorna `200 OK`
-- Health check em `GET /health`
+- Receives webhooks via `POST /webhook`
+- Logs headers and body (raw) to console
+- Always returns `200 OK`
+- Health check at `GET /health`
 
-## Instalação
+## Installation
 
 ```bash
 npm install
 ```
 
-## Como rodar
+## How to Run
 
 ```bash
 npm run dev
 ```
 
-O servidor iniciará na porta **4002** por padrão.
+The server will start on port **4002** by default.
 
-Para usar outra porta, defina a variável de ambiente `PORT`:
+To use a different port, set the `PORT` environment variable:
 
 ```bash
 PORT=3000 npm run dev
@@ -33,9 +33,9 @@ PORT=3000 npm run dev
 
 ### POST /webhook
 
-Recebe qualquer webhook e loga todas as informações.
+Receives any webhook and logs all information.
 
-**Resposta:**
+**Response:**
 ```json
 {
   "ok": true
@@ -46,33 +46,33 @@ Recebe qualquer webhook e loga todas as informações.
 
 Health check endpoint.
 
-**Resposta:**
+**Response:**
 ```json
 {
   "ok": true
 }
 ```
 
-## Como usar com o Simulador
+## How to Use with the Simulator
 
-1. Inicie este receiver:
+1. Start this receiver:
    ```bash
    cd webhook-received
    npm run dev
    ```
 
-2. No simulador (rodando em `http://localhost:4001`), configure a Webhook URL como:
+2. In the simulator (running at `http://localhost:4001`), configure the Webhook URL as:
    ```
    http://localhost:4002/webhook
    ```
 
-3. Dispare qualquer evento do simulador. Você verá os logs no console do receiver mostrando:
+3. Trigger any event from the simulator. You'll see logs in the receiver console showing:
    - Timestamp
-   - Method e Path
-   - Headers completos
+   - Method and Path
+   - Complete headers
    - Body (raw JSON)
 
-## Exemplo de Log
+## Example Log
 
 ```
 ================================================================================
@@ -98,16 +98,15 @@ Body:
 ================================================================================
 ```
 
-## Build para Produção
+## Build for Production
 
 ```bash
 npm run build
 npm start
 ```
 
-## Notas
+## Notes
 
-- Logs são apenas no `stdout` (console) - sem persistência
-- Não valida assinaturas de webhook - apenas recebe e loga
-- Aceita qualquer content-type
-
+- Logs are only in `stdout` (console) - no persistence
+- Does not validate webhook signatures - only receives and logs
+- Accepts any content-type

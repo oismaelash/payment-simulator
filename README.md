@@ -452,14 +452,14 @@ npm run type-check
 npm run build
 ```
 
-## Contribuindo
+## Contributing
 
-Quer adicionar um novo gateway de pagamento ou atualizar um existente? Consulte o [guia de contribuição](CONTRIBUTING.md) para instruções detalhadas sobre:
+Want to add a new payment gateway or update an existing one? Check out the [contributing guide](CONTRIBUTING.md) for detailed instructions on:
 
-- Como adicionar um novo gateway de pagamento
-- Como atualizar um gateway existente (adicionar eventos, headers, etc.)
-- Arquitetura do projeto e padrões de código
-- Dicas de debug e troubleshooting
+- How to add a new payment gateway
+- How to update an existing gateway (add events, headers, etc.)
+- Project architecture and code patterns
+- Debugging tips and troubleshooting
 
 ## Architecture Notes
 

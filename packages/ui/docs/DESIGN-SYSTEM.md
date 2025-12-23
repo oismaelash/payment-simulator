@@ -1,87 +1,87 @@
 # 🎨 Design System — Payment Simulator Landing Page
 
-Este documento descreve o sistema de design utilizado na landing page do **Payment Simulator**, uma ferramenta open-source para desenvolvedores.
+This document describes the design system used in the **Payment Simulator** landing page, an open-source tool for developers.
 
 ---
 
-## Índice
+## Table of Contents
 
-- [Filosofia de design](#filosofia-de-design)
-- [Paleta de cores](#paleta-de-cores)
-- [Tipografia](#tipografia)
-- [Espaçamento e layout](#espacamento-e-layout)
-- [Componentes](#componentes)
-  - [Botões](#botoes)
+- [Design Philosophy](#design-philosophy)
+- [Color Palette](#color-palette)
+- [Typography](#typography)
+- [Spacing and Layout](#spacing-and-layout)
+- [Components](#components)
+  - [Buttons](#buttons)
   - [Cards](#cards)
   - [Code block / terminal](#code-block--terminal)
   - [Badges](#badges)
   - [Navbar](#navbar)
-- [Efeitos visuais](#efeitos-visuais)
-- [Animações](#animacoes)
-- [Classes utilitárias](#classes-utilitarias)
-- [Referências de inspiração](#referencias-de-inspiracao)
-- [Checklist de consistência](#checklist-de-consistencia)
-- [Notas de implementação](#notas-de-implementacao)
+- [Visual Effects](#visual-effects)
+- [Animations](#animations)
+- [Utility Classes](#utility-classes)
+- [Inspiration References](#inspiration-references)
+- [Consistency Checklist](#consistency-checklist)
+- [Implementation Notes](#implementation-notes)
 
 ---
 
-## Filosofia de design
+## Design Philosophy
 
-| Princípio | Descrição |
+| Principle | Description |
 | --- | --- |
-| **Dark Mode First** | Interface escura como padrão, reduzindo fadiga visual |
-| **Developer-Centric** | Estética de ferramentas de desenvolvimento (terminais, CLI) |
-| **Minimalismo Técnico** | Sem ilustrações genéricas, foco em diagramas e código |
-| **Clareza** | Hierarquia visual clara, sem ruído |
-| **Consistência** | Componentes reutilizáveis com padrões definidos |
+| **Dark Mode First** | Dark interface as default, reducing visual fatigue |
+| **Developer-Centric** | Aesthetic of development tools (terminals, CLI) |
+| **Technical Minimalism** | No generic illustrations, focus on diagrams and code |
+| **Clarity** | Clear visual hierarchy, no noise |
+| **Consistency** | Reusable components with defined patterns |
 
 ---
 
-## Paleta de cores
+## Color Palette
 
-### Cores principais
+### Primary Colors
 
-| Token | HSL | Uso |
+| Token | HSL | Usage |
 | --- | --- | --- |
-| `--background` | `222 47% 6%` | Fundo principal da página |
-| `--foreground` | `210 40% 98%` | Texto principal |
-| `--primary` | `172 66% 50%` | Cor de destaque (teal/cyan) |
-| `--primary-foreground` | `222 47% 6%` | Texto sobre elementos primários |
+| `--background` | `222 47% 6%` | Main page background |
+| `--foreground` | `210 40% 98%` | Main text |
+| `--primary` | `172 66% 50%` | Accent color (teal/cyan) |
+| `--primary-foreground` | `222 47% 6%` | Text on primary elements |
 
-### Cores secundárias
+### Secondary Colors
 
-| Token | HSL | Uso |
+| Token | HSL | Usage |
 | --- | --- | --- |
-| `--secondary` | `217 33% 12%` | Elementos secundários, cards |
-| `--secondary-foreground` | `210 40% 98%` | Texto sobre secundários |
-| `--muted` | `217 33% 15%` | Fundos sutis |
-| `--muted-foreground` | `215 20% 55%` | Texto de menor importância |
+| `--secondary` | `217 33% 12%` | Secondary elements, cards |
+| `--secondary-foreground` | `210 40% 98%` | Text on secondary |
+| `--muted` | `217 33% 15%` | Subtle backgrounds |
+| `--muted-foreground` | `215 20% 55%` | Less important text |
 
-### Cores de interface
+### Interface Colors
 
-| Token | HSL | Uso |
+| Token | HSL | Usage |
 | --- | --- | --- |
-| `--border` | `217 33% 18%` | Bordas de cards e separadores |
-| `--ring` | `172 66% 50%` | Foco e estados de interação |
-| `--accent` | `217 33% 15%` | Destaques sutis |
-| `--accent-foreground` | `210 40% 98%` | Texto sobre accent |
+| `--border` | `217 33% 18%` | Card borders and separators |
+| `--ring` | `172 66% 50%` | Focus and interaction states |
+| `--accent` | `217 33% 15%` | Subtle highlights |
+| `--accent-foreground` | `210 40% 98%` | Text on accent |
 
-### Cores semânticas
+### Semantic Colors
 
-| Token | HSL | Uso |
+| Token | HSL | Usage |
 | --- | --- | --- |
-| `--destructive` | `0 63% 31%` | Ações destrutivas, erros |
-| `--success` | `142 76% 36%` | Sucesso, confirmações |
-| `--warning` | `38 92% 50%` | Avisos |
+| `--destructive` | `0 63% 31%` | Destructive actions, errors |
+| `--success` | `142 76% 36%` | Success, confirmations |
+| `--warning` | `38 92% 50%` | Warnings |
 
-### Cores especiais
+### Special Colors
 
-| Token | HSL | Uso |
+| Token | HSL | Usage |
 | --- | --- | --- |
-| `--code-bg` | `220 27% 10%` | Fundo de blocos de código |
-| `--glow` | `172 66% 50%` | Efeitos de brilho |
+| `--code-bg` | `220 27% 10%` | Code block background |
+| `--glow` | `172 66% 50%` | Glow effects |
 
-### HEX equivalentes (referência rápida)
+### HEX Equivalents (Quick Reference)
 
 - **Background**: `#0a0f1a`
 - **Foreground**: `#f8fafc`
@@ -95,37 +95,37 @@ Este documento descreve o sistema de design utilizado na landing page do **Payme
 
 ---
 
-## Tipografia
+## Typography
 
-### Famílias de fonte
+### Font Families
 
-| Tipo | Fonte | Fallback | Uso |
+| Type | Font | Fallback | Usage |
 | --- | --- | --- | --- |
-| `font-sans` | Inter | system-ui, sans-serif | Texto geral, títulos, parágrafos |
-| `font-mono` | JetBrains Mono | Consolas, monospace | Código, comandos CLI, terminal |
+| `font-sans` | Inter | system-ui, sans-serif | General text, titles, paragraphs |
+| `font-mono` | JetBrains Mono | Consolas, monospace | Code, CLI commands, terminal |
 
-### Escala tipográfica
+### Typographic Scale
 
-| Classe | Tamanho | Peso | Uso |
+| Class | Size | Weight | Usage |
 | --- | --- | --- | --- |
 | `text-5xl md:text-7xl` | 3rem / 4.5rem | `font-bold` | Hero headline |
-| `text-3xl md:text-4xl` | 1.875rem / 2.25rem | `font-bold` | Títulos de seção |
-| `text-xl` | 1.25rem | `font-normal` | Subtítulos |
-| `text-lg` | 1.125rem | `font-medium` | Títulos de cards |
-| `text-base` | 1rem | `font-normal` | Corpo de texto |
-| `text-sm` | 0.875rem | `font-normal` | Texto secundário, labels |
+| `text-3xl md:text-4xl` | 1.875rem / 2.25rem | `font-bold` | Section titles |
+| `text-xl` | 1.25rem | `font-normal` | Subtitles |
+| `text-lg` | 1.125rem | `font-medium` | Card titles |
+| `text-base` | 1rem | `font-normal` | Body text |
+| `text-sm` | 0.875rem | `font-normal` | Secondary text, labels |
 | `text-xs` | 0.75rem | `font-medium` | Badges, tags |
 
-### Line height
+### Line Height
 
-- **Títulos**: `leading-tight` (1.25)
-- **Corpo**: `leading-relaxed` (1.625)
+- **Titles**: `leading-tight` (1.25)
+- **Body**: `leading-relaxed` (1.625)
 
 ---
 
-## Espaçamento e layout
+## Spacing and Layout
 
-### Container principal
+### Main Container
 
 ```css
 .section-container {
@@ -150,66 +150,66 @@ Este documento descreve o sistema de design utilizado na landing page do **Payme
 }
 ```
 
-### Espaçamento vertical de seções
+### Section Vertical Spacing
 
-| Uso | Classe | Mobile | Desktop |
+| Usage | Class | Mobile | Desktop |
 | --- | --- | --- | --- |
-| Seção principal | `py-20 md:py-28` | 5rem | 7rem |
-| Seção secundária | `py-16 md:py-20` | 4rem | 5rem |
+| Main section | `py-20 md:py-28` | 5rem | 7rem |
+| Secondary section | `py-16 md:py-20` | 4rem | 5rem |
 
-### Gap padrão
+### Default Gap
 
-| Uso | Classe | Valor |
+| Usage | Class | Value |
 | --- | --- | --- |
-| Entre cards | `gap-6` ou `gap-8` | 1.5rem / 2rem |
-| Entre elementos inline | `gap-4` | 1rem |
-| Entre textos | `space-y-4` | 1rem |
+| Between cards | `gap-6` or `gap-8` | 1.5rem / 2rem |
+| Between inline elements | `gap-4` | 1rem |
+| Between texts | `space-y-4` | 1rem |
 
-### Border radius
+### Border Radius
 
-| Token / classe | Valor | Uso |
+| Token / Class | Value | Usage |
 | --- | --- | --- |
-| `--radius` | 0.75rem | Cards, botões, inputs |
-| `rounded-xl` | 0.75rem | Cards principais |
-| `rounded-lg` | 0.5rem | Elementos menores |
-| `rounded-full` | 9999px | Badges, avatares |
+| `--radius` | 0.75rem | Cards, buttons, inputs |
+| `rounded-xl` | 0.75rem | Main cards |
+| `rounded-lg` | 0.5rem | Smaller elements |
+| `rounded-full` | 9999px | Badges, avatars |
 
 ---
 
-## Componentes
+## Components
 
-### Botões
+### Buttons
 
-#### Variantes disponíveis
+#### Available Variants
 
-| Variante | Descrição | Uso |
+| Variant | Description | Usage |
 | --- | --- | --- |
-| `default` | Fundo primário, texto escuro | CTAs padrão |
-| `outline` | Borda, fundo transparente | Ações secundárias |
-| `hero` | Primário com efeito glow | CTA principal do hero |
-| `hero-outline` | Outline com hover glow | CTA secundário do hero |
-| `ghost` | Sem fundo, hover sutil | Navegação, links |
-| `link` | Estilo de link com underline | Links inline |
-| `destructive` | Vermelho para ações perigosas | Deletar, cancelar |
+| `default` | Primary background, dark text | Default CTAs |
+| `outline` | Border, transparent background | Secondary actions |
+| `hero` | Primary with glow effect | Hero main CTA |
+| `hero-outline` | Outline with hover glow | Hero secondary CTA |
+| `ghost` | No background, subtle hover | Navigation, links |
+| `link` | Link style with underline | Inline links |
+| `destructive` | Red for dangerous actions | Delete, cancel |
 
-#### Tamanhos
+#### Sizes
 
-| Size | Altura | Padding | Uso |
+| Size | Height | Padding | Usage |
 | --- | --- | --- | --- |
-| `sm` | 2.25rem | `px-3` | Botões compactos |
-| `default` | 2.5rem | `px-4 py-2` | Uso geral |
-| `lg` | 2.75rem | `px-8` | CTAs principais |
-| `icon` | 2.5rem × 2.5rem | — | Botões de ícone |
+| `sm` | 2.25rem | `px-3` | Compact buttons |
+| `default` | 2.5rem | `px-4 py-2` | General use |
+| `lg` | 2.75rem | `px-8` | Main CTAs |
+| `icon` | 2.5rem × 2.5rem | — | Icon buttons |
 
-#### Exemplos
+#### Examples
 
 ```tsx
-// CTA Principal
+// Main CTA
 <Button variant="hero" size="lg">
   Run locally in minutes
 </Button>
 
-// CTA Secundário
+// Secondary CTA
 <Button variant="hero-outline" size="lg">
   View on GitHub
 </Button>
@@ -234,15 +234,15 @@ Este documento descreve o sistema de design utilizado na landing page do **Payme
 }
 ```
 
-#### Estrutura (JSX)
+#### Structure (JSX)
 
 ```tsx
 <div className="bg-secondary border border-border rounded-xl p-6 hover:border-primary/30 transition-all">
   <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
     <Icon className="w-6 h-6 text-primary" />
   </div>
-  <h3 className="text-lg font-semibold mb-2">Título</h3>
-  <p className="text-muted-foreground text-sm">Descrição</p>
+  <h3 className="text-lg font-semibold mb-2">Title</h3>
+  <p className="text-muted-foreground text-sm">Description</p>
 </div>
 ```
 
@@ -266,7 +266,7 @@ Este documento descreve o sistema de design utilizado na landing page do **Payme
 
 ```tsx
 <div className="bg-code-bg border border-border rounded-xl overflow-hidden">
-  {/* Barra do terminal */}
+  {/* Terminal bar */}
   <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
     <div className="w-3 h-3 rounded-full bg-red-500" />
     <div className="w-3 h-3 rounded-full bg-yellow-500" />
@@ -274,7 +274,7 @@ Este documento descreve o sistema de design utilizado na landing page do **Payme
     <span className="ml-2 text-xs text-muted-foreground">terminal</span>
   </div>
 
-  {/* Conteúdo */}
+  {/* Content */}
   <div className="p-4 font-mono text-sm">
     <span className="text-muted-foreground">$</span>
     <span className="text-primary ml-2">npx payment-simulator start</span>
@@ -285,12 +285,12 @@ Este documento descreve o sistema de design utilizado na landing page do **Payme
 ### Badges
 
 ```tsx
-// Badge padrão
+// Default badge
 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
   Open Source
 </span>
 
-// Badge de status
+// Status badge
 <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-success/10 text-success">
   Free
 </span>
@@ -312,12 +312,12 @@ Este documento descreve o sistema de design utilizado na landing page do **Payme
 
 ---
 
-## Efeitos visuais
+## Visual Effects
 
-### Glow (brilho)
+### Glow (shine)
 
 ```css
-/* Glow padrão */
+/* Default glow */
 .glow {
   box-shadow:
     0 0 20px hsl(var(--glow) / 0.3),
@@ -325,7 +325,7 @@ Este documento descreve o sistema de design utilizado na landing page do **Payme
     0 0 60px hsl(var(--glow) / 0.1);
 }
 
-/* Glow pequeno */
+/* Small glow */
 .glow-sm {
   box-shadow:
     0 0 10px hsl(var(--glow) / 0.2),
@@ -333,7 +333,7 @@ Este documento descreve o sistema de design utilizado na landing page do **Payme
 }
 ```
 
-### Sombra de terminal
+### Terminal Shadow
 
 ```css
 .terminal-shadow {
@@ -343,17 +343,17 @@ Este documento descreve o sistema de design utilizado na landing page do **Payme
 }
 ```
 
-### Gradientes
+### Gradients
 
 ```css
-/* Gradiente de texto */
+/* Text gradient */
 .text-gradient {
   background: linear-gradient(135deg, hsl(var(--primary)), hsl(172 66% 70%));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Gradiente de fundo hero */
+/* Hero background gradient */
 .hero-gradient {
   background: radial-gradient(
     ellipse 80% 50% at 50% -20%,
@@ -363,7 +363,7 @@ Este documento descreve o sistema de design utilizado na landing page do **Payme
 }
 ```
 
-### Padrões de fundo
+### Background Patterns
 
 ```css
 /* Grid pattern */
@@ -393,9 +393,9 @@ Este documento descreve o sistema de design utilizado na landing page do **Payme
 
 ---
 
-## Animações
+## Animations
 
-### Keyframes definidos
+### Defined Keyframes
 
 ```css
 @keyframes float {
@@ -439,16 +439,16 @@ Este documento descreve o sistema de design utilizado na landing page do **Payme
 }
 ```
 
-### Classes de animação
+### Animation Classes
 
-| Classe | Duração | Uso |
+| Class | Duration | Usage |
 | --- | --- | --- |
-| `animate-float` | 3s infinite | Elementos flutuantes |
-| `animate-pulse-glow` | 2s infinite | Destaque pulsante |
-| `animate-slide-up` | 0.5s ease-out | Entrada de elementos |
-| `animate-fade-in` | 0.3s ease-out | Fade in suave |
+| `animate-float` | 3s infinite | Floating elements |
+| `animate-pulse-glow` | 2s infinite | Pulsing highlight |
+| `animate-slide-up` | 0.5s ease-out | Element entrance |
+| `animate-fade-in` | 0.3s ease-out | Smooth fade in |
 
-### Animações existentes (Tailwind)
+### Existing Animations (Tailwind)
 
 - `animate-accordion-down` / `animate-accordion-up`
 - `animate-scale-in` / `animate-scale-out`
@@ -456,23 +456,23 @@ Este documento descreve o sistema de design utilizado na landing page do **Payme
 
 ---
 
-## Classes utilitárias
+## Utility Classes
 
-### Texto
+### Text
 
 ```css
-/* Texto com gradiente */
+/* Gradient text */
 .text-gradient {
   @apply bg-gradient-to-r from-primary to-teal-300 bg-clip-text text-transparent;
 }
 
-/* Texto muted */
+/* Muted text */
 .text-muted {
   @apply text-muted-foreground;
 }
 ```
 
-### Interatividade
+### Interactivity
 
 ```css
 /* Hover scale */
@@ -480,7 +480,7 @@ Este documento descreve o sistema de design utilizado na landing page do **Payme
   @apply transition-transform duration-200 hover:scale-105;
 }
 
-/* Link com underline animado */
+/* Link with animated underline */
 .story-link {
   @apply relative inline-block;
 }
@@ -495,7 +495,7 @@ Este documento descreve o sistema de design utilizado na landing page do **Payme
 }
 ```
 
-### Focus states
+### Focus States
 
 ```css
 .focus-ring {
@@ -505,35 +505,35 @@ Este documento descreve o sistema de design utilizado na landing page do **Payme
 
 ---
 
-## Referências de inspiração
+## Inspiration References
 
-| Produto | Elemento inspirado |
+| Product | Inspired Element |
 | --- | --- |
-| Firebase Emulator Suite | UI de simulador, organização |
-| Stripe Docs | Clareza técnica, blocos de código |
-| Vercel Dashboard | Dark mode, minimalismo |
-| Linear | Efeitos de glow, animações suaves |
-| Raycast | Estética developer-first |
+| Firebase Emulator Suite | Simulator UI, organization |
+| Stripe Docs | Technical clarity, code blocks |
+| Vercel Dashboard | Dark mode, minimalism |
+| Linear | Glow effects, smooth animations |
+| Raycast | Developer-first aesthetic |
 
 ---
 
-## Checklist de consistência
+## Consistency Checklist
 
-- Usar sempre **`font-mono`** para código
-- Manter contraste mínimo de **4.5:1** para texto
-- Usar **`border-border`** para todas as bordas
-- Aplicar **`transition-all`** em elementos interativos
-- Usar **`rounded-xl`** para cards e **`rounded-lg`** para elementos menores
-- Manter espaçamento vertical consistente entre seções
+- Always use **`font-mono`** for code
+- Maintain minimum contrast of **4.5:1** for text
+- Use **`border-border`** for all borders
+- Apply **`transition-all`** on interactive elements
+- Use **`rounded-xl`** for cards and **`rounded-lg`** for smaller elements
+- Maintain consistent vertical spacing between sections
 
 ---
 
-## Notas de implementação
+## Implementation Notes
 
-- **Dark Mode**: este design é dark-first; não há light mode implementado.
-- **Responsividade**: componentes usam breakpoints `sm`, `md`, `lg`.
-- **Acessibilidade**: usar `sr-only` para labels de ícones.
-- **Performance**: animações usam `transform` e `opacity` para melhor uso de GPU.
+- **Dark Mode**: This design is dark-first; no light mode is implemented.
+- **Responsiveness**: Components use `sm`, `md`, `lg` breakpoints.
+- **Accessibility**: Use `sr-only` for icon labels.
+- **Performance**: Animations use `transform` and `opacity` for better GPU usage.
 
 ---
 
