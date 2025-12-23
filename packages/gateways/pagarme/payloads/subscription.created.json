@@ -1,0 +1,37 @@
+{
+  "id": "evt_123456798",
+  "type": "subscription.created",
+  "created_at": "2025-12-23T21:30:00Z",
+  "data": {
+    "id": "sub_123456789",
+    "code": "SUB-2025-001",
+    "plan_id": "plan_123456789",
+    "customer_id": "cus_123456794",
+    "status": "active",
+    "payment_method": "credit_card",
+    "currency": "BRL",
+    "amount": 9900,
+    "interval": "month",
+    "interval_count": 1,
+    "billing_at": "2026-01-23T21:30:00Z",
+    "created_at": "2025-12-23T21:30:00Z",
+    "customer": {
+      "id": "cus_123456794",
+      "name": "Fernanda Lima",
+      "email": "fernanda.lima@example.com",
+      "document": "44455566677",
+      "phone": {
+        "country_code": "55",
+        "area_code": "11",
+        "number": "976543210"
+      }
+    },
+    "plan": {
+      "id": "plan_123456789",
+      "name": "Plano Mensal",
+      "amount": 9900,
+      "interval": "month"
+    }
+  }
+}
+

@@ -1,0 +1,47 @@
+{
+  "id": "evt_123456797",
+  "type": "order.updated",
+  "created_at": "2025-12-23T21:38:00Z",
+  "data": {
+    "id": "ord_123456792",
+    "code": "ORD-2025-001",
+    "amount": 18000,
+    "currency": "BRL",
+    "status": "pending",
+    "created_at": "2025-12-23T21:30:00Z",
+    "updated_at": "2025-12-23T21:38:00Z",
+    "customer": {
+      "id": "cus_123456792",
+      "name": "Ana Costa",
+      "email": "ana.costa@example.com",
+      "document": "55566677788",
+      "phone": {
+        "country_code": "55",
+        "area_code": "11",
+        "number": "998877665"
+      }
+    },
+    "items": [
+      {
+        "id": "item_001",
+        "description": "Produto A",
+        "quantity": 1,
+        "amount": 10000
+      },
+      {
+        "id": "item_002",
+        "description": "Produto B",
+        "quantity": 1,
+        "amount": 5000
+      },
+      {
+        "id": "item_004",
+        "description": "Produto D",
+        "quantity": 1,
+        "amount": 3000
+      }
+    ],
+    "charges": []
+  }
+}
+

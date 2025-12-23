@@ -105,6 +105,23 @@ An open-source developer tool for simulating payment gateway webhooks locally. T
   - `CHECKOUT_EXPIRED` (Checkout expired)
   - `CHECKOUT_PAID` (Checkout paid)
 
+### Pagar.me
+- **Charge Events:**
+  - `charge.created` (Charge created)
+  - `charge.paid` (Charge paid)
+  - `charge.payment_failed` (Charge payment failed)
+  - `charge.canceled` (Charge canceled)
+  - `charge.refunded` (Charge refunded)
+- **Order Events:**
+  - `order.created` (Order created)
+  - `order.paid` (Order paid)
+  - `order.canceled` (Order canceled)
+  - `order.updated` (Order updated)
+- **Subscription Events:**
+  - `subscription.created` (Subscription created)
+  - `subscription.updated` (Subscription updated)
+  - `subscription.canceled` (Subscription canceled)
+
 ## Project Structure
 
 ```
@@ -114,7 +131,8 @@ payment-simulator/
 │   ├── gateways/
 │   │   ├── stripe/              # Stripe adapter + payloads
 │   │   ├── abacatepay/          # AbacatePay adapter + payloads
-│   │   └── asaas/               # Asaas adapter + payloads
+│   │   ├── asaas/               # Asaas adapter + payloads
+│   │   └── pagarme/             # Pagar.me adapter + payloads
 │   └── ui/                      # Next.js UI + API routes
 ├── package.json
 └── tsconfig.json
@@ -146,7 +164,7 @@ payment-simulator/
 
 In the **Webhook Configuration** panel:
 
-1. **Select a gateway** (Stripe, AbacatePay, or Asaas) - each gateway can have its own configuration
+1. **Select a gateway** (Stripe, AbacatePay, Asaas, Mercado Pago, or Pagar.me) - each gateway can have its own configuration
 2. **Enter URL base** (e.g., `http://localhost:4000/webhook`)
 3. **Add query parameters** (optional):
    - Click "+ Add" to add key-value pairs
@@ -167,7 +185,7 @@ The configuration is stored:
 ### 2. Simulate Webhook
 
 In the **Event Simulator** panel:
-- Select a gateway (Stripe, AbacatePay, or Asaas)
+- Select a gateway (Stripe, AbacatePay, Asaas, Mercado Pago, or Pagar.me)
 - Select an event from the dynamically populated list
 - Click **Send Webhook**
 
@@ -210,6 +228,10 @@ To add new payload files for existing events:
      - `withdraw.done` → `withdraw-done.json`
      - `withdraw.failed` → `withdraw-failed.json`
 
+3. **Pagar.me**: Add JSON files to `packages/gateways/pagarme/payloads/`
+   - File name must match the event name: `{event}.json`
+   - Example: `charge.paid.json`
+
 **Important**: Payloads are sent exactly as-is (no modification, no validation).
 
 ## Configuring Gateway Headers
@@ -223,6 +245,7 @@ Each gateway has a `headers.json` file that defines static headers sent with web
 - `packages/gateways/stripe/headers.json`
 - `packages/gateways/abacatepay/headers.json`
 - `packages/gateways/asaas/headers.json`
+- `packages/gateways/pagarme/headers.json`
 
 Edit these files to customize default headers. The format is:
 
@@ -428,6 +451,15 @@ npm run type-check
 ```bash
 npm run build
 ```
+
+## Contribuindo
+
+Quer adicionar um novo gateway de pagamento ou atualizar um existente? Consulte o [guia de contribuição](CONTRIBUTING.md) para instruções detalhadas sobre:
+
+- Como adicionar um novo gateway de pagamento
+- Como atualizar um gateway existente (adicionar eventos, headers, etc.)
+- Arquitetura do projeto e padrões de código
+- Dicas de debug e troubleshooting
 
 ## Architecture Notes
 

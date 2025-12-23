@@ -1,0 +1,39 @@
+{
+  "id": "evt_123456800",
+  "type": "subscription.canceled",
+  "created_at": "2025-12-23T22:30:00Z",
+  "data": {
+    "id": "sub_123456789",
+    "code": "SUB-2025-001",
+    "plan_id": "plan_123456790",
+    "customer_id": "cus_123456794",
+    "status": "canceled",
+    "payment_method": "credit_card",
+    "currency": "BRL",
+    "amount": 14900,
+    "interval": "month",
+    "interval_count": 1,
+    "billing_at": null,
+    "created_at": "2025-12-23T21:30:00Z",
+    "updated_at": "2025-12-23T22:00:00Z",
+    "canceled_at": "2025-12-23T22:30:00Z",
+    "customer": {
+      "id": "cus_123456794",
+      "name": "Fernanda Lima",
+      "email": "fernanda.lima@example.com",
+      "document": "44455566677",
+      "phone": {
+        "country_code": "55",
+        "area_code": "11",
+        "number": "976543210"
+      }
+    },
+    "plan": {
+      "id": "plan_123456790",
+      "name": "Plano Premium Mensal",
+      "amount": 14900,
+      "interval": "month"
+    }
+  }
+}
+

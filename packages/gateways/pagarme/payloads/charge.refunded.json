@@ -1,0 +1,36 @@
+{
+  "id": "evt_123456793",
+  "type": "charge.refunded",
+  "created_at": "2025-12-23T22:00:00Z",
+  "data": {
+    "id": "ch_123456789",
+    "code": "ABC123",
+    "amount": 10000,
+    "currency": "BRL",
+    "status": "refunded",
+    "payment_method": "credit_card",
+    "created_at": "2025-12-23T21:30:00Z",
+    "paid_at": "2025-12-23T21:35:00Z",
+    "refunded_at": "2025-12-23T22:00:00Z",
+    "customer": {
+      "id": "cus_123456789",
+      "name": "João Silva",
+      "email": "joao.silva@example.com",
+      "document": "12345678900",
+      "phone": {
+        "country_code": "55",
+        "area_code": "11",
+        "number": "987654321"
+      }
+    },
+    "order": {
+      "id": "ord_123456789"
+    },
+    "last_transaction": {
+      "id": "tran_123456791",
+      "status": "refunded",
+      "acquirer": "pagarme"
+    }
+  }
+}
+
