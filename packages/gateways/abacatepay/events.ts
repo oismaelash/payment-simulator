@@ -51,10 +51,10 @@ export class AbacatePayAdapter implements GatewayAdapter {
 
     // Map event names to payload file names
     const payloadFileMap: Record<string, string> = {
-      "billing.paid.pix.qrcode": "billing-paid-pix-qrcode.json",
-      "billing.paid.pix.billing": "billing-paid-pix-billing.json",
-      "withdraw.done": "withdraw-done.json",
-      "withdraw.failed": "withdraw-failed.json",
+      "billing.paid.pix.qrcode": "billing.paid.pix.qrcode.json",
+      "billing.paid.pix.billing": "billing.paid.pix.billing.json",
+      "withdraw.done": "withdraw.done.json",
+      "withdraw.failed": "withdraw.failed.json",
     };
 
     const payloadFileName = payloadFileMap[event];
