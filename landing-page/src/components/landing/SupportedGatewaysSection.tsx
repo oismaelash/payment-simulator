@@ -1,9 +1,9 @@
 const gateways = [
-  { name: "Abacatepay", logoSrc: "/gateways/abacatepay.svg", alt: "Abacatepay logo" },
+  { name: "AbacatePay", logoSrc: "/gateways/abacatepay.svg", alt: "Abacatepay logo" },
   { name: "Stripe", logoSrc: "/gateways/stripe.svg", alt: "Stripe logo" },
-  { name: "Mercado Pago", logoSrc: "/gateways/mercadopago.svg", alt: "Mercado Pago logo" },
+  { name: "Mercado Pago", logoSrc: "/gateways/mercadopago.png", alt: "Mercado Pago logo" },
   { name: "Asaas", logoSrc: "/gateways/asaas.svg", alt: "Asaas logo" },
-  { name: "Pagar.me", logoSrc: "/gateways/pagarme.svg", alt: "Pagar.me logo" },
+  { name: "Pagar.me", logoSrc: "/gateways/pagarme.png", alt: "Pagar.me logo" },
 ];
 
 const SupportedGatewaysSection = () => {
