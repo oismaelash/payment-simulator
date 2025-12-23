@@ -5,7 +5,7 @@ An open-source developer tool for simulating payment gateway webhooks locally. T
 ## Features
 
 - **Gateway-agnostic core**: Understands only the canonical `payment.succeeded` event
-- **Gateway adapters**: Stripe and AbacatePay adapters map gateway-specific events to canonical events
+- **Gateway adapters**: Stripe, AbacatePay, and Asaas adapters map gateway-specific events to canonical events
 - **Raw payload support**: Payloads are loaded from JSON files and sent without modification
 - **Simple UI**: Minimal Next.js interface for configuring webhooks and triggering events
 - **In-memory state**: No persistence layer - perfect for local development
@@ -72,6 +72,39 @@ An open-source developer tool for simulating payment gateway webhooks locally. T
 - `withdraw.done` (Withdraw completed successfully)
 - `withdraw.failed` (Withdraw failed)
 
+### Asaas
+- **Payment Events:**
+  - `PAYMENT_CREATED` (Payment created)
+  - `PAYMENT_CONFIRMED` (Payment confirmed)
+  - `PAYMENT_RECEIVED` (Payment received)
+  - `PAYMENT_OVERDUE` (Payment overdue)
+  - `PAYMENT_REFUNDED` (Payment refunded)
+  - `PAYMENT_DELETED` (Payment deleted)
+  - `PAYMENT_AWAITING_RISK_ANALYSIS` (Payment awaiting risk analysis)
+  - `PAYMENT_APPROVED_BY_RISK_ANALYSIS` (Payment approved by risk analysis)
+  - `PAYMENT_REPROVED_BY_RISK_ANALYSIS` (Payment reproved by risk analysis)
+  - `PAYMENT_CHARGEBACK_REQUESTED` (Payment chargeback requested)
+  - `PAYMENT_CHARGEBACK_DISPUTE` (Payment chargeback dispute)
+  - `PAYMENT_AWAITING_CHARGEBACK_REVERSAL` (Payment awaiting chargeback reversal)
+  - `PAYMENT_DUNNING_RECEIVED` (Payment dunning received)
+  - `PAYMENT_DUNNING_REQUESTED` (Payment dunning requested)
+  - `PAYMENT_BANK_SLIP_VIEWED` (Payment bank slip viewed)
+  - `PAYMENT_CHECKOUT_VIEWED` (Payment checkout viewed)
+- **Subscription Events:**
+  - `SUBSCRIPTION_CREATED` (Subscription created)
+  - `SUBSCRIPTION_UPDATED` (Subscription updated)
+  - `SUBSCRIPTION_DELETED` (Subscription deleted)
+- **Invoice Events:**
+  - `INVOICE_CREATED` (Invoice created)
+  - `INVOICE_UPDATED` (Invoice updated)
+  - `INVOICE_AUTHORIZED` (Invoice authorized)
+  - `INVOICE_CANCELED` (Invoice canceled)
+- **Checkout Events:**
+  - `CHECKOUT_CREATED` (Checkout created)
+  - `CHECKOUT_CANCELED` (Checkout canceled)
+  - `CHECKOUT_EXPIRED` (Checkout expired)
+  - `CHECKOUT_PAID` (Checkout paid)
+
 ## Project Structure
 
 ```
@@ -80,7 +113,8 @@ payment-simulator/
 │   ├── core/                    # Gateway-agnostic core simulator
 │   ├── gateways/
 │   │   ├── stripe/              # Stripe adapter + payloads
-│   │   └── abacatepay/          # AbacatePay adapter + payloads
+│   │   ├── abacatepay/          # AbacatePay adapter + payloads
+│   │   └── asaas/               # Asaas adapter + payloads
 │   └── ui/                      # Next.js UI + API routes
 ├── package.json
 └── tsconfig.json
@@ -112,7 +146,7 @@ payment-simulator/
 
 In the **Webhook Configuration** panel:
 
-1. **Select a gateway** (Stripe or AbacatePay) - each gateway can have its own configuration
+1. **Select a gateway** (Stripe, AbacatePay, or Asaas) - each gateway can have its own configuration
 2. **Enter URL base** (e.g., `http://localhost:4000/webhook`)
 3. **Add query parameters** (optional):
    - Click "+ Add" to add key-value pairs
@@ -133,7 +167,7 @@ The configuration is stored:
 ### 2. Simulate Webhook
 
 In the **Event Simulator** panel:
-- Select a gateway (Stripe or AbacatePay)
+- Select a gateway (Stripe, AbacatePay, or Asaas)
 - Select an event from the dynamically populated list
 - Click **Send Webhook**
 
@@ -188,6 +222,7 @@ Each gateway has a `headers.json` file that defines static headers sent with web
 
 - `packages/gateways/stripe/headers.json`
 - `packages/gateways/abacatepay/headers.json`
+- `packages/gateways/asaas/headers.json`
 
 Edit these files to customize default headers. The format is:
 

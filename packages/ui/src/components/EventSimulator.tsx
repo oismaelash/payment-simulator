@@ -22,6 +22,13 @@ interface MetaResponse {
   gateways: Record<string, GatewayMeta>;
 }
 
+// Mapeamento de URLs de documentação oficial para cada gateway
+const GATEWAY_DOCUMENTATION_URLS: Record<string, string> = {
+  stripe: "https://stripe.com/docs/api/webhooks",
+  abacatepay: "https://docs.abacatepay.com",
+  asaas: "https://docs.asaas.com/webhooks",
+};
+
 export default function EventSimulator() {
   const [gateways, setGateways] = useState<Record<string, GatewayMeta>>({});
   const [selectedGateway, setSelectedGateway] = useState<string>("");
@@ -308,6 +315,15 @@ export default function EventSimulator() {
                 </option>
               ))}
             </select>
+            {selectedGateway && GATEWAY_DOCUMENTATION_URLS[selectedGateway] && (
+              <button
+                onClick={() => window.open(GATEWAY_DOCUMENTATION_URLS[selectedGateway], "_blank")}
+                className="btn btn-secondary"
+                style={{ marginTop: "0.5rem", width: "100%" }}
+              >
+                📚 Open Official Documentation
+              </button>
+            )}
           </div>
           <div>
             <label className="text-sm" style={{ display: "block", marginBottom: "0.3125rem" }}>

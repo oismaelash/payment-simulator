@@ -1,0 +1,21 @@
+{
+  "event": "SUBSCRIPTION_DELETED",
+  "subscription": {
+    "object": "subscription",
+    "id": "sub_000000000001",
+    "dateCreated": "2025-12-23",
+    "customer": "cus_000000002750",
+    "paymentLink": null,
+    "billingType": "CREDIT_CARD",
+    "value": 50.00,
+    "nextDueDate": null,
+    "cycle": "MONTHLY",
+    "description": "Assinatura mensal",
+    "endDate": "2025-12-25",
+    "maxPayments": null,
+    "status": "DELETED",
+    "externalReference": null,
+    "split": []
+  }
+}
+

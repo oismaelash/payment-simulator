@@ -1,0 +1,21 @@
+{
+  "event": "SUBSCRIPTION_CREATED",
+  "subscription": {
+    "object": "subscription",
+    "id": "sub_000000000001",
+    "dateCreated": "2025-12-23",
+    "customer": "cus_000000002750",
+    "paymentLink": null,
+    "billingType": "CREDIT_CARD",
+    "value": 50.00,
+    "nextDueDate": "2025-12-30",
+    "cycle": "MONTHLY",
+    "description": "Assinatura mensal",
+    "endDate": null,
+    "maxPayments": null,
+    "status": "ACTIVE",
+    "externalReference": null,
+    "split": []
+  }
+}
+

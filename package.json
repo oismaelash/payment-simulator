@@ -7,8 +7,8 @@
     "packages/gateways/*"
   ],
   "scripts": {
-    "dev": "npm run build --workspace=@payment-simulator/core && npm run build --workspace=@payment-simulator/gateway-stripe && npm run build --workspace=@payment-simulator/gateway-abacatepay && npm run dev --workspace=@payment-simulator/ui",
-    "build": "npm run build --workspace=@payment-simulator/core && npm run build --workspace=@payment-simulator/gateway-stripe && npm run build --workspace=@payment-simulator/gateway-abacatepay && npm run build --workspace=@payment-simulator/ui",
+    "dev": "npm run build --workspace=@payment-simulator/core && npm run build --workspace=@payment-simulator/gateway-stripe && npm run build --workspace=@payment-simulator/gateway-abacatepay && npm run build --workspace=@payment-simulator/gateway-asaas && npm run dev --workspace=@payment-simulator/ui",
+    "build": "npm run build --workspace=@payment-simulator/core && npm run build --workspace=@payment-simulator/gateway-stripe && npm run build --workspace=@payment-simulator/gateway-abacatepay && npm run build --workspace=@payment-simulator/gateway-asaas && npm run build --workspace=@payment-simulator/ui",
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {

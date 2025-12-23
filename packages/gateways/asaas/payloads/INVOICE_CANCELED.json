@@ -1,0 +1,39 @@
+{
+  "event": "INVOICE_CANCELED",
+  "invoice": {
+    "object": "invoice",
+    "id": "inv_000000000232",
+    "dateCreated": "2025-12-23",
+    "customer": "cus_000000002750",
+    "type": "NFS-e",
+    "serviceDescription": "Desenvolvimento de software",
+    "value": 200.00,
+    "dueDate": "2025-12-25",
+    "status": "CANCELED",
+    "externalReference": null,
+    "municipalServiceId": null,
+    "municipalServiceCode": null,
+    "municipalServiceName": null,
+    "taxes": {
+      "retainIss": false,
+      "iss": 0.00,
+      "cofins": 0.00,
+      "csll": 0.00,
+      "inss": 0.00,
+      "ir": 0.00,
+      "pis": 0.00
+    },
+    "deductions": 0.00,
+    "effectiveDate": null,
+    "number": null,
+    "verificationCode": null,
+    "authenticationCode": null,
+    "rpsNumber": null,
+    "rpsSerie": null,
+    "rpsType": null,
+    "statusDescription": "Cancelada",
+    "servicesAmount": 200.00,
+    "observations": "Fatura cancelada pelo usuário"
+  }
+}
+

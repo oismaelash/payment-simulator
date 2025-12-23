@@ -1,0 +1,54 @@
+{
+  "event": "PAYMENT_DUNNING_REQUESTED",
+  "payment": {
+    "object": "payment",
+    "id": "pay_080225913252",
+    "dateCreated": "2025-12-20",
+    "customer": "cus_000000002750",
+    "subscription": null,
+    "installment": null,
+    "paymentLink": null,
+    "value": 100.00,
+    "netValue": 95.00,
+    "originalValue": null,
+    "interestValue": null,
+    "description": "Pagamento de teste",
+    "billingType": "BOLETO",
+    "status": "OVERDUE",
+    "dueDate": "2025-12-22",
+    "originalDueDate": "2025-12-22",
+    "paymentDate": null,
+    "clientPaymentDate": null,
+    "invoiceUrl": "https://www.asaas.com/i/080225913252",
+    "invoiceNumber": "00000123",
+    "externalReference": null,
+    "deleted": false,
+    "anticipated": false,
+    "anticipable": false,
+    "refunds": null,
+    "creditDate": null,
+    "estimatedCreditDate": null,
+    "transactionReceiptUrl": null,
+    "nossoNumero": "12345678",
+    "bankSlipUrl": "https://www.asaas.com/b/pdf/080225913252",
+    "lastInvoiceViewedDate": null,
+    "lastBankSlipViewedDate": null,
+    "discount": {
+      "value": 0.00,
+      "dueDateLimitDays": 0,
+      "type": "FIXED"
+    },
+    "fine": {
+      "value": 2.00,
+      "type": "FIXED"
+    },
+    "interest": {
+      "value": 1.00,
+      "type": "PERCENTAGE"
+    },
+    "postalService": false,
+    "custody": null,
+    "split": []
+  }
+}
+

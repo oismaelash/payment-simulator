@@ -1,0 +1,46 @@
+{
+  "event": "CHECKOUT_CANCELED",
+  "checkout": {
+    "id": "2bd251f0-09b2-44ff-8a0c-a5cb29e5bbda",
+    "dateCreated": "2025-12-23",
+    "status": "CANCELED",
+    "billingTypes": ["CREDIT_CARD"],
+    "chargeTypes": ["RECURRENT"],
+    "items": [
+      {
+        "name": "Produto 1",
+        "description": "Descrição do produto 1",
+        "value": 100.00,
+        "quantity": 1
+      }
+    ],
+    "customer": {
+      "id": "cus_000000002750",
+      "name": "Cliente Exemplo",
+      "email": "[email protected]",
+      "phone": "47999999999",
+      "mobilePhone": "47999999999",
+      "cpfCnpj": "12345678900",
+      "postalCode": "89010000",
+      "address": "Rua Exemplo",
+      "addressNumber": "123",
+      "complement": null,
+      "province": "Centro",
+      "city": "Brasília",
+      "state": "DF",
+      "country": "Brasil",
+      "externalReference": null,
+      "notificationDisabled": false,
+      "additionalEmails": null,
+      "personType": "FISICA"
+    },
+    "totalValue": 100.00,
+    "installmentCount": 1,
+    "installmentValue": 100.00,
+    "dueDate": "2025-12-30",
+    "expiresDate": "2025-12-30",
+    "redirectUrl": "https://example.com/success",
+    "callbackUrl": "https://example.com/webhook"
+  }
+}
+

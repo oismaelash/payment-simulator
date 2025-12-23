@@ -1,0 +1,39 @@
+{
+  "event": "INVOICE_AUTHORIZED",
+  "invoice": {
+    "object": "invoice",
+    "id": "inv_000000000232",
+    "dateCreated": "2025-12-23",
+    "customer": "cus_000000002750",
+    "type": "NFS-e",
+    "serviceDescription": "Desenvolvimento de software",
+    "value": 200.00,
+    "dueDate": "2025-12-25",
+    "status": "AUTHORIZED",
+    "externalReference": null,
+    "municipalServiceId": "12345",
+    "municipalServiceCode": "1.01",
+    "municipalServiceName": "Desenvolvimento de software",
+    "taxes": {
+      "retainIss": false,
+      "iss": 0.00,
+      "cofins": 0.00,
+      "csll": 0.00,
+      "inss": 0.00,
+      "ir": 0.00,
+      "pis": 0.00
+    },
+    "deductions": 0.00,
+    "effectiveDate": "2025-12-25",
+    "number": "00000123",
+    "verificationCode": "ABC123XYZ",
+    "authenticationCode": "AUTH123456",
+    "rpsNumber": "001",
+    "rpsSerie": "1",
+    "rpsType": "1",
+    "statusDescription": "Autorizada",
+    "servicesAmount": 200.00,
+    "observations": null
+  }
+}
+
