@@ -82,30 +82,56 @@ export async function POST(request: NextRequest) {
           );
         }
 
-        // Stringify the payload override
-        const payloadString = JSON.stringify(payloadOverride, null, 2);
+        const method = eventDef.method || "POST";
 
-        // Prepare headers: Content-Type -> gateway headers -> custom headers (custom overrides gateway)
+        // Prepare headers: gateway headers -> custom headers (custom overrides gateway)
         finalHeaders = {
-          "Content-Type": "application/json",
           ...eventDef.headers,
           ...extraHeaders,
         };
 
-        // POST to webhook URL
-        const response = await fetch(webhookUrl, {
-          method: "POST",
-          headers: finalHeaders,
-          body: payloadString,
-        });
+        if (method === "GET") {
+          // For GET requests, convert payload override to querystring
+          const queryParams = new URLSearchParams();
+          for (const [key, value] of Object.entries(payloadOverride)) {
+            if (value !== null && value !== undefined) {
+              queryParams.append(key, String(value));
+            }
+          }
+          const queryString = queryParams.toString();
+          finalUrl = queryString ? `${webhookUrl}?${queryString}` : webhookUrl;
 
-        const responseBody = await response.text().catch(() => "");
+          const response = await fetch(finalUrl, {
+            method: "GET",
+            headers: finalHeaders,
+          });
 
-        result = {
-          status: response.status,
-          ok: response.status === 200,
-          responseBody,
-        };
+          const responseBody = await response.text().catch(() => "");
+
+          result = {
+            status: response.status,
+            ok: response.status === 200,
+            responseBody,
+          };
+        } else {
+          // POST: send JSON body
+          finalHeaders["Content-Type"] = "application/json";
+          const payloadString = JSON.stringify(payloadOverride, null, 2);
+
+          const response = await fetch(webhookUrl, {
+            method: "POST",
+            headers: finalHeaders,
+            body: payloadString,
+          });
+
+          const responseBody = await response.text().catch(() => "");
+
+          result = {
+            status: response.status,
+            ok: response.status === 200,
+            responseBody,
+          };
+        }
       } catch (error) {
         result = {
           status: 0,
@@ -125,36 +151,75 @@ export async function POST(request: NextRequest) {
           );
         }
 
+        const method = eventDef.method || "POST";
+
         // Read payload file as raw text (same as simulate does)
         const { readFileSync } = await import("fs");
         const payload = readFileSync(eventDef.payloadFile, "utf-8");
 
-        // Prepare headers: Content-Type -> gateway headers -> custom headers
+        // Prepare headers: gateway headers -> custom headers
         finalHeaders = {
-          "Content-Type": "application/json",
           ...eventDef.headers,
           ...extraHeaders,
         };
 
-        // POST to webhook URL
-        const response = await fetch(webhookUrl, {
-          method: "POST",
-          headers: finalHeaders,
-          body: payload,
-        });
+        if (method === "GET") {
+          // For GET requests, convert payload JSON to querystring
+          try {
+            const payloadObj = JSON.parse(payload);
+            const queryParams = new URLSearchParams();
+            for (const [key, value] of Object.entries(payloadObj)) {
+              if (value !== null && value !== undefined) {
+                queryParams.append(key, String(value));
+              }
+            }
+            const queryString = queryParams.toString();
+            finalUrl = queryString ? `${webhookUrl}?${queryString}` : webhookUrl;
+          } catch {
+            // If payload is not valid JSON, use URL as-is
+            finalUrl = webhookUrl;
+          }
 
-        let responseBody: string | undefined;
-        try {
-          responseBody = await response.text();
-        } catch {
-          responseBody = undefined;
+          const response = await fetch(finalUrl, {
+            method: "GET",
+            headers: finalHeaders,
+          });
+
+          let responseBody: string | undefined;
+          try {
+            responseBody = await response.text();
+          } catch {
+            responseBody = undefined;
+          }
+
+          result = {
+            status: response.status,
+            ok: response.status === 200,
+            responseBody,
+          };
+        } else {
+          // POST: send JSON body
+          finalHeaders["Content-Type"] = "application/json";
+
+          const response = await fetch(webhookUrl, {
+            method: "POST",
+            headers: finalHeaders,
+            body: payload,
+          });
+
+          let responseBody: string | undefined;
+          try {
+            responseBody = await response.text();
+          } catch {
+            responseBody = undefined;
+          }
+
+          result = {
+            status: response.status,
+            ok: response.status === 200,
+            responseBody,
+          };
         }
-
-        result = {
-          status: response.status,
-          ok: response.status === 200,
-          responseBody,
-        };
       } catch (error) {
         result = {
           status: 0,

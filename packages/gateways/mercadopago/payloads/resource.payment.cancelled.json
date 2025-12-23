@@ -1,0 +1,74 @@
+{
+  "id": 123456789,
+  "status": "cancelled",
+  "status_detail": "by_collector",
+  "operation_type": "regular_payment",
+  "date_created": "2025-01-15T10:30:00.000-04:00",
+  "date_approved": null,
+  "date_last_updated": "2025-01-15T10:40:00.000-04:00",
+  "money_release_date": null,
+  "currency_id": "BRL",
+  "transaction_amount": 100.00,
+  "transaction_amount_refunded": 0,
+  "coupon_amount": 0,
+  "differential_pricing_id": null,
+  "deduction_schema": null,
+  "transaction_details": {
+    "net_received_amount": 0,
+    "total_paid_amount": 0,
+    "overpaid_amount": 0,
+    "external_resource_url": null,
+    "installment_amount": 0,
+    "financial_institution": null,
+    "payment_method_reference_id": null,
+    "payable_deferral_period": null,
+    "acquirer_reference": null
+  },
+  "fee_details": [],
+  "captured": false,
+  "binary_mode": false,
+  "call_for_authorize_id": null,
+  "statement_descriptor": "MERCADOPAGO",
+  "installments": 1,
+  "payment_method_id": "visa",
+  "issuer_id": "310",
+  "card": {
+    "id": null,
+    "first_six_digits": "423456",
+    "last_four_digits": "7890",
+    "expiration_month": 12,
+    "expiration_year": 2025,
+    "date_created": "2025-01-15T10:30:00.000-04:00",
+    "date_last_updated": "2025-01-15T10:30:00.000-04:00",
+    "cardholder": {
+      "name": "APRO",
+      "identification": {
+        "type": "CPF",
+        "number": "12345678909"
+      }
+    }
+  },
+  "notification_url": "https://www.yoursite.com/webhooks",
+  "processing_mode": "aggregator",
+  "merchant_account_id": null,
+  "acquirer": "visa",
+  "merchant_number": null,
+  "acquirer_reconciliation": [],
+  "point_of_interaction": {
+    "type": "CHECKOUT",
+    "sub_type": null,
+    "application_data": {
+      "name": "MP-TEST-APP",
+      "version": "1.0.0"
+    },
+    "transaction_data": {
+      "qr_code": null,
+      "qr_code_base64": null,
+      "ticket_url": null,
+      "e2e_id": null,
+      "financial_institution": null,
+      "bank_info": null
+    }
+  }
+}
+

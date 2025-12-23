@@ -27,6 +27,7 @@ const GATEWAY_DOCUMENTATION_URLS: Record<string, string> = {
   stripe: "https://stripe.com/docs/api/webhooks",
   abacatepay: "https://docs.abacatepay.com",
   asaas: "https://docs.asaas.com/webhooks",
+  mercadopago: "https://www.mercadopago.com.br/developers/pt/docs/checkout-pro/payment-notifications",
 };
 
 export default function EventSimulator() {

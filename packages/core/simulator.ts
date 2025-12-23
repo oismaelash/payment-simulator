@@ -15,6 +15,7 @@ export interface GatewayAdapter {
     canonicalEvent: CanonicalEvent;
     payloadFile: string;
     headers: Record<string, string>;
+    method?: "GET" | "POST";
   } | null;
 }
 
@@ -36,7 +37,7 @@ export interface SimulateResult {
  * Simulates sending a webhook by:
  * 1. Getting event definition from adapter
  * 2. Reading payload file as raw text
- * 3. POSTing to webhook URL with adapter headers
+ * 3. POSTing to webhook URL with adapter headers (or GET with querystring for IPN)
  */
 export async function simulate({
   gateway,
@@ -54,21 +55,46 @@ export async function simulate({
       };
     }
 
+    const method = eventDef.method || "POST";
+
     // Read payload file as raw text (no modification)
     // payloadFile is already an absolute path from the adapter
     const payload = readFileSync(eventDef.payloadFile, "utf-8");
 
-    // Prepare headers (include Content-Type)
-    const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-      ...eventDef.headers,
-    };
+    let finalUrl = webhookUrl;
+    let headers: Record<string, string> = { ...eventDef.headers };
+    let body: string | undefined;
 
-    // POST to webhook URL
-    const response = await fetch(webhookUrl, {
-      method: "POST",
+    if (method === "GET") {
+      // For GET requests, convert payload JSON to querystring
+      try {
+        const payloadObj = JSON.parse(payload);
+        const queryParams = new URLSearchParams();
+        for (const [key, value] of Object.entries(payloadObj)) {
+          if (value !== null && value !== undefined) {
+            queryParams.append(key, String(value));
+          }
+        }
+        const queryString = queryParams.toString();
+        finalUrl = queryString ? `${webhookUrl}?${queryString}` : webhookUrl;
+        body = undefined;
+      } catch {
+        // If payload is not valid JSON, use it as-is in querystring
+        // This shouldn't happen for IPN events, but handle gracefully
+        finalUrl = webhookUrl;
+        body = undefined;
+      }
+    } else {
+      // POST: send JSON body
+      headers["Content-Type"] = "application/json";
+      body = payload;
+    }
+
+    // Send request
+    const response = await fetch(finalUrl, {
+      method,
       headers,
-      body: payload,
+      body,
     });
 
     let responseBody: string | undefined;

@@ -1,6 +1,7 @@
 import { StripeAdapter } from "@payment-simulator/gateway-stripe";
 import { AbacatePayAdapter } from "@payment-simulator/gateway-abacatepay";
 import { AsaasAdapter } from "@payment-simulator/gateway-asaas";
+import { MercadoPagoAdapter } from "@payment-simulator/gateway-mercadopago";
 import type { GatewayAdapter } from "@payment-simulator/core";
 
 /**
@@ -10,6 +11,7 @@ export const gatewayAdapters: Record<string, GatewayAdapter> = {
   stripe: new StripeAdapter(),
   abacatepay: new AbacatePayAdapter(),
   asaas: new AsaasAdapter(),
+  mercadopago: new MercadoPagoAdapter(),
 };
 
 export function getGatewayAdapter(gateway: string): GatewayAdapter | null {
