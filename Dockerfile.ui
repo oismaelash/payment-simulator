@@ -62,7 +62,6 @@ RUN mkdir -p /data && chown -R nextjs:nodejs /data
 # Copy built application
 COPY --from=builder --chown=nextjs:nodejs /app/packages/ui/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/packages/ui/.next/static ./packages/ui/.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/packages/ui/public ./packages/ui/public
 
 # Set correct permissions
 RUN chown -R nextjs:nodejs /app
