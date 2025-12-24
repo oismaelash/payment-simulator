@@ -7,6 +7,7 @@ interface PayloadEditorModalProps {
   onClose: () => void;
   initialPayload: string;
   onApply: (payload: any) => void;
+  isDirty?: boolean;
 }
 
 export default function PayloadEditorModal({
@@ -14,10 +15,12 @@ export default function PayloadEditorModal({
   onClose,
   initialPayload,
   onApply,
+  isDirty = false,
 }: PayloadEditorModalProps) {
   const [payloadText, setPayloadText] = useState("");
   const [isValid, setIsValid] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -58,6 +61,30 @@ export default function PayloadEditorModal({
     }
   };
 
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(payloadText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      // Fallback for older browsers
+      const textArea = document.createElement("textarea");
+      textArea.value = payloadText;
+      textArea.style.position = "fixed";
+      textArea.style.opacity = "0";
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand("copy");
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (e) {
+        console.error("Failed to copy:", e);
+      }
+      document.body.removeChild(textArea);
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -71,7 +98,9 @@ export default function PayloadEditorModal({
             marginBottom: "1rem",
           }}
         >
-          <h2 className="text-xl" style={{ margin: 0 }}>Edit Payload</h2>
+          <h2 className="text-xl" style={{ margin: 0 }}>
+            Edit Payload{isDirty && <span style={{ marginLeft: "0.5rem", opacity: 0.7 }}>•</span>}
+          </h2>
           <button
             onClick={onClose}
             style={{
@@ -101,32 +130,36 @@ export default function PayloadEditorModal({
             <label className="text-sm" style={{ fontWeight: "500" }}>
               JSON Payload:
             </label>
-            {!isValid && error && (
-              <span className="text-xs" style={{ color: `hsl(var(--destructive))` }}>
-                {error}
-              </span>
-            )}
-            {isValid && (
-              <span className="text-xs" style={{ color: `hsl(var(--success))` }}>
-                ✓ Valid JSON
-              </span>
-            )}
+            <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+              {!isValid && error && (
+                <span className="text-xs" style={{ color: `hsl(var(--destructive))` }}>
+                  {error}
+                </span>
+              )}
+              {isValid && (
+                <span className="text-xs" style={{ color: `hsl(var(--success))` }}>
+                  ✓ Valid JSON
+                </span>
+              )}
+              <button
+                onClick={copyToClipboard}
+                className="btn btn-secondary btn-sm"
+                style={{ fontSize: "0.75rem" }}
+              >
+                {copied ? "✓ Copied" : "📋 Copy"}
+              </button>
+            </div>
           </div>
           <textarea
             value={payloadText}
             onChange={(e) => handleChange(e.target.value)}
+            className="code"
             style={{
               flex: 1,
               minHeight: "400px",
               resize: "vertical",
               cursor: "text",
-              backgroundColor: "#000000",
-              color: `hsl(var(--success))`,
-              fontFamily: "monospace",
               border: `1px solid ${isValid ? `hsl(var(--border))` : `hsl(var(--destructive))`}`,
-              borderRadius: "4px",
-              padding: "0.75rem",
-              fontSize: "0.875rem",
             }}
             spellCheck={false}
           />

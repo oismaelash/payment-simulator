@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 interface ResponseViewModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -17,6 +19,32 @@ export default function ResponseViewModal({
   url,
   headers,
 }: ResponseViewModalProps) {
+  const [copiedSection, setCopiedSection] = useState<string | null>(null);
+
+  const copyToClipboard = async (text: string, section: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedSection(section);
+      setTimeout(() => setCopiedSection(null), 2000);
+    } catch (err) {
+      // Fallback for older browsers
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.opacity = "0";
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand("copy");
+        setCopiedSection(section);
+        setTimeout(() => setCopiedSection(null), 2000);
+      } catch (e) {
+        console.error("Failed to copy:", e);
+      }
+      document.body.removeChild(textArea);
+    }
+  };
+
   if (!isOpen) return null;
 
   // Try to format as JSON if possible
@@ -83,20 +111,19 @@ export default function ResponseViewModal({
         {/* URL */}
         {url && (
           <div style={{ marginBottom: "1rem" }}>
-            <label className="text-sm" style={{ fontWeight: "500", display: "block", marginBottom: "0.5rem" }}>
-              Request URL:
-            </label>
-            <div
-              style={{
-                padding: "0.75rem",
-                borderRadius: "4px",
-                fontSize: "0.875rem",
-                wordBreak: "break-all",
-                backgroundColor: "#000000",
-                color: `hsl(var(--success))`,
-                fontFamily: "monospace",
-              }}
-            >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+              <label className="text-sm" style={{ fontWeight: "500" }}>
+                Request URL:
+              </label>
+              <button
+                onClick={() => copyToClipboard(url, "url")}
+                className="btn btn-secondary btn-sm"
+                style={{ fontSize: "0.75rem" }}
+              >
+                {copiedSection === "url" ? "✓ Copied" : "📋 Copy"}
+              </button>
+            </div>
+            <div className="code" style={{ wordBreak: "break-all" }}>
               {url}
             </div>
           </div>
@@ -116,22 +143,23 @@ export default function ResponseViewModal({
               <label className="text-sm" style={{ fontWeight: "500" }}>
                 Request Headers:
               </label>
+              <button
+                onClick={() => copyToClipboard(formattedHeaders, "headers")}
+                className="btn btn-secondary btn-sm"
+                style={{ fontSize: "0.75rem" }}
+              >
+                {copiedSection === "headers" ? "✓ Copied" : "📋 Copy"}
+              </button>
             </div>
             <textarea
               value={formattedHeaders}
               readOnly
+              className="code"
               style={{
                 width: "100%",
                 minHeight: "150px",
                 resize: "vertical",
                 cursor: "text",
-                fontSize: "0.875rem",
-                backgroundColor: "#000000",
-                color: `hsl(var(--success))`,
-                fontFamily: "monospace",
-                border: "1px solid hsl(var(--border))",
-                borderRadius: "4px",
-                padding: "0.75rem",
               }}
               spellCheck={false}
             />
@@ -161,27 +189,31 @@ export default function ResponseViewModal({
             <label className="text-sm" style={{ fontWeight: "500" }}>
               Response Body:
             </label>
-            {isValidJson && (
-              <span className="text-xs" style={{ color: `hsl(var(--success))` }}>
-                ✓ Valid JSON
-              </span>
-            )}
+            <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+              {isValidJson && (
+                <span className="text-xs" style={{ color: `hsl(var(--success))` }}>
+                  ✓ Valid JSON
+                </span>
+              )}
+              <button
+                onClick={() => copyToClipboard(formattedBody, "body")}
+                className="btn btn-secondary btn-sm"
+                style={{ fontSize: "0.75rem" }}
+              >
+                {copiedSection === "body" ? "✓ Copied" : "📋 Copy"}
+              </button>
+            </div>
           </div>
           <textarea
             value={formattedBody}
             readOnly
+            className="code"
             style={{
               flex: "1 1 auto",
               minHeight: "200px",
               maxHeight: "100%",
               resize: "none",
               cursor: "text",
-              backgroundColor: "#000000",
-              color: `hsl(var(--success))`,
-              fontFamily: "monospace",
-              border: "1px solid hsl(var(--border))",
-              borderRadius: "4px",
-              padding: "0.75rem",
               overflowY: "auto",
             }}
             spellCheck={false}

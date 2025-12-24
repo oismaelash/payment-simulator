@@ -43,6 +43,7 @@ export default function EventSimulator() {
     type: "success" | "error";
     text: string;
   } | null>(null);
+  const [isPayloadDirty, setIsPayloadDirty] = useState(false);
 
   useEffect(() => {
     // Load gateway metadata
@@ -132,17 +133,36 @@ export default function EventSimulator() {
       const template = templates.find((t) => t.id === selectedTemplateId);
       if (template) {
         setCurrentPayload(template.payload);
+        setIsPayloadDirty(false);
       }
     } else if (!selectedTemplateId && basePayload) {
       // Reset to base payload
       try {
         const parsed = JSON.parse(basePayload);
         setCurrentPayload(parsed);
+        setIsPayloadDirty(false);
       } catch {
         setCurrentPayload(null);
+        setIsPayloadDirty(false);
       }
     }
   }, [selectedTemplateId, templates, basePayload]);
+
+  // Check if payload is dirty
+  useEffect(() => {
+    if (!basePayload || !currentPayload) {
+      setIsPayloadDirty(false);
+      return;
+    }
+    try {
+      const baseParsed = JSON.parse(basePayload);
+      const baseStr = JSON.stringify(baseParsed);
+      const currentStr = JSON.stringify(currentPayload);
+      setIsPayloadDirty(baseStr !== currentStr);
+    } catch {
+      setIsPayloadDirty(false);
+    }
+  }, [basePayload, currentPayload]);
 
   const handleGatewayChange = (gateway: string) => {
     setSelectedGateway(gateway);
@@ -260,6 +280,7 @@ export default function EventSimulator() {
   const handleApplyPayload = (payload: any) => {
     setCurrentPayload(payload);
     setSelectedTemplateId(""); // Clear template selection when manually editing
+    setIsPayloadDirty(true);
   };
 
   const handleSaveTemplate = async () => {
@@ -350,9 +371,30 @@ export default function EventSimulator() {
         </h2>
         <div style={{ display: "flex", flexDirection: "column", gap: "0.625rem" }}>
           <div>
-            <label className="text-sm" style={{ display: "block", marginBottom: "0.3125rem" }}>
-              Select Gateway:
-            </label>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.3125rem" }}>
+              <label className="text-sm" style={{ display: "block", margin: 0 }}>
+                Select Gateway:
+              </label>
+              {selectedGateway && GATEWAY_DOCUMENTATION_URLS[selectedGateway] && (
+                <a
+                  href={GATEWAY_DOCUMENTATION_URLS[selectedGateway]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    color: `hsl(var(--primary))`,
+                    textDecoration: "none",
+                    fontSize: "0.75rem",
+                    opacity: 0.8,
+                  }}
+                  title="Open Official Documentation"
+                >
+                  <span style={{ marginRight: "0.25rem" }}>📚</span>
+                  Docs
+                </a>
+              )}
+            </div>
             <select
               className="select"
               value={selectedGateway}
@@ -365,15 +407,6 @@ export default function EventSimulator() {
                 </option>
               ))}
             </select>
-            {selectedGateway && GATEWAY_DOCUMENTATION_URLS[selectedGateway] && (
-              <button
-                onClick={() => window.open(GATEWAY_DOCUMENTATION_URLS[selectedGateway], "_blank")}
-                className="btn btn-secondary"
-                style={{ marginTop: "0.5rem", width: "100%" }}
-              >
-                📚 Open Official Documentation
-              </button>
-            )}
           </div>
           <div>
             <label className="text-sm" style={{ display: "block", marginBottom: "0.3125rem" }}>
@@ -438,6 +471,9 @@ export default function EventSimulator() {
                   style={{ flex: 1 }}
                 >
                   View/Edit Payload
+                  {isPayloadDirty && (
+                    <span style={{ marginLeft: "0.375rem", opacity: 0.7 }}>•</span>
+                  )}
                 </button>
                 <button
                   onClick={handleResetToBase}
@@ -449,7 +485,7 @@ export default function EventSimulator() {
                 <button
                   onClick={() => setShowSaveTemplateDialog(true)}
                   disabled={!currentPayload}
-                  className="btn btn-success"
+                  className="btn btn-outline"
                 >
                   Save Template
                 </button>
@@ -483,6 +519,7 @@ export default function EventSimulator() {
               : basePayload
           }
           onApply={handleApplyPayload}
+          isDirty={isPayloadDirty}
         />
       )}
 
