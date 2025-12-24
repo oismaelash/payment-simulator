@@ -77,9 +77,15 @@ export default function Dropdown({
     if (isOpen) {
       handleClose();
     } else {
-      setIsOpen(true);
-      updateMenuPosition();
+      handleOpen();
     }
+  };
+
+  // Open dropdown
+  const handleOpen = () => {
+    if (disabled) return;
+    setIsOpen(true);
+    updateMenuPosition();
   };
 
   // Close dropdown
