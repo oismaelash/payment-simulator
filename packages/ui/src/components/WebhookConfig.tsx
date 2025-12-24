@@ -881,7 +881,7 @@ export default function WebhookConfig({ gateways, loadingGateways, selectedGatew
               >
                 <button
                   onClick={() => setIsEditorOpen(true)}
-                  className="btn btn-secondary"
+                  className="btn btn-outline"
                   style={{ flex: 1 }}
                 >
                   View/Edit Payload
@@ -892,7 +892,7 @@ export default function WebhookConfig({ gateways, loadingGateways, selectedGatew
                 <button
                   onClick={handleResetToBase}
                   disabled={!basePayload}
-                  className="btn btn-secondary"
+                  className="btn btn-outline"
                 >
                   Reset
                 </button>

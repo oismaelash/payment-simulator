@@ -467,7 +467,7 @@ export default function EventSimulator() {
               >
                 <button
                   onClick={() => setIsEditorOpen(true)}
-                  className="btn btn-secondary"
+                  className="btn btn-outline"
                   style={{ flex: 1 }}
                 >
                   View/Edit Payload
@@ -478,7 +478,7 @@ export default function EventSimulator() {
                 <button
                   onClick={handleResetToBase}
                   disabled={!basePayload}
-                  className="btn btn-secondary"
+                  className="btn btn-outline"
                 >
                   Reset
                 </button>
@@ -496,7 +496,7 @@ export default function EventSimulator() {
           <button
             onClick={handleSend}
             disabled={sending || !selectedGateway || !selectedEvent}
-            className="btn btn-primary"
+            className="btn btn-outline"
           >
             {sending ? "Sending..." : "Send Webhook"}
           </button>
