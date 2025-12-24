@@ -8,9 +8,7 @@ export default function Home() {
     <>
       <header className="header">
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <div style={{ background: "hsl(217 91% 60%)", padding: "0.375rem", borderRadius: "0.5rem", display: "flex", alignItems: "center", justifyContent: "center", color: "white" }}>
-            <span className="material-icons-outlined" style={{ fontSize: "1.125rem" }}>dns</span>
-          </div>
+          <img src="/icon.png" alt="Payment Simulator" style={{ width: "2rem", height: "2rem", display: "block" }} />
           <div>
             <h1 style={{ fontWeight: 700, fontSize: "0.875rem", color: "hsl(var(--foreground))", lineHeight: 1.2 }}>
               Payment Simulator

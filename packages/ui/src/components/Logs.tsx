@@ -116,52 +116,12 @@ export default function Logs() {
     }
   };
 
-  const selectedLog = selectedLogIndex !== null && selectedLogIndex < logs.length ? logs[selectedLogIndex] : null;
-  const selectedLogPayload = selectedLog ? (() => {
-    try {
-      const basePayload: any = {
-        id: `evt_${String(selectedLogIndex).padStart(4, "0")}`,
-        object: "event",
-        gateway: selectedLog.gateway,
-        type: selectedLog.event,
-        timestamp: selectedLog.timestamp,
-        status: selectedLog.httpStatus,
-        ok: selectedLog.ok,
-      };
-      
-      // Add URL if available (includes query parameters if present)
-      if (selectedLog.url) {
-        basePayload.url = selectedLog.url;
-      }
-      
-      // Add headers if available (includes custom headers if present)
-      if (selectedLog.headers && Object.keys(selectedLog.headers).length > 0) {
-        basePayload.headers = selectedLog.headers;
-      }
-      
-      if (selectedLog.responseBody) {
-        try {
-          const parsedBody = JSON.parse(selectedLog.responseBody);
-          basePayload.data = parsedBody;
-        } catch {
-          basePayload.responseBody = selectedLog.responseBody;
-        }
-      }
-      
-      return JSON.stringify(basePayload, null, 2);
-    } catch {
-      return JSON.stringify({ error: "Failed to format payload" }, null, 2);
+  // Reset payloadExpanded to true when selecting a different log
+  useEffect(() => {
+    if (selectedLogIndex !== null) {
+      setPayloadExpanded(true);
     }
-  })() : null;
-
-  const copyPayloadToClipboard = async () => {
-    if (!selectedLogPayload) return;
-    try {
-      await navigator.clipboard.writeText(selectedLogPayload);
-    } catch (err) {
-      console.error("Failed to copy", err);
-    }
-  };
+  }, [selectedLogIndex]);
 
   return (
     <section style={{ width: "50%", display: "flex", flexDirection: "column", backgroundColor: "hsl(var(--muted))", overflow: "hidden" }}>
@@ -206,7 +166,7 @@ export default function Logs() {
               search
             </span>
           </div>
-          <button
+          {/* <button
             style={{
               padding: "0.375rem",
               color: "hsl(var(--muted-foreground))",
@@ -227,7 +187,7 @@ export default function Logs() {
             title="Filter"
           >
             <span className="material-icons-outlined" style={{ fontSize: "1.125rem" }}>filter_list</span>
-          </button>
+          </button> */}
           <button
             onClick={resetLogs}
             disabled={resetting}
@@ -260,7 +220,7 @@ export default function Logs() {
         </div>
       </div>
 
-      <div style={{ flex: 1, overflow: "auto", padding: "1.5rem" }} className="custom-scrollbar">
+      <div style={{ flex: 1, overflowY: "auto", overflowX: "hidden", padding: "1.5rem" }} className="custom-scrollbar">
 
         {logs.length === 0 ? (
           <div className="text-muted text-sm" style={{ padding: "1.25rem", textAlign: "center" }}>
@@ -273,8 +233,8 @@ export default function Logs() {
                 No logs match the current filters
               </div>
             ) : (
-              <div style={{ backgroundColor: "hsl(var(--surface-dark))", border: "1px solid hsl(var(--border))", borderRadius: "var(--radius)", overflow: "hidden", boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)" }}>
-                <table className="table">
+              <div style={{ backgroundColor: "hsl(var(--surface-dark))", border: "1px solid hsl(var(--border))", borderRadius: "var(--radius)", overflow: "visible", boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)" }}>
+                <table className="table" style={{ width: "100%", tableLayout: "fixed" }}>
                   <thead>
                     <tr>
                       <th>Status</th>
@@ -302,57 +262,179 @@ export default function Logs() {
                       const statusClass = isSending ? "badge-sending" : getStatusBadgeClass(log.httpStatus, log.ok);
                       const dotColor = getStatusDotColor(log.httpStatus, log.ok);
                       
+                      const logPayload = logIndex === selectedLogIndex ? (() => {
+                        try {
+                          const basePayload: any = {
+                            id: `evt_${String(logIndex).padStart(4, "0")}`,
+                            object: "event",
+                            gateway: log.gateway,
+                            type: log.event,
+                            timestamp: log.timestamp,
+                            status: log.httpStatus,
+                            ok: log.ok,
+                          };
+                          
+                          if (log.url) {
+                            basePayload.url = log.url;
+                          }
+                          
+                          if (log.headers && Object.keys(log.headers).length > 0) {
+                            basePayload.headers = log.headers;
+                          }
+                          
+                          if (log.responseBody) {
+                            try {
+                              const parsedBody = JSON.parse(log.responseBody);
+                              basePayload.data = parsedBody;
+                            } catch {
+                              basePayload.responseBody = log.responseBody;
+                            }
+                          }
+                          
+                          return JSON.stringify(basePayload, null, 2);
+                        } catch {
+                          return JSON.stringify({ error: "Failed to format payload" }, null, 2);
+                        }
+                      })() : null;
+                      
                       return (
-                        <tr
-                          key={logIndex}
-                          onClick={() => setSelectedLogIndex(logIndex)}
-                          style={{
-                            cursor: "pointer",
-                            backgroundColor: isSelected ? `hsl(217 91% 60% / 0.1)` : isSending ? `hsl(217 91% 60% / 0.05)` : "transparent",
-                            borderLeft: isSelected ? "2px solid hsl(217 91% 60%)" : isSending ? "2px solid hsl(217 91% 60%)" : "none",
-                          }}
-                          className="group"
-                        >
-                          <td style={{ paddingLeft: isSelected || isSending ? "calc(1.5rem - 2px)" : "1.5rem", whiteSpace: "nowrap" }}>
-                            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                              {!isSending && (
-                                <div
-                                  style={{
-                                    width: "8px",
-                                    height: "8px",
-                                    borderRadius: "50%",
-                                    backgroundColor: dotColor,
-                                  }}
-                                />
-                              )}
-                              {isSending && (
-                                <span className="material-icons-outlined" style={{ color: "hsl(217 91% 60%)", fontSize: "0.875rem", animation: "spin 1s linear infinite" }}>
-                                  sync
+                        <>
+                          <tr
+                            key={logIndex}
+                            onClick={() => setSelectedLogIndex(logIndex === selectedLogIndex ? null : logIndex)}
+                            style={{
+                              cursor: "pointer",
+                              backgroundColor: isSelected ? `hsl(217 91% 60% / 0.1)` : isSending ? `hsl(217 91% 60% / 0.05)` : "transparent",
+                              borderLeft: isSelected ? "2px solid hsl(217 91% 60%)" : isSending ? "2px solid hsl(217 91% 60%)" : "none",
+                            }}
+                            className="group"
+                          >
+                            <td style={{ paddingLeft: isSelected || isSending ? "calc(1.5rem - 2px)" : "1.5rem", whiteSpace: "nowrap" }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                                {!isSending && (
+                                  <div
+                                    style={{
+                                      width: "8px",
+                                      height: "8px",
+                                      borderRadius: "50%",
+                                      backgroundColor: dotColor,
+                                    }}
+                                  />
+                                )}
+                                {isSending && (
+                                  <span className="material-icons-outlined" style={{ color: "hsl(217 91% 60%)", fontSize: "0.875rem", animation: "spin 1s linear infinite" }}>
+                                    sync
+                                  </span>
+                                )}
+                                <span className={`badge ${statusClass} mono`} style={{ fontSize: "0.75rem", fontWeight: 500 }}>
+                                  {isSending ? "Sending" : `${log.httpStatus} ${log.ok ? "OK" : "Err"}`}
                                 </span>
-                              )}
-                              <span className={`badge ${statusClass} mono`} style={{ fontSize: "0.75rem", fontWeight: 500 }}>
-                                {isSending ? "Sending" : `${log.httpStatus} ${log.ok ? "OK" : "Err"}`}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="mono" style={{ fontSize: "0.75rem", color: "hsl(var(--muted-foreground))" }}>{shortEventId}</td>
-                          <td style={{ fontWeight: 500, color: "hsl(var(--foreground))" }}>{log.event}</td>
-                          <td style={{ color: "hsl(var(--muted-foreground))" }}>{log.gateway}</td>
-                          <td className="mono" style={{ textAlign: "right", fontSize: "0.75rem", color: "hsl(var(--muted-foreground))", paddingRight: "1.5rem" }}>
-                            {(() => {
-                              const date = new Date(log.timestamp);
-                              const now = new Date();
-                              const diffMs = now.getTime() - date.getTime();
-                              const diffMins = Math.floor(diffMs / 60000);
-                              const diffHours = Math.floor(diffMs / 3600000);
-                              
-                              if (diffMins < 1) return "Just now";
-                              if (diffMins < 60) return `${diffMins}m ago`;
-                              if (diffHours < 24) return date.toLocaleTimeString();
-                              return date.toLocaleString();
-                            })()}
-                          </td>
-                        </tr>
+                              </div>
+                            </td>
+                            <td className="mono" style={{ fontSize: "0.75rem", color: "hsl(var(--muted-foreground))" }}>{shortEventId}</td>
+                            <td style={{ fontWeight: 500, color: "hsl(var(--foreground))" }}>{log.event}</td>
+                            <td style={{ color: "hsl(var(--muted-foreground))" }}>{log.gateway}</td>
+                            <td className="mono" style={{ textAlign: "right", fontSize: "0.75rem", color: "hsl(var(--muted-foreground))", paddingRight: "1.5rem" }}>
+                              {(() => {
+                                const date = new Date(log.timestamp);
+                                const now = new Date();
+                                const diffMs = now.getTime() - date.getTime();
+                                const diffMins = Math.floor(diffMs / 60000);
+                                const diffHours = Math.floor(diffMs / 3600000);
+                                
+                                if (diffMins < 1) return "Just now";
+                                if (diffMins < 60) return `${diffMins}m ago`;
+                                if (diffHours < 24) return date.toLocaleTimeString();
+                                return date.toLocaleString();
+                              })()}
+                            </td>
+                          </tr>
+                          {isSelected && logPayload && (
+                            <tr key={`${logIndex}-detail`} style={{ backgroundColor: "hsl(var(--surface-dark))" }}>
+                              <td colSpan={5} style={{ padding: 0, borderTop: "1px solid hsl(var(--border))", borderLeft: "2px solid hsl(217 91% 60%)", textAlign: "left", width: "100%", maxWidth: "100%", overflow: "hidden" }}>
+                                <div style={{ padding: "1rem 1.5rem", display: "flex", flexDirection: "column", gap: "0.5rem", minWidth: 0, width: "100%", maxWidth: "100%" }}>
+                                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.5rem", minWidth: 0 }}>
+                                    <span style={{ fontSize: "0.625rem", fontWeight: 700, color: "hsl(var(--muted-foreground))", textTransform: "uppercase", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1, marginRight: "0.5rem" }}>
+                                      Event Payload: {`evt_${String(logIndex).padStart(4, "0")}`}
+                                    </span>
+                                    <div style={{ display: "flex", gap: "0.5rem" }}>
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          navigator.clipboard.writeText(logPayload).catch(() => {});
+                                        }}
+                                        style={{
+                                          fontSize: "0.625rem",
+                                          backgroundColor: "hsl(var(--muted))",
+                                          color: "hsl(var(--foreground))",
+                                          padding: "0.25rem 0.5rem",
+                                          borderRadius: "0.25rem",
+                                          border: "none",
+                                          cursor: "pointer",
+                                          transition: "background-color 0.2s",
+                                          fontWeight: 500,
+                                        }}
+                                        onMouseEnter={(e) => {
+                                          e.currentTarget.style.backgroundColor = "hsl(var(--muted) / 1.2)";
+                                        }}
+                                        onMouseLeave={(e) => {
+                                          e.currentTarget.style.backgroundColor = "hsl(var(--muted))";
+                                        }}
+                                      >
+                                        Copy JSON
+                                      </button>
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setPayloadExpanded(!payloadExpanded);
+                                        }}
+                                        style={{
+                                          fontSize: "0.625rem",
+                                          backgroundColor: "hsl(var(--muted))",
+                                          color: "hsl(var(--foreground))",
+                                          padding: "0.25rem 0.5rem",
+                                          borderRadius: "0.25rem",
+                                          border: "none",
+                                          cursor: "pointer",
+                                          transition: "background-color 0.2s",
+                                          fontWeight: 500,
+                                        }}
+                                        onMouseEnter={(e) => {
+                                          e.currentTarget.style.backgroundColor = "hsl(var(--muted) / 1.2)";
+                                        }}
+                                        onMouseLeave={(e) => {
+                                          e.currentTarget.style.backgroundColor = "hsl(var(--muted))";
+                                        }}
+                                      >
+                                        {payloadExpanded ? "Collapse" : "Expand"}
+                                      </button>
+                                    </div>
+                                  </div>
+                                  {payloadExpanded && (
+                                    <div
+                                      className="code custom-scrollbar"
+                                      style={{
+                                        padding: "1rem",
+                                        overflowX: "auto",
+                                        overflowY: "hidden",
+                                        backgroundColor: "hsl(var(--code-bg))",
+                                        borderRadius: "var(--radius)",
+                                        fontSize: "0.75rem",
+                                        lineHeight: 1.6,
+                                        width: "100%",
+                                        maxWidth: "100%",
+                                        minWidth: 0,
+                                        boxSizing: "border-box",
+                                      }}
+                                    >
+                                      <pre style={{ margin: 0, fontFamily: "inherit", whiteSpace: "pre", wordWrap: "normal", overflowWrap: "normal", minWidth: "max-content" }}>{logPayload}</pre>
+                                    </div>
+                                  )}
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </>
                       );
                     })}
                   </tbody>
@@ -362,77 +444,6 @@ export default function Logs() {
           </>
         )}
 
-        {/* Event Payload Section */}
-        {selectedLog && selectedLogPayload && (
-          <div style={{ marginTop: "1.5rem", backgroundColor: "hsl(var(--surface-dark))", border: "1px solid hsl(var(--border))", borderRadius: "var(--radius)", boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)", display: "flex", flexDirection: "column" }}>
-            <div style={{ padding: "0.5rem 1rem", borderBottom: "1px solid hsl(var(--border))", backgroundColor: "hsl(var(--input-dark))", display: "flex", alignItems: "center", justifyContent: "space-between", borderRadius: "var(--radius) var(--radius) 0 0" }}>
-              <span style={{ fontSize: "0.625rem", fontWeight: 700, color: "hsl(var(--muted-foreground))", textTransform: "uppercase" }}>
-                Event Payload: {`evt_${String(selectedLogIndex).padStart(4, "0")}`}
-              </span>
-              <div style={{ display: "flex", gap: "0.5rem" }}>
-                <button
-                  onClick={copyPayloadToClipboard}
-                  style={{
-                    fontSize: "0.625rem",
-                    backgroundColor: "hsl(var(--muted))",
-                    color: "hsl(var(--foreground))",
-                    padding: "0.25rem 0.5rem",
-                    borderRadius: "0.25rem",
-                    border: "none",
-                    cursor: "pointer",
-                    transition: "background-color 0.2s",
-                    fontWeight: 500,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "hsl(var(--muted) / 1.2)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "hsl(var(--muted))";
-                  }}
-                >
-                  Copy JSON
-                </button>
-                <button
-                  onClick={() => setPayloadExpanded(!payloadExpanded)}
-                  style={{
-                    fontSize: "0.625rem",
-                    backgroundColor: "hsl(var(--muted))",
-                    color: "hsl(var(--foreground))",
-                    padding: "0.25rem 0.5rem",
-                    borderRadius: "0.25rem",
-                    border: "none",
-                    cursor: "pointer",
-                    transition: "background-color 0.2s",
-                    fontWeight: 500,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "hsl(var(--muted) / 1.2)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "hsl(var(--muted))";
-                  }}
-                >
-                  {payloadExpanded ? "Collapse" : "Expand"}
-                </button>
-              </div>
-            </div>
-            <div
-              className="code"
-              style={{
-                padding: "1rem",
-                overflowX: "auto",
-                backgroundColor: "hsl(var(--code-bg))",
-                borderRadius: "0 0 var(--radius) var(--radius)",
-                maxHeight: payloadExpanded ? "none" : "200px",
-                overflowY: payloadExpanded ? "visible" : "auto",
-                fontSize: "0.75rem",
-                lineHeight: 1.6,
-              }}
-            >
-              <pre style={{ margin: 0, fontFamily: "inherit" }}>{selectedLogPayload}</pre>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Response View Modal */}
