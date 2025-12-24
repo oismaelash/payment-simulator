@@ -106,7 +106,7 @@ const Navbar = () => {
               </DropdownMenuContent>
             </DropdownMenu>
             
-            <Button 
+            {/* <Button 
               variant="ghost" 
               size="sm" 
               className="hidden sm:inline-flex"
@@ -114,7 +114,7 @@ const Navbar = () => {
             >
               <Github className="w-4 h-4" />
               <span className="ml-2">{t("nav.star")}</span>
-            </Button>
+            </Button> */}
             <Button size="sm" className="hidden sm:inline-flex" onClick={scrollToHero}>
               {t("nav.getStarted")}
             </Button>
