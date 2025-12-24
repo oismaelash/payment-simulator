@@ -73,3 +73,5 @@ export class AsaasAdapter implements GatewayAdapter {
 }
 
 
+
+
