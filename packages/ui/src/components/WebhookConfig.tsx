@@ -26,6 +26,7 @@ export default function WebhookConfig() {
   });
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   // Load gateways on mount
   useEffect(() => {
@@ -44,9 +45,33 @@ export default function WebhookConfig() {
       });
   }, []);
 
+  // Listen for gateway changes from Event Simulator
+  useEffect(() => {
+    const handleGatewayChange = (event: CustomEvent<{ gateway: string }>) => {
+      const { gateway } = event.detail;
+      // Only update if the gateway exists in our gateways list
+      if (gateway && gateways[gateway]) {
+        setSelectedGateway(gateway);
+      }
+    };
+
+    window.addEventListener(
+      "event-simulator-gateway-changed",
+      handleGatewayChange as EventListener
+    );
+
+    return () => {
+      window.removeEventListener(
+        "event-simulator-gateway-changed",
+        handleGatewayChange as EventListener
+      );
+    };
+  }, [gateways]);
+
   // Load config when gateway changes
   useEffect(() => {
     if (selectedGateway) {
+      setIsInitialLoad(true);
       // Fetch config from server
       fetch(`/api/config/webhook?gateway=${selectedGateway}`)
         .then((res) => res.json())
@@ -81,6 +106,8 @@ export default function WebhookConfig() {
               headers: [],
             });
           }
+          // Mark initial load as complete after a short delay
+          setTimeout(() => setIsInitialLoad(false), 100);
         })
         .catch(() => {
           // On error, use defaults
@@ -89,6 +116,7 @@ export default function WebhookConfig() {
             queryParams: [],
             headers: [],
           });
+          setTimeout(() => setIsInitialLoad(false), 100);
         });
       
       // Sync gateway selection with Event Simulator
@@ -99,6 +127,62 @@ export default function WebhookConfig() {
       );
     }
   }, [selectedGateway]);
+
+  // Auto-save when config changes (with debounce)
+  useEffect(() => {
+    // Skip auto-save during initial load
+    if (isInitialLoad || !selectedGateway) {
+      return;
+    }
+
+    // Don't save if urlBase is empty
+    if (!config.urlBase.trim()) {
+      return;
+    }
+
+    // Debounce auto-save
+    const timeoutId = setTimeout(async () => {
+      setSaving(true);
+      setMessage(null);
+
+      try {
+        // Build final URL with query params
+        const finalUrl = buildWebhookUrl(config);
+
+        // Convert headers array to record
+        const headersRecord = headersArrayToRecord(config.headers);
+
+        // Save to server
+        const response = await fetch("/api/config/webhook", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            gateway: selectedGateway,
+            url: finalUrl,
+            urlBase: config.urlBase.trim(),
+            headers: headersRecord,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          setMessage({
+            type: "success",
+            text: `Configuration saved for ${selectedGateway}`,
+          });
+        } else {
+          setMessage({ type: "error", text: data.error || "Failed to save" });
+        }
+      } catch (error) {
+        setMessage({ type: "error", text: "Network error" });
+      } finally {
+        setSaving(false);
+      }
+    }, 500); // 500ms debounce
+
+    return () => clearTimeout(timeoutId);
+  }, [config, selectedGateway, isInitialLoad]);
 
   // Auto-hide success messages after 3 seconds
   useEffect(() => {
@@ -148,56 +232,6 @@ export default function WebhookConfig() {
   const handleRemoveHeader = (index: number) => {
     const newHeaders = config.headers.filter((_, i) => i !== index);
     setConfig({ ...config, headers: newHeaders });
-  };
-
-  const handleSave = async () => {
-    if (!selectedGateway) {
-      setMessage({ type: "error", text: "Please select a gateway" });
-      return;
-    }
-
-    if (!config.urlBase.trim()) {
-      setMessage({ type: "error", text: "Please enter a webhook URL base" });
-      return;
-    }
-
-    setSaving(true);
-    setMessage(null);
-
-    try {
-      // Build final URL with query params
-      const finalUrl = buildWebhookUrl(config);
-
-      // Convert headers array to record
-      const headersRecord = headersArrayToRecord(config.headers);
-
-      // Save to server
-      const response = await fetch("/api/config/webhook", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          gateway: selectedGateway,
-          url: finalUrl,
-          urlBase: config.urlBase.trim(),
-          headers: headersRecord,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setMessage({
-          type: "success",
-          text: `Webhook configuration saved successfully for ${selectedGateway}`,
-        });
-      } else {
-        setMessage({ type: "error", text: data.error || "Failed to save" });
-      }
-    } catch (error) {
-      setMessage({ type: "error", text: "Network error" });
-    } finally {
-      setSaving(false);
-    }
   };
 
   const finalUrl = buildWebhookUrl(config);
@@ -348,15 +382,12 @@ export default function WebhookConfig() {
             )}
           </div>
 
-          {/* Save button */}
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            className="btn btn-primary"
-            style={{ width: "100%" }}
-          >
-            {saving ? "Saving..." : "Save Configuration"}
-          </button>
+          {/* Auto-save indicator */}
+          {saving && (
+            <div className="text-sm" style={{ color: "var(--text-secondary)", fontStyle: "italic", marginTop: "0.5rem" }}>
+              Saving...
+            </div>
+          )}
         </>
       )}
 

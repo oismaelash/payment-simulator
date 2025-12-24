@@ -147,6 +147,12 @@ export default function EventSimulator() {
   const handleGatewayChange = (gateway: string) => {
     setSelectedGateway(gateway);
     setSelectedEvent("");
+    // Sync gateway selection with Webhook Configuration
+    window.dispatchEvent(
+      new CustomEvent("event-simulator-gateway-changed", {
+        detail: { gateway },
+      })
+    );
   };
 
   // Auto-hide success messages after 3 seconds

@@ -115,12 +115,18 @@ export default function PayloadEditorModal({
           <textarea
             value={payloadText}
             onChange={(e) => handleChange(e.target.value)}
-            className="code-white"
             style={{
               flex: 1,
               minHeight: "400px",
               resize: "vertical",
-              borderColor: isValid ? `hsl(var(--border))` : `hsl(var(--destructive))`,
+              cursor: "text",
+              backgroundColor: "#000000",
+              color: `hsl(var(--success))`,
+              fontFamily: "monospace",
+              border: `1px solid ${isValid ? `hsl(var(--border))` : `hsl(var(--destructive))`}`,
+              borderRadius: "4px",
+              padding: "0.75rem",
+              fontSize: "0.875rem",
             }}
             spellCheck={false}
           />

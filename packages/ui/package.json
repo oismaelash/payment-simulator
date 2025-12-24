@@ -10,12 +10,12 @@
   },
   "dependencies": {
     "@payment-simulator/core": "file:../core",
-    "@payment-simulator/gateway-stripe": "file:../gateways/stripe",
     "@payment-simulator/gateway-abacatepay": "file:../gateways/abacatepay",
     "@payment-simulator/gateway-asaas": "file:../gateways/asaas",
     "@payment-simulator/gateway-mercadopago": "file:../gateways/mercadopago",
     "@payment-simulator/gateway-pagarme": "file:../gateways/pagarme",
-    "better-sqlite3": "^9.2.2",
+    "@payment-simulator/gateway-stripe": "file:../gateways/stripe",
+    "better-sqlite3": "^12.5.0",
     "next": "^14.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
@@ -28,4 +28,3 @@
     "typescript": "^5.3.3"
   }
 }
-
