@@ -4,53 +4,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
 
-@layer base {
-  :root {
-    --background: 222 47% 6%;
-    --foreground: 210 40% 98%;
-
-    --card: 222 47% 8%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222 47% 8%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 172 66% 50%;
-    --primary-foreground: 222 47% 6%;
-
-    --secondary: 222 47% 12%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 222 47% 14%;
-    --muted-foreground: 215 20% 55%;
-
-    --accent: 172 66% 50%;
-    --accent-foreground: 222 47% 6%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 222 47% 16%;
-    --input: 222 47% 16%;
-    --ring: 172 66% 50%;
-
-    --radius: 0.5rem;
-
-    /* Custom tokens */
-    --glow-primary: 172 66% 50%;
-    --success: 142 76% 46%;
-    --warning: 38 92% 50%;
-    --code-bg: 222 47% 10%;
-    --gradient-start: 222 47% 6%;
-    --gradient-end: 222 47% 10%;
-    --dot-pattern: hsla(172, 66%, 50%, 0.08);
-  }
-
-  .dark {
-    --background: 222 47% 6%;
-    --foreground: 210 40% 98%;
-  }
-}
+/* Theme variables are now imported from @payment-simulator/theme/theme.css */
 
 @layer base {
   * {

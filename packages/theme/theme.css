@@ -1,0 +1,53 @@
+:root {
+  /* Colors - Futuristic neon devtool theme */
+  --background: 222 47% 6%; /* #020617 slate-950 */
+  --foreground: 210 40% 98%;
+  --primary: 188 94% 47%; /* #22d3ee cyan-400 */
+  --primary-hover: 188 94% 42%; /* #06b6d4 cyan-500 */
+  --primary-foreground: 222 47% 6%;
+  --primary-glow: 188 94% 47% / 0.5;
+  --secondary: 217 33% 20%; /* #0f172a slate-900 */
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217 33% 15%;
+  --muted-foreground: 215 20% 55%;
+  --border: 217 33% 18%; /* #1e293b slate-800 */
+  --border-highlight: 215 28% 17%; /* #334155 slate-700 */
+  --ring: 188 94% 47%;
+  --accent: 217 33% 15%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 63% 31%;
+  --destructive-foreground: 210 40% 98%;
+  --success: 142 76% 36%;
+  --warning: 38 92% 50%;
+  --code-bg: 13 20% 8%; /* #0d1117 */
+  --input-dark: 217 33% 12%; /* #1e293b slate-800 */
+  --surface-dark: 217 33% 20%; /* #0f172a slate-900 */
+  --surface-darker: 222 47% 8%; /* #0b1120 */
+  --glow: 188 94% 47%;
+  --radius: 0.5rem;
+  
+  /* Futuristic effects */
+  --shadow-neon: 0 0 10px hsl(188 94% 47% / 0.2), 0 0 20px hsl(188 94% 47% / 0.1);
+  --shadow-neon-hover: 0 0 15px hsl(188 94% 47% / 0.4), 0 0 30px hsl(188 94% 47% / 0.2);
+  --shadow-inset: inset 0 0 20px hsl(188 94% 47% / 0.05);
+  --shadow-input-focus: 0 0 0 1px hsl(188 94% 47%), 0 0 10px hsl(188 94% 47% / 0.3);
+  --glass-bg: hsl(217 33% 20% / 0.9);
+  --gridline: hsl(217 33% 18% / 0.3);
+
+  /* Additional tokens for Tailwind/shadcn compatibility */
+  --card: 222 47% 8%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222 47% 8%;
+  --popover-foreground: 210 40% 98%;
+  --input: 222 47% 16%;
+  --glow-primary: 188 94% 47%;
+  --gradient-start: 222 47% 6%;
+  --gradient-end: 222 47% 10%;
+  --dot-pattern: hsla(188, 94%, 47%, 0.08);
+}
+
+.dark {
+  --background: 222 47% 6%;
+  --foreground: 210 40% 98%;
+}
+
