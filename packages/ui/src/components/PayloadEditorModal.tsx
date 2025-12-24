@@ -118,13 +118,14 @@ export default function PayloadEditorModal({
           </button>
         </div>
 
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", marginBottom: "1rem" }}>
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", marginBottom: "1rem", minHeight: 0, overflow: "hidden" }}>
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
               marginBottom: "0.5rem",
+              flexShrink: 0,
             }}
           >
             <label className="text-sm" style={{ fontWeight: "500" }}>
@@ -153,13 +154,15 @@ export default function PayloadEditorModal({
           <textarea
             value={payloadText}
             onChange={(e) => handleChange(e.target.value)}
-            className="code"
+            className="code custom-scrollbar"
             style={{
-              flex: 1,
+              height: "400px",
               minHeight: "400px",
-              resize: "vertical",
+              resize: "none",
               cursor: "text",
               border: `1px solid ${isValid ? `hsl(var(--border))` : `hsl(var(--destructive))`}`,
+              overflowY: "auto",
+              overflowX: "auto",
             }}
             spellCheck={false}
           />
