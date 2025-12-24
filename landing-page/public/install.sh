@@ -4,7 +4,7 @@ set -euo pipefail
 VERSION="${PAYMENT_SIMULATOR_VERSION:-1.0.0}"
 APP_DIR="${PAYMENT_SIMULATOR_DIR:-$HOME/.payment-simulator}"
 UI_PORT="${UI_PORT:-4001}"
-COMPOSE_URL="${PAYMENT_SIMULATOR_COMPOSE_URL:-https://main.d3jtz8f4x1oafr.amplifyapp.com/docker-compose.yml}"
+COMPOSE_URL="${PAYMENT_SIMULATOR_COMPOSE_URL:-https://paymentsimulator.com/docker-compose.yml}"
 
 need() {
   command -v "$1" >/dev/null 2>&1 || {
