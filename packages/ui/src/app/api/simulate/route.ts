@@ -13,6 +13,7 @@ export async function POST(request: NextRequest) {
       payloadOverride,
       webhookUrl: webhookUrlFromClient,
       extraHeaders: extraHeadersFromClient,
+      delay = "instant",
     } = body;
 
     if (!gateway || !event) {
@@ -21,6 +22,9 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    // Map delay to milliseconds
+    const delayMs = delay === "5s" ? 5000 : 0;
 
     const adapter = getGatewayAdapter(gateway);
     if (!adapter) {
@@ -80,21 +84,32 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    let result;
-    let finalHeaders: Record<string, string> = {};
-    // finalUrl will be rewritten for Docker if needed before each fetch
-    let finalUrl = webhookUrl;
+    // Helper function to execute the webhook send
+    const executeWebhookSend = async (): Promise<{
+      status: number;
+      ok: boolean;
+      responseBody?: string;
+      error?: string;
+      finalUrl: string;
+      finalHeaders: Record<string, string>;
+    }> => {
+      let result: {
+        status: number;
+        ok: boolean;
+        responseBody?: string;
+        error?: string;
+      };
+      let finalHeaders: Record<string, string> = {};
+      // finalUrl will be rewritten for Docker if needed before each fetch
+      let finalUrl = webhookUrl!;
 
-    // If payloadOverride is provided, send it directly
-    if (payloadOverride !== undefined) {
-      try {
-        const eventDef = adapter.getEventDefinition(event);
-        if (!eventDef) {
-          return NextResponse.json(
-            { error: `Event "${event}" not found for gateway "${gateway}"` },
-            { status: 400 }
-          );
-        }
+      // If payloadOverride is provided, send it directly
+      if (payloadOverride !== undefined) {
+        try {
+          const eventDef = adapter.getEventDefinition(event);
+          if (!eventDef) {
+            throw new Error(`Event "${event}" not found for gateway "${gateway}"`);
+          }
 
         const method = eventDef.method || "POST";
 
@@ -150,24 +165,21 @@ export async function POST(request: NextRequest) {
             responseBody,
           };
         }
-      } catch (error) {
-        result = {
-          status: 0,
-          ok: false,
-          error: error instanceof Error ? error.message : String(error),
-        };
-      }
-    } else {
-      // Use the standard simulate function, but we need to merge headers manually
-      // since simulate doesn't support extraHeaders yet
-      try {
-        const eventDef = adapter.getEventDefinition(event);
-        if (!eventDef) {
-          return NextResponse.json(
-            { error: `Event "${event}" not found for gateway "${gateway}"` },
-            { status: 400 }
-          );
+        } catch (error) {
+          result = {
+            status: 0,
+            ok: false,
+            error: error instanceof Error ? error.message : String(error),
+          };
         }
+      } else {
+        // Use the standard simulate function, but we need to merge headers manually
+        // since simulate doesn't support extraHeaders yet
+        try {
+          const eventDef = adapter.getEventDefinition(event);
+          if (!eventDef) {
+            throw new Error(`Event "${event}" not found for gateway "${gateway}"`);
+          }
 
         const method = eventDef.method || "POST";
 
@@ -242,15 +254,82 @@ export async function POST(request: NextRequest) {
             responseBody,
           };
         }
-      } catch (error) {
-        result = {
-          status: 0,
-          ok: false,
-          responseBody: undefined,
-          error: error instanceof Error ? error.message : String(error),
-        };
+        } catch (error) {
+          result = {
+            status: 0,
+            ok: false,
+            responseBody: undefined,
+            error: error instanceof Error ? error.message : String(error),
+          };
+        }
       }
+
+      return {
+        status: result.status,
+        ok: result.ok,
+        responseBody: result.responseBody,
+        error: result.error,
+        finalUrl,
+        finalHeaders,
+      };
+    };
+
+    // If delay is set, queue the send
+    if (delayMs > 0) {
+      // Create pending log entry immediately
+      const pendingLogId = webhookLogs.addReturningId({
+        gateway,
+        event,
+        timestamp: new Date().toISOString(),
+        httpStatus: 0,
+        ok: false,
+        url: webhookUrl,
+        headers: extraHeaders,
+      });
+
+      // Return immediately with queued status
+      // Fire-and-forget: execute after delay
+      (async () => {
+        try {
+          // Wait for the delay
+          await new Promise((resolve) => setTimeout(resolve, delayMs));
+
+          // Execute the webhook send
+          const result = await executeWebhookSend();
+
+          // Update the log with final results
+          webhookLogs.updateById(pendingLogId, {
+            timestamp: new Date().toISOString(),
+            httpStatus: result.status,
+            ok: result.ok,
+            responseBody: result.responseBody,
+            error: result.error,
+            url: result.finalUrl,
+            headers: result.finalHeaders,
+          });
+        } catch (error) {
+          // Update log with error
+          webhookLogs.updateById(pendingLogId, {
+            timestamp: new Date().toISOString(),
+            httpStatus: 0,
+            ok: false,
+            error: error instanceof Error ? error.message : String(error),
+          });
+        }
+      })();
+
+      return NextResponse.json(
+        {
+          queued: true,
+          delayMs,
+          logId: pendingLogId,
+        },
+        { status: 202 }
+      );
     }
+
+    // Instant send (delay === 0)
+    const result = await executeWebhookSend();
 
     // Log the result
     webhookLogs.add({
@@ -261,8 +340,8 @@ export async function POST(request: NextRequest) {
       ok: result.ok,
       responseBody: result.responseBody,
       error: result.error,
-      url: finalUrl,
-      headers: finalHeaders,
+      url: result.finalUrl,
+      headers: result.finalHeaders,
     });
 
     return NextResponse.json({

@@ -198,6 +198,98 @@ export const webhookLogs = {
   },
 
   /**
+   * Add a new log entry and return the inserted ID
+   */
+  addReturningId(log: WebhookLog): number {
+    const database = getDb();
+    const stmt = database.prepare(`
+      INSERT INTO webhook_logs (
+        gateway, event, timestamp, http_status, ok, response_body, error, url, headers
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+    
+    const result = stmt.run(
+      log.gateway,
+      log.event,
+      log.timestamp,
+      log.httpStatus,
+      log.ok ? 1 : 0,
+      log.responseBody || null,
+      log.error || null,
+      log.url || null,
+      JSON.stringify(log.headers || {})
+    );
+
+    // Keep only last MAX_LOGS entries
+    const countStmt = database.prepare(`SELECT COUNT(*) as count FROM webhook_logs`);
+    const count = (countStmt.get() as { count: number }).count;
+    
+    if (count > MAX_LOGS) {
+      const deleteStmt = database.prepare(`
+        DELETE FROM webhook_logs
+        WHERE id NOT IN (
+          SELECT id FROM webhook_logs
+          ORDER BY timestamp DESC
+          LIMIT ?
+        )
+      `);
+      deleteStmt.run(MAX_LOGS);
+    }
+
+    return Number(result.lastInsertRowid);
+  },
+
+  /**
+   * Update a log entry by ID
+   */
+  updateById(id: number, updates: Partial<WebhookLog>): void {
+    const database = getDb();
+    const updatesList: string[] = [];
+    const values: any[] = [];
+
+    if (updates.timestamp !== undefined) {
+      updatesList.push("timestamp = ?");
+      values.push(updates.timestamp);
+    }
+    if (updates.httpStatus !== undefined) {
+      updatesList.push("http_status = ?");
+      values.push(updates.httpStatus);
+    }
+    if (updates.ok !== undefined) {
+      updatesList.push("ok = ?");
+      values.push(updates.ok ? 1 : 0);
+    }
+    if (updates.responseBody !== undefined) {
+      updatesList.push("response_body = ?");
+      values.push(updates.responseBody || null);
+    }
+    if (updates.error !== undefined) {
+      updatesList.push("error = ?");
+      values.push(updates.error || null);
+    }
+    if (updates.url !== undefined) {
+      updatesList.push("url = ?");
+      values.push(updates.url || null);
+    }
+    if (updates.headers !== undefined) {
+      updatesList.push("headers = ?");
+      values.push(JSON.stringify(updates.headers || {}));
+    }
+
+    if (updatesList.length === 0) {
+      return; // No updates to apply
+    }
+
+    values.push(id);
+    const stmt = database.prepare(`
+      UPDATE webhook_logs
+      SET ${updatesList.join(", ")}
+      WHERE id = ?
+    `);
+    stmt.run(...values);
+  },
+
+  /**
    * Get all logs
    */
   getAll(): WebhookLog[] {

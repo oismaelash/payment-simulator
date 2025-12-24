@@ -67,7 +67,19 @@ export default function Logs() {
     // Listen for refresh events
     const handleRefresh = () => fetchLogs();
     window.addEventListener("logs-refresh", handleRefresh);
-    return () => window.removeEventListener("logs-refresh", handleRefresh);
+    
+    // Poll for updates if there are sending logs
+    const pollInterval = setInterval(() => {
+      fetchLogs().then(() => {
+        // Check if there are still sending logs after fetch
+        // The next poll will check again
+      });
+    }, 1000); // Poll every second
+    
+    return () => {
+      window.removeEventListener("logs-refresh", handleRefresh);
+      clearInterval(pollInterval);
+    };
   }, []);
 
   // Get status badge class and color based on HTTP status
@@ -275,9 +287,10 @@ export default function Logs() {
                       const isSelected = logIndex === selectedLogIndex;
                       const eventId = `evt_${String(logIndex).padStart(4, "0")}`;
                       const shortEventId = eventId.length > 10 ? `${eventId.substring(0, 7)}...` : eventId;
-                      const statusClass = getStatusBadgeClass(log.httpStatus, log.ok);
+                      // Check if log is in "Sending" state: httpStatus === 0 and no error
+                      const isSending = log.httpStatus === 0 && !log.error;
+                      const statusClass = isSending ? "badge-sending" : getStatusBadgeClass(log.httpStatus, log.ok);
                       const dotColor = getStatusDotColor(log.httpStatus, log.ok);
-                      const isSending = false; // Can be enhanced later to track sending state
                       
                       return (
                         <tr
@@ -285,12 +298,12 @@ export default function Logs() {
                           onClick={() => setSelectedLogIndex(logIndex)}
                           style={{
                             cursor: "pointer",
-                            backgroundColor: isSelected ? `hsl(217 91% 60% / 0.1)` : "transparent",
-                            borderLeft: isSelected ? "2px solid hsl(217 91% 60%)" : "none",
+                            backgroundColor: isSelected ? `hsl(217 91% 60% / 0.1)` : isSending ? `hsl(217 91% 60% / 0.05)` : "transparent",
+                            borderLeft: isSelected ? "2px solid hsl(217 91% 60%)" : isSending ? "2px solid hsl(217 91% 60%)" : "none",
                           }}
                           className="group"
                         >
-                          <td style={{ paddingLeft: isSelected ? "calc(1.5rem - 2px)" : "1.5rem", whiteSpace: "nowrap" }}>
+                          <td style={{ paddingLeft: isSelected || isSending ? "calc(1.5rem - 2px)" : "1.5rem", whiteSpace: "nowrap" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                               {!isSending && (
                                 <div
@@ -308,7 +321,7 @@ export default function Logs() {
                                 </span>
                               )}
                               <span className={`badge ${statusClass} mono`} style={{ fontSize: "0.75rem", fontWeight: 500 }}>
-                                {log.httpStatus} {log.ok ? "OK" : "Err"}
+                                {isSending ? "Sending" : `${log.httpStatus} ${log.ok ? "OK" : "Err"}`}
                               </span>
                             </div>
                           </td>

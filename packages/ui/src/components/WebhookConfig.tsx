@@ -383,6 +383,7 @@ export default function WebhookConfig() {
       const body: any = {
         gateway: selectedGateway,
         event: selectedEvent,
+        delay: delay, // Include delay configuration
       };
 
       if (finalUrl) {
@@ -404,7 +405,18 @@ export default function WebhookConfig() {
 
       const data = await response.json();
 
-      if (response.ok && data.success) {
+      // Handle queued response (202)
+      if (response.status === 202 && data.queued) {
+        const delayMs = data.delayMs || 0;
+        setMessage({
+          type: "success",
+          text: `Webhook queued (will send in ${delayMs / 1000}s)`,
+        });
+        // Schedule refresh after delay + buffer
+        setTimeout(() => {
+          window.dispatchEvent(new Event("logs-refresh"));
+        }, delayMs + 500);
+      } else if (response.ok && data.success) {
         setMessage({
           type: "success",
           text: `Webhook sent successfully (${data.status})`,
