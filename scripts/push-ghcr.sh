@@ -76,12 +76,27 @@ echo -e "${GREEN}✅ Login realizado com sucesso!${NC}"
 
 # Build da imagem usando Dockerfile.ui
 echo -e "${YELLOW}🔨 Construindo imagem Docker da UI (Dockerfile.ui)...${NC}"
-docker build -f Dockerfile.ui -t "${FULL_IMAGE_NAME}:${GHCR_IMAGE_VERSION}" -t "${FULL_IMAGE_NAME}:latest" .
+docker buildx build --load -f Dockerfile.ui -t "${FULL_IMAGE_NAME}:${GHCR_IMAGE_VERSION}" -t "${FULL_IMAGE_NAME}:latest" .
 
 if [ $? -ne 0 ]; then
     echo -e "${RED}❌ Erro ao construir a imagem${NC}"
     exit 1
 fi
+
+# Verificar se as tags foram criadas localmente
+echo -e "${YELLOW}🔍 Verificando se as tags foram criadas localmente...${NC}"
+if ! docker image inspect "${FULL_IMAGE_NAME}:${GHCR_IMAGE_VERSION}" >/dev/null 2>&1; then
+    echo -e "${RED}❌ Erro: A tag ${FULL_IMAGE_NAME}:${GHCR_IMAGE_VERSION} não foi criada localmente${NC}"
+    echo -e "${RED}   Isso pode ocorrer se o builder não carregou a imagem. Verifique se está usando buildx com --load${NC}"
+    exit 1
+fi
+
+if ! docker image inspect "${FULL_IMAGE_NAME}:latest" >/dev/null 2>&1; then
+    echo -e "${RED}❌ Erro: A tag ${FULL_IMAGE_NAME}:latest não foi criada localmente${NC}"
+    echo -e "${RED}   Isso pode ocorrer se o builder não carregou a imagem. Verifique se está usando buildx com --load${NC}"
+    exit 1
+fi
+
 echo -e "${GREEN}✅ Imagem construída com sucesso!${NC}"
 
 # Push da imagem com a versão específica
