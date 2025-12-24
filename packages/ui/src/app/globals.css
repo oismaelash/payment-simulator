@@ -618,6 +618,56 @@ body {
   border: 1px solid hsl(var(--destructive) / 0.2);
 }
 
+/* Toast Notification */
+.toast {
+  background-color: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), var(--shadow-neon);
+  min-width: 16rem;
+  max-width: 24rem;
+}
+
+.toast-success {
+  border-left: 3px solid hsl(var(--success));
+}
+
+.toast-error {
+  border-left: 3px solid hsl(var(--destructive));
+}
+
+.toast-info {
+  border-left: 3px solid hsl(var(--primary));
+}
+
+.toast-message {
+  flex: 1;
+  font-size: 0.875rem;
+  color: hsl(var(--foreground));
+  font-weight: 500;
+}
+
+.toast-close {
+  background: transparent;
+  border: none;
+  color: hsl(var(--muted-foreground));
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.toast-close:hover {
+  background-color: hsl(var(--muted) / 0.3);
+  color: hsl(var(--foreground));
+}
+
 /* Animations */
 @keyframes fade-in {
   from {
@@ -636,6 +686,17 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 

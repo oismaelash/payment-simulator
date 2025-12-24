@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import PayloadEditorModal from "./PayloadEditorModal";
 import Dropdown, { type DropdownOption } from "./Dropdown";
+import Toast from "./Toast";
 import type { WebhookTemplate } from "@/lib/templates";
 import {
   buildWebhookUrl,
@@ -870,24 +871,32 @@ export default function WebhookConfig({ gateways, loadingGateways, selectedGatew
             </button>
           </div>
 
-          {/* Auto-save indicator */}
-          {saving && (
-            <div className="text-sm text-muted" style={{ fontStyle: "italic", marginTop: "0.5rem" }}>
-              Saving...
-            </div>
-          )}
         </>
       )}
-
-          {message && (
-            <div className={`message ${message.type === "success" ? "message-success" : "message-error"}`} style={{ marginTop: "1rem" }}>
-              {message.text}
-            </div>
-          )}
         </div>
         )}
       </div>
     </section>
+
+      {/* Toast Notifications */}
+      {saving && (
+        <Toast
+          message="Saving..."
+          type="info"
+          isVisible={true}
+          onClose={() => setSaving(false)}
+          duration={0}
+        />
+      )}
+      {message && !saving && (
+        <Toast
+          message={message.text}
+          type={message.type}
+          isVisible={true}
+          onClose={() => setMessage(null)}
+          duration={3000}
+        />
+      )}
 
       {/* Payload Editor Modal */}
       {isEditorOpen && basePayload && (
