@@ -102,41 +102,38 @@ export default function Logs() {
               </tr>
             </thead>
             <tbody>
-              {logs
-                .slice()
-                .reverse()
-                .map((log, index) => (
-                  <tr key={index}>
-                    <td>{log.gateway}</td>
-                    <td>{log.event}</td>
-                    <td className="text-muted">
-                      {new Date(log.timestamp).toLocaleString()}
-                    </td>
-                    <td>
-                      <span className={`badge ${log.ok ? "badge-success" : "badge-error"}`}>
-                        {log.httpStatus} {log.ok ? "✓" : "✗"}
-                      </span>
-                      {log.error && (
-                        <div className="text-xs" style={{ marginTop: "0.25rem", color: `hsl(var(--destructive))` }}>
-                          {log.error}
-                        </div>
-                      )}
-                    </td>
-                    <td style={{ maxWidth: "420px" }}>
-                      {typeof log.responseBody === "string" && log.responseBody.length > 0 ? (
-                        <button
-                          onClick={() => setViewingResponse({ body: log.responseBody!, index })}
-                          className="btn btn-secondary btn-sm"
-                          style={{ fontSize: "0.8125rem" }}
-                        >
-                          View response
-                        </button>
-                      ) : (
-                        <span className="text-muted text-sm">—</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
+              {logs.map((log, index) => (
+                <tr key={index}>
+                  <td>{log.gateway}</td>
+                  <td>{log.event}</td>
+                  <td className="text-muted">
+                    {new Date(log.timestamp).toLocaleString()}
+                  </td>
+                  <td>
+                    <span className={`badge ${log.ok ? "badge-success" : "badge-error"}`}>
+                      {log.httpStatus} {log.ok ? "✓" : "✗"}
+                    </span>
+                    {log.error && (
+                      <div className="text-xs" style={{ marginTop: "0.25rem", color: `hsl(var(--destructive))` }}>
+                        {log.error}
+                      </div>
+                    )}
+                  </td>
+                  <td style={{ maxWidth: "420px" }}>
+                    {typeof log.responseBody === "string" && log.responseBody.length > 0 ? (
+                      <button
+                        onClick={() => setViewingResponse({ body: log.responseBody!, index })}
+                        className="btn btn-secondary btn-sm"
+                        style={{ fontSize: "0.8125rem" }}
+                      >
+                        View response
+                      </button>
+                    ) : (
+                      <span className="text-muted text-sm">—</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -148,9 +145,9 @@ export default function Logs() {
           isOpen={true}
           onClose={() => setViewingResponse(null)}
           responseBody={viewingResponse.body}
-          title={`Response - ${logs[logs.length - 1 - viewingResponse.index]?.gateway} ${logs[logs.length - 1 - viewingResponse.index]?.event}`}
-          url={logs[logs.length - 1 - viewingResponse.index]?.url}
-          headers={logs[logs.length - 1 - viewingResponse.index]?.headers}
+          title={`Response - ${logs[viewingResponse.index]?.gateway} ${logs[viewingResponse.index]?.event}`}
+          url={logs[viewingResponse.index]?.url}
+          headers={logs[viewingResponse.index]?.headers}
         />
       )}
     </div>
