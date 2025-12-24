@@ -1,9 +1,43 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import WebhookConfig from "@/components/WebhookConfig";
 import Logs from "@/components/Logs";
 
+interface GatewayMeta {
+  events: string[];
+}
+
+interface MetaResponse {
+  gateways: Record<string, GatewayMeta>;
+}
+
 export default function Home() {
+  const [gateways, setGateways] = useState<Record<string, GatewayMeta>>({});
+  const [loadingGateways, setLoadingGateways] = useState(true);
+  const [selectedGateway, setSelectedGateway] = useState<string>("");
+
+  // Load gateways on mount
+  useEffect(() => {
+    setLoadingGateways(true);
+    fetch("/api/meta")
+      .then((res) => res.json())
+      .then((data: MetaResponse) => {
+        setGateways(data.gateways);
+        const gatewayNames = Object.keys(data.gateways);
+        if (gatewayNames.length > 0 && !selectedGateway) {
+          // Select first gateway if none selected
+          setSelectedGateway(gatewayNames[0]);
+        }
+        setLoadingGateways(false);
+      })
+      .catch(() => {
+        setLoadingGateways(false);
+      });
+  }, []);
+
+  const gatewayNames = Object.keys(gateways);
+
   return (
     <>
       <header className="header">
@@ -19,6 +53,41 @@ export default function Home() {
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+          {/* Gateway selector */}
+          {gatewayNames.length > 0 && (
+            <div style={{ position: "relative" }}>
+              <select
+                className="select"
+                value={selectedGateway}
+                onChange={(e) => setSelectedGateway(e.target.value)}
+                disabled={loadingGateways}
+                style={{
+                  appearance: "none",
+                  paddingRight: "2.5rem",
+                  paddingLeft: "2.5rem",
+                  minWidth: "10rem",
+                  opacity: loadingGateways ? 0.6 : 1,
+                  cursor: loadingGateways ? "not-allowed" : "pointer",
+                }}
+              >
+                {loadingGateways ? (
+                  <option value="">Loading...</option>
+                ) : (
+                  <>
+                    <option value="">-- Select Gateway --</option>
+                    {gatewayNames.map((gateway) => (
+                      <option key={gateway} value={gateway}>
+                        {gateway}
+                      </option>
+                    ))}
+                  </>
+                )}
+              </select>
+              <span className="material-icons-outlined" style={{ position: "absolute", right: "0.75rem", top: "50%", transform: "translateY(-50%)", color: "hsl(var(--muted-foreground))", pointerEvents: "none", fontSize: "1.25rem" }}>
+                expand_more
+              </span>
+            </div>
+          )}
           <div className="status-online">
             <div className="status-online-dot" />
             <span style={{ fontSize: "0.75rem", fontWeight: 500, color: "hsl(142 76% 36%)" }}>System Online</span>
@@ -65,7 +134,7 @@ export default function Home() {
       </header>
       <main style={{ flex: 1, display: "flex", overflow: "hidden" }}>
         <div className="grid2">
-          <WebhookConfig />
+          <WebhookConfig gateways={gateways} loadingGateways={loadingGateways} selectedGateway={selectedGateway} setSelectedGateway={setSelectedGateway} />
           <Logs />
         </div>
       </main>

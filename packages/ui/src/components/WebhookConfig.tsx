@@ -14,14 +14,14 @@ interface GatewayMeta {
   events: string[];
 }
 
-interface MetaResponse {
+interface WebhookConfigProps {
   gateways: Record<string, GatewayMeta>;
+  loadingGateways: boolean;
+  selectedGateway: string;
+  setSelectedGateway: (gateway: string) => void;
 }
 
-export default function WebhookConfig() {
-  const [gateways, setGateways] = useState<Record<string, GatewayMeta>>({});
-  const [loadingGateways, setLoadingGateways] = useState(true);
-  const [selectedGateway, setSelectedGateway] = useState<string>("");
+export default function WebhookConfig({ gateways, loadingGateways, selectedGateway, setSelectedGateway }: WebhookConfigProps) {
   const [config, setConfig] = useState<WebhookGatewayConfig>({
     urlBase: "",
     queryParams: [],
@@ -45,25 +45,6 @@ export default function WebhookConfig() {
   const [templateName, setTemplateName] = useState("");
   const [showSaveTemplateDialog, setShowSaveTemplateDialog] = useState(false);
 
-  // Load gateways on mount
-  useEffect(() => {
-    setLoadingGateways(true);
-    fetch("/api/meta")
-      .then((res) => res.json())
-      .then((data: MetaResponse) => {
-        setGateways(data.gateways);
-        const gatewayNames = Object.keys(data.gateways);
-        if (gatewayNames.length > 0) {
-          // Select first gateway
-          setSelectedGateway(gatewayNames[0]);
-        }
-        setLoadingGateways(false);
-      })
-      .catch(() => {
-        setMessage({ type: "error", text: "Failed to load gateways" });
-        setLoadingGateways(false);
-      });
-  }, []);
 
   // Load events and payload when gateway/event changes
   useEffect(() => {
@@ -324,7 +305,6 @@ export default function WebhookConfig() {
   };
 
   const finalUrl = buildWebhookUrl(config);
-  const gatewayNames = Object.keys(gateways);
 
   const handleRestoreDefaults = () => {
     setSelectedEvent("");
@@ -550,33 +530,6 @@ export default function WebhookConfig() {
           </div>
         ) : (
         <div className="card" style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-      {/* Gateway selector */}
-      {gatewayNames.length > 0 && (
-        <div>
-          <label className="text-sm" style={{ display: "block", marginBottom: "0.5rem", fontWeight: 500, color: "hsl(var(--foreground))" }}>
-            Gateway
-          </label>
-          <div style={{ position: "relative" }}>
-            <select
-              className="select"
-              value={selectedGateway}
-              onChange={(e) => setSelectedGateway(e.target.value)}
-              style={{ appearance: "none", paddingRight: "2.5rem" }}
-            >
-              <option value="">-- Select Gateway --</option>
-              {gatewayNames.map((gateway) => (
-                <option key={gateway} value={gateway}>
-                  {gateway}
-                </option>
-              ))}
-            </select>
-            <span className="material-icons-outlined" style={{ position: "absolute", right: "0.75rem", top: "50%", transform: "translateY(-50%)", color: "hsl(var(--muted-foreground))", pointerEvents: "none", fontSize: "1.25rem" }}>
-              expand_more
-            </span>
-          </div>
-        </div>
-      )}
-
       {selectedGateway && (
         <>
           {/* Webhook URL */}
