@@ -10,6 +10,21 @@ curl -fsSL https://paymentsimulator.com/install | bash
 
 Then open `http://localhost:4001`.
 
+### Docker and Localhost URLs
+
+When running the simulator via Docker, webhook URLs configured as `localhost` or `127.0.0.1` are automatically rewritten to `host.docker.internal` so they can reach services running on your host machine (WSL2, macOS, or Windows).
+
+**Examples:**
+- ✅ `http://localhost:4002/webhook` → automatically rewritten to `http://host.docker.internal:4002/webhook`
+- ✅ `http://127.0.0.1:3000/api/webhook` → automatically rewritten to `http://host.docker.internal:3000/api/webhook`
+- ✅ `https://api.example.com/webhook` → unchanged (remote URLs work as-is)
+
+**Alternative approaches:**
+- Use `host.docker.internal` explicitly: `http://host.docker.internal:4002/webhook` (works without rewrite)
+- For container-to-container communication: use Docker service names (e.g., `http://webhook-receiver:4002/webhook`)
+
+**Note:** The `docker-compose.yml` includes `extra_hosts` configuration to ensure `host.docker.internal` resolves correctly on Linux/WSL2.
+
 ## Features
 
 - **Gateway-agnostic core**: Understands only the canonical `payment.succeeded` event

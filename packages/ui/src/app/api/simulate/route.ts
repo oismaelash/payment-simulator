@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { simulate } from "@payment-simulator/core";
 import { webhookConfig, webhookLogs } from "@/db/sqlite";
 import { getGatewayAdapter } from "@/gateways";
+import { rewriteLocalhostForDocker } from "@/lib/docker-rewrite";
 
 export async function POST(request: NextRequest) {
   try {
@@ -54,6 +55,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Rewrite localhost URLs to host.docker.internal when running in Docker
+    webhookUrl = rewriteLocalhostForDocker(webhookUrl);
+
     // Client is source of truth: always prefer client-provided headers when available
     let extraHeaders: Record<string, string> = {};
 
@@ -78,6 +82,7 @@ export async function POST(request: NextRequest) {
 
     let result;
     let finalHeaders: Record<string, string> = {};
+    // finalUrl will be rewritten for Docker if needed before each fetch
     let finalUrl = webhookUrl;
 
     // If payloadOverride is provided, send it directly
@@ -109,6 +114,8 @@ export async function POST(request: NextRequest) {
           }
           const queryString = queryParams.toString();
           finalUrl = queryString ? `${webhookUrl}?${queryString}` : webhookUrl;
+          // Rewrite localhost in final URL (may have query params added)
+          finalUrl = rewriteLocalhostForDocker(finalUrl);
 
           const response = await fetch(finalUrl, {
             method: "GET",
@@ -126,8 +133,10 @@ export async function POST(request: NextRequest) {
           // POST: send JSON body
           finalHeaders["Content-Type"] = "application/json";
           const payloadString = JSON.stringify(payloadOverride, null, 2);
+          // webhookUrl already rewritten above, but ensure finalUrl is set correctly
+          finalUrl = webhookUrl;
 
-          const response = await fetch(webhookUrl, {
+          const response = await fetch(finalUrl, {
             method: "POST",
             headers: finalHeaders,
             body: payloadString,
@@ -188,6 +197,8 @@ export async function POST(request: NextRequest) {
             // If payload is not valid JSON, use URL as-is
             finalUrl = webhookUrl;
           }
+          // Rewrite localhost in final URL (may have query params added)
+          finalUrl = rewriteLocalhostForDocker(finalUrl);
 
           const response = await fetch(finalUrl, {
             method: "GET",
@@ -209,8 +220,10 @@ export async function POST(request: NextRequest) {
         } else {
           // POST: send JSON body
           finalHeaders["Content-Type"] = "application/json";
+          // webhookUrl already rewritten above, but ensure finalUrl is set correctly
+          finalUrl = webhookUrl;
 
-          const response = await fetch(webhookUrl, {
+          const response = await fetch(finalUrl, {
             method: "POST",
             headers: finalHeaders,
             body: payload,

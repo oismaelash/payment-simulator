@@ -242,8 +242,6 @@ export default function EventSimulator() {
           type: "success",
           text: `Webhook sent successfully (${data.status})`,
         });
-        // Trigger logs refresh
-        window.dispatchEvent(new Event("logs-refresh"));
       } else {
         setMessage({
           type: "error",
@@ -254,6 +252,8 @@ export default function EventSimulator() {
       setMessage({ type: "error", text: "Network error" });
     } finally {
       setSending(false);
+      // Always trigger logs refresh after attempting to send (success or failure)
+      window.dispatchEvent(new Event("logs-refresh"));
     }
   };
 
