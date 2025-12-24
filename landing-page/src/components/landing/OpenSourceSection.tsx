@@ -54,7 +54,11 @@ const OpenSourceSection = () => {
             </div>
           </div>
 
-          <Button variant="hero-outline" size="lg">
+          <Button 
+            variant="hero-outline" 
+            size="lg"
+            onClick={() => window.open("https://github.com/oismaelash/payment-simulator", "_blank", "noopener,noreferrer")}
+          >
             <Github className="w-5 h-5" />
             Star on GitHub
           </Button>

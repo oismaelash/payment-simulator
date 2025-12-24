@@ -22,7 +22,7 @@ const Index = () => {
         <HowItWorksSection />
         <FeaturesSection />
         <DeveloperExperienceSection />
-        <OpenSourceSection />
+        {/* <OpenSourceSection /> */}
         <CTASection />
       </main>
       <Footer />

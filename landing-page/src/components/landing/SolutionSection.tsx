@@ -37,11 +37,11 @@ const SolutionSection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="flex flex-wrap justify-center gap-6 mx-auto w-full" style={{maxWidth: "900px"}}>
           {solutions.map((solution, index) => (
             <div 
               key={index} 
-              className="feature-card text-center group"
+              className="feature-card text-center group w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] max-w-[250px]"
             >
               <div className="inline-flex p-4 rounded-xl bg-primary/10 border border-primary/20 mb-4 group-hover:bg-primary/20 transition-colors">
                 <solution.icon className="w-6 h-6 text-primary" />

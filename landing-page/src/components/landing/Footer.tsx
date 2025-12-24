@@ -7,16 +7,23 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo / Brand */}
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
-              <span className="text-primary font-mono font-bold text-lg">PS</span>
+            <div className="">
+              <img
+                src="/icon.png" 
+                alt="Payment Simulator" 
+                className="h-9 w-9"
+                loading="lazy"
+              />
             </div>
             <span className="font-semibold">Payment Simulator</span>
           </div>
 
           {/* Links */}
-          <div className="flex items-center gap-6">
+          {/* <div className="flex items-center gap-6">
             <a 
-              href="#" 
+              href="https://github.com/oismaelash/payment-simulator"
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               <Github className="w-4 h-4" />
@@ -36,7 +43,7 @@ const Footer = () => {
               <Scale className="w-4 h-4" />
               Apache 2.0
             </a>
-          </div>
+          </div> */}
 
           {/* Tagline */}
           <p className="text-sm text-muted-foreground">

@@ -1,25 +1,68 @@
-import { Check, Sparkles } from "lucide-react";
+import { 
+  Code, 
+  Plug, 
+  Settings, 
+  FileEdit, 
+  FileText, 
+  Terminal, 
+  Layout, 
+  Database 
+} from "lucide-react";
 
-const openSourceFeatures = [
-  "Local payment simulator",
-  "Pix & Credit Card support",
-  "Stripe, Mercado Pago, Pagar.me",
-  "Webhook sender with retries",
-  "Firebase Emulator-inspired UI",
-  "CLI for automation",
-  "Docker support",
-  "Self-hostable",
-];
-
-const proFeatures = [
-  "Advanced failure scenarios",
-  "Event reordering simulation",
-  "Network failure simulation",
-  "Chargeback timelines",
-  "Multi-project support",
-  "Export logs & reports",
-  "Team collaboration",
-  "Priority support",
+const features = [
+  {
+    icon: Code,
+    title: "Gateway-agnostic core",
+    description: "Payloads are sent exactly as defined",
+  },
+  {
+    icon: Plug,
+    title: "Gateway adapters",
+    description: "Stripe, AbacatePay, Asaas, and Pagar.me e more",
+  },
+  {
+    icon: Settings,
+    title: "Configuration gateway",
+    description: "URL base, query parameters, and custom headers",
+    subItems: [
+      "URL base",
+      "Query parameters",
+      "Custom headers",
+    ],
+  },
+  {
+    icon: FileEdit,
+    title: "Editable payloads",
+    description: "View and edit payload JSON before sending",
+    subItems: [
+      "View and edit payload JSON before sending",
+      "Save edited payloads as reusable templates",
+    ],
+  },
+  {
+    icon: FileText,
+    title: "Payload templates",
+    description: "Create custom payload variants per event",
+    subItems: [
+      "Create custom payload variants per event",
+      "Quickly re-send modified payloads without editing JSON again",
+    ],
+  },
+  {
+    icon: Terminal,
+    title: "Raw payload support",
+    description: "Payloads are sent exactly as defined",
+  },
+  {
+    icon: Layout,
+    title: "Simple UI",
+    description: "Minimal interface for configuring and triggering webhooks",
+  },
+  {
+    icon: Database,
+    title: "In-memory state",
+    description: "Persistence layer, perfect for local development",
+  },
 ];
 
 const FeaturesSection = () => {
@@ -31,57 +74,38 @@ const FeaturesSection = () => {
         <div className="text-center mb-16">
           <p className="text-primary font-mono text-sm mb-4">// FEATURES</p>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-            Free forever. Pro when you need it.
+            Free forever.
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            The core is open source and always will be. Pro unlocks advanced testing scenarios.
+            Everything you need to test payment webhooks locally, without any restrictions.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {/* Open Source */}
-          <div className="feature-card">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-lg bg-success/10 border border-success/20">
-                <Check className="w-5 h-5 text-success" />
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+          {features.map((feature, index) => (
+            <div 
+              key={index} 
+              className="feature-card text-center group"
+            >
+              <div className="inline-flex p-4 rounded-xl bg-primary/10 border border-primary/20 mb-4 group-hover:bg-primary/20 transition-colors">
+                <feature.icon className="w-6 h-6 text-primary" />
               </div>
-              <div>
-                <h3 className="text-xl font-bold">Open Source</h3>
-                <p className="text-muted-foreground text-sm">Free forever • Apache 2.0</p>
-              </div>
+              <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed mb-3">
+                {feature.description}
+              </p>
+              {/* {feature.subItems && feature.subItems.length > 0 && (
+                <ul className="text-left mt-3 space-y-1.5">
+                  {feature.subItems.map((subItem, subIndex) => (
+                    <li key={subIndex} className="text-muted-foreground text-xs flex items-start gap-2">
+                      <span className="text-primary mt-1">•</span>
+                      <span>{subItem}</span>
+                    </li>
+                  ))}
+                </ul>
+              )} */}
             </div>
-            
-            <ul className="space-y-3">
-              {openSourceFeatures.map((feature, index) => (
-                <li key={index} className="flex items-center gap-3">
-                  <Check className="w-4 h-4 text-success flex-shrink-0" />
-                  <span className="text-foreground text-sm">{feature}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Pro */}
-          <div className="feature-card border-primary/30 bg-gradient-to-br from-card to-primary/5">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
-                <Sparkles className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold">Pro</h3>
-                <p className="text-muted-foreground text-sm">For teams & advanced testing</p>
-              </div>
-            </div>
-            
-            <ul className="space-y-3">
-              {proFeatures.map((feature, index) => (
-                <li key={index} className="flex items-center gap-3">
-                  <Sparkles className="w-4 h-4 text-primary flex-shrink-0" />
-                  <span className="text-foreground text-sm">{feature}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          ))}
         </div>
       </div>
     </section>

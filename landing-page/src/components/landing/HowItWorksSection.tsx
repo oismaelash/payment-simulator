@@ -7,20 +7,20 @@ const steps = [
     title: "Choose a gateway",
     description: "Select from Stripe, Mercado Pago, Pagar.me, or add your own custom gateway configuration.",
   },
+  // {
+  //   number: "02",
+  //   icon: Settings2,
+  //   title: "Create a payment",
+  //   description: "Use the dashboard or API to create a simulated Pix or credit card payment with any amount.",
+  // },
   {
     number: "02",
-    icon: Settings2,
-    title: "Create a payment",
-    description: "Use the dashboard or API to create a simulated Pix or credit card payment with any amount.",
-  },
-  {
-    number: "03",
     icon: Webhook,
     title: "Configure webhook behavior",
     description: "Set delays, retries, failure rates, or simulate specific scenarios like chargebacks.",
   },
   {
-    number: "04",
+    number: "03",
     icon: ArrowRight,
     title: "Receive real payloads",
     description: "Your local endpoint receives production-identical webhooks. Test your handlers like it's real.",
@@ -42,11 +42,11 @@ const HowItWorksSection = () => {
 
         <div className="relative">
           {/* Connection line */}
-          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent -translate-y-1/2" />
+          <div className="hidden lg:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-280px)] max-w-[800px] h-px bg-gradient-to-r from-transparent via-border to-transparent" />
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="flex flex-wrap justify-center gap-8">
             {steps.map((step, index) => (
-              <div key={index} className="relative">
+              <div key={index} className="relative w-full md:w-[calc(50%-16px)] lg:w-[calc(33.333%-22px)] max-w-[280px]">
                 <div className="feature-card h-full relative z-10">
                   {/* Step number */}
                   <span className="text-5xl font-bold text-primary/20 font-mono absolute top-4 right-4">

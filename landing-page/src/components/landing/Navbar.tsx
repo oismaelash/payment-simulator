@@ -3,13 +3,24 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 const navLinks = [
-  { label: "Features", href: "#features" },
+  { label: "Gateways", href: "#gateways" },
+  { label: "Problem", href: "#problem" },
+  { label: "Solution", href: "#solution" },
   { label: "How it works", href: "#how-it-works" },
-  { label: "Open Source", href: "#open-source" },
+  { label: "Features", href: "#features" },
+  { label: "Developer Experience", href: "#dx" },
+  // { label: "Open Source", href: "#open-source" },
 ];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const scrollToHero = () => {
+    const heroSection = document.getElementById("hero");
+    if (heroSection) {
+      heroSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
@@ -17,8 +28,13 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <a href="#" className="flex items-center gap-3">
-            <div className="p-1.5 rounded-lg bg-primary/10 border border-primary/20">
-              <span className="text-primary font-mono font-bold text-sm">PS</span>
+            <div className="">
+              <img 
+                src="/icon.png" 
+                alt="Payment Simulator" 
+                className="h-9 w-9"
+                loading="lazy"
+              />
             </div>
             <span className="font-semibold hidden sm:block">Payment Simulator</span>
           </a>
@@ -38,11 +54,16 @@ const Navbar = () => {
 
           {/* CTA */}
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" className="hidden sm:inline-flex">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="hidden sm:inline-flex"
+              onClick={() => window.open("https://github.com/oismaelash/payment-simulator", "_blank", "noopener,noreferrer")}
+            >
               <Github className="w-4 h-4" />
               <span className="ml-2">Star</span>
             </Button>
-            <Button size="sm" className="hidden sm:inline-flex">
+            <Button size="sm" className="hidden sm:inline-flex" onClick={scrollToHero}>
               Get Started
             </Button>
             
@@ -71,11 +92,16 @@ const Navbar = () => {
                 </a>
               ))}
               <div className="flex gap-3 pt-4">
-                <Button variant="outline" size="sm" className="flex-1">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="flex-1"
+                  onClick={() => window.open("https://github.com/oismaelash/payment-simulator", "_blank", "noopener,noreferrer")}
+                >
                   <Github className="w-4 h-4 mr-2" />
                   Star
                 </Button>
-                <Button size="sm" className="flex-1">
+                <Button size="sm" className="flex-1" onClick={scrollToHero}>
                   Get Started
                 </Button>
               </div>

@@ -1,7 +1,14 @@
-import { Terminal, Sparkles } from "lucide-react";
+import { Terminal, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const CTASection = () => {
+  const scrollToHero = () => {
+    const heroSection = document.getElementById("hero");
+    if (heroSection) {
+      heroSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <section id="cta" className="section-padding relative overflow-hidden">
       {/* Background glow */}
@@ -19,18 +26,22 @@ const CTASection = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button variant="hero" size="xl">
+            <Button variant="hero" size="xl" onClick={scrollToHero}>
               <Terminal className="w-5 h-5" />
               Get started locally
             </Button>
-            <Button variant="hero-outline" size="xl">
-              <Sparkles className="w-5 h-5" />
-              Explore Pro features
+            <Button 
+              variant="hero-outline" 
+              size="xl"
+              onClick={() => window.open("https://github.com/oismaelash/payment-simulator", "_blank", "noopener,noreferrer")}
+            >
+              <Github className="w-5 h-5" />
+              View on GitHub
             </Button>
           </div>
 
           <p className="text-muted-foreground text-sm mt-8">
-            No credit card required • Open source • Works offline
+            Free forever • Open source • Works offline
           </p>
         </div>
       </div>

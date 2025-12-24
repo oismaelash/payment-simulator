@@ -1,20 +1,27 @@
 import { Terminal, Github, Zap, ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+} from "@/components/ui/dialog";
 
 const HeroSection = () => {
+  const [isDemoOpen, setIsDemoOpen] = useState(false);
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 bg-dot-pattern opacity-40" />
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/10 rounded-full blur-[120px] animate-pulse-glow" />
       
       <div className="section-container relative z-10 text-center py-20">
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary border border-border mb-8 animate-fade-in">
+        {/* <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary border border-border mb-8 animate-fade-in">
           <Zap className="w-4 h-4 text-primary" />
           <span className="text-sm text-muted-foreground">Open Source</span>
           <span className="text-sm text-foreground font-medium">Payment Testing Made Simple</span>
-        </div>
+        </div> */}
 
         {/* Headline */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 animate-slide-up">
@@ -35,11 +42,15 @@ const HeroSection = () => {
             <Terminal className="w-5 h-5" />
             Run locally in minutes
           </Button> */}
-          <Button variant="hero" size="xl">
+          <Button variant="hero" size="xl" onClick={() => setIsDemoOpen(true)}>
             <Play className="w-5 h-5" />
             Demo
           </Button>
-          <Button variant="hero-outline" size="xl">
+          <Button 
+            variant="hero-outline" 
+            size="xl"
+            onClick={() => window.open("https://github.com/oismaelash/payment-simulator", "_blank", "noopener,noreferrer")}
+          >
             <Github className="w-5 h-5" />
             View on GitHub
           </Button>
@@ -80,6 +91,21 @@ const HeroSection = () => {
           <ArrowRight className="w-5 h-5 text-muted-foreground rotate-90" />
         </div>
       </div>
+
+      {/* Demo Video Modal */}
+      <Dialog open={isDemoOpen} onOpenChange={setIsDemoOpen}>
+        <DialogContent className="max-w-4xl p-0">
+          <div className="relative w-full aspect-video">
+            <iframe
+              className="w-full h-full rounded-lg"
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+              title="Payment Simulator Demo"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };

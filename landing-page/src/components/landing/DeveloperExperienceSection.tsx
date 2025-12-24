@@ -60,20 +60,20 @@ const DeveloperExperienceSection = () => {
                 <div className="w-3 h-3 rounded-full bg-warning/60" />
                 <div className="w-3 h-3 rounded-full bg-success/60" />
               </div>
-              <span className="text-xs text-muted-foreground ml-2">zsh</span>
+              <span className="text-xs text-muted-foreground ml-2">terminal</span>
             </div>
-            <div className="p-6 text-sm space-y-4">
-              <div>
-                <p className="text-muted-foreground"># Install globally</p>
-                <p><span className="text-primary">$</span> npm install -g payment-simulator</p>
+            <div className="p-6 text-left">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <span className="text-primary">$</span>
+                <span className="text-foreground">curl -fsSL https://paymentsimulator.com/install.sh | bash</span>
               </div>
-              <div>
-                <p className="text-muted-foreground"># Or run with npx</p>
-                <p><span className="text-primary">$</span> npx payment-simulator start</p>
-              </div>
-              <div>
-                <p className="text-muted-foreground"># That's it. You're done.</p>
-                <p><span className="text-primary">$</span> open http://localhost:4000</p>
+              <div className="mt-4 space-y-1 text-sm">
+                <p className="text-muted-foreground">
+                  <span className="text-success">✓</span> Starting Payment Simulator v1.0.0
+                </p>
+                <p className="text-foreground mt-4">
+                  <span className="text-primary">→</span> Dashboard: <span className="text-primary underline">http://localhost:4001</span>
+                </p>
               </div>
             </div>
           </div>
