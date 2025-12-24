@@ -62,7 +62,7 @@ export default function Home() {
         <div style={{ display: "flex", alignItems: "center", gap: "1rem", flex: 1 }}>
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
             <img 
-              src="/icon.png" 
+              src="https://www.paymentsimulator.com/icon.png" 
               alt="Payment Simulator Logo" 
               style={{ 
                 width: "2rem",
