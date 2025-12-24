@@ -11,11 +11,11 @@ const solutions = [
     title: "Realistic webhooks",
     description: "Receive actual payloads from Stripe, Mercado Pago, Pagar.me formats. Exactly like production.",
   },
-  {
-    icon: Settings,
-    title: "Configurable scenarios",
-    description: "Simulate delays, retries, failures, and edge cases. Control every aspect of the flow.",
-  },
+  // {
+  //   icon: Settings,
+  //   title: "Configurable scenarios",
+  //   description: "Simulate delays, retries, failures, and edge cases. Control every aspect of the flow.",
+  // },
   {
     icon: MonitorPlay,
     title: "Visual dashboard",
