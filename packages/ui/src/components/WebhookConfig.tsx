@@ -514,9 +514,9 @@ export default function WebhookConfig({ gateways, loadingGateways, selectedGatew
     <section style={{ width: "50%", minWidth: "500px", borderRight: "1px solid hsl(var(--border))", display: "flex", flexDirection: "column", overflowY: "auto", backgroundColor: "hsl(var(--surface-darker))", position: "relative" }} className="custom-scrollbar">
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "16rem", background: "linear-gradient(to bottom, hsl(var(--primary) / 0.05), transparent)", pointerEvents: "none" }} />
       <div style={{ padding: "2rem", maxWidth: "48rem", margin: "0 auto", width: "100%", position: "relative", zIndex: 1 }}>
-        <div style={{ marginBottom: "2rem" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
           {/* <h2 style={{ fontSize: "1.25rem", fontWeight: 700, color: "hsl(var(--foreground))", marginBottom: "0.5rem", letterSpacing: "-0.02em" }}>Webhook Configuration</h2> */}
-          <p className="text-sm text-muted">
+          <p className="text-sm text-muted" style={{ textAlign: "center" }}>
             Manage endpoint dispatching rules and parameters.
           </p>
         </div>
@@ -530,7 +530,7 @@ export default function WebhookConfig({ gateways, loadingGateways, selectedGatew
             </p>
           </div>
         ) : (
-        <div className="card" style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+        <div className="" style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
       {selectedGateway && (
         <>
           {/* Webhook URL */}
