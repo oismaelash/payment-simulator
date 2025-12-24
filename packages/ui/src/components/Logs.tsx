@@ -23,7 +23,7 @@ export default function Logs() {
   const [viewingResponse, setViewingResponse] = useState<{ body: string; index: number } | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLogIndex, setSelectedLogIndex] = useState<number | null>(null);
-  const [payloadExpanded, setPayloadExpanded] = useState(false);
+  const [payloadExpanded, setPayloadExpanded] = useState(true);
 
   const fetchLogs = async () => {
     setLoading(true);
@@ -119,7 +119,7 @@ export default function Logs() {
   const selectedLog = selectedLogIndex !== null && selectedLogIndex < logs.length ? logs[selectedLogIndex] : null;
   const selectedLogPayload = selectedLog ? (() => {
     try {
-      const basePayload = {
+      const basePayload: any = {
         id: `evt_${String(selectedLogIndex).padStart(4, "0")}`,
         object: "event",
         gateway: selectedLog.gateway,
@@ -129,12 +129,22 @@ export default function Logs() {
         ok: selectedLog.ok,
       };
       
+      // Add URL if available (includes query parameters if present)
+      if (selectedLog.url) {
+        basePayload.url = selectedLog.url;
+      }
+      
+      // Add headers if available (includes custom headers if present)
+      if (selectedLog.headers && Object.keys(selectedLog.headers).length > 0) {
+        basePayload.headers = selectedLog.headers;
+      }
+      
       if (selectedLog.responseBody) {
         try {
           const parsedBody = JSON.parse(selectedLog.responseBody);
-          return JSON.stringify({ ...basePayload, data: parsedBody }, null, 2);
+          basePayload.data = parsedBody;
         } catch {
-          return JSON.stringify({ ...basePayload, responseBody: selectedLog.responseBody }, null, 2);
+          basePayload.responseBody = selectedLog.responseBody;
         }
       }
       

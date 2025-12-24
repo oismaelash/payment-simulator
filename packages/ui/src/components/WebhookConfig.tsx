@@ -20,6 +20,7 @@ interface MetaResponse {
 
 export default function WebhookConfig() {
   const [gateways, setGateways] = useState<Record<string, GatewayMeta>>({});
+  const [loadingGateways, setLoadingGateways] = useState(true);
   const [selectedGateway, setSelectedGateway] = useState<string>("");
   const [config, setConfig] = useState<WebhookGatewayConfig>({
     urlBase: "",
@@ -46,6 +47,7 @@ export default function WebhookConfig() {
 
   // Load gateways on mount
   useEffect(() => {
+    setLoadingGateways(true);
     fetch("/api/meta")
       .then((res) => res.json())
       .then((data: MetaResponse) => {
@@ -55,9 +57,11 @@ export default function WebhookConfig() {
           // Select first gateway
           setSelectedGateway(gatewayNames[0]);
         }
+        setLoadingGateways(false);
       })
       .catch(() => {
         setMessage({ type: "error", text: "Failed to load gateways" });
+        setLoadingGateways(false);
       });
   }, []);
 
@@ -357,25 +361,28 @@ export default function WebhookConfig() {
         return;
       }
 
-      // Build config object from server response
+      // Build config object: use local state for query params and headers (user's custom config)
+      // but fallback to server config for urlBase if local is empty
       const gatewayConfig = {
-        urlBase: configData.urlBase || configData.url || "",
-        queryParams: [] as Array<{ key: string; value: string }>,
-        headers: headersRecordToArray(configData.headers || {}),
+        urlBase: config.urlBase || configData.urlBase || configData.url || "",
+        queryParams: config.queryParams.length > 0 ? config.queryParams : (() => {
+          // If no local query params, try to parse from server URL
+          if (configData.url && !configData.urlBase) {
+            try {
+              const url = new URL(configData.url);
+              const params: Array<{ key: string; value: string }> = [];
+              url.searchParams.forEach((value, key) => {
+                params.push({ key, value });
+              });
+              return params;
+            } catch {
+              return [];
+            }
+          }
+          return [];
+        })(),
+        headers: config.headers.length > 0 ? config.headers : headersRecordToArray(configData.headers || {}),
       };
-
-      // Parse URL to extract query params if url is provided
-      if (configData.url && !configData.urlBase) {
-        try {
-          const url = new URL(configData.url);
-          url.searchParams.forEach((value, key) => {
-            gatewayConfig.queryParams.push({ key, value });
-          });
-          gatewayConfig.urlBase = `${url.protocol}//${url.host}${url.pathname}`;
-        } catch {
-          gatewayConfig.urlBase = configData.url;
-        }
-      }
 
       const finalUrl = buildWebhookUrl(gatewayConfig);
       const customHeaders = headersArrayToRecord(gatewayConfig.headers);
@@ -528,8 +535,17 @@ export default function WebhookConfig() {
             Configure endpoint settings and behavior for local webhook dispatching.
           </p>
         </div>
+        {loadingGateways ? (
+          <div className="card" style={{ padding: "2rem", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "1rem" }}>
+            <span className="material-icons-outlined" style={{ fontSize: "2rem", color: "hsl(var(--muted-foreground))", animation: "spin 1s linear infinite" }}>
+              sync
+            </span>
+            <p style={{ color: "hsl(var(--muted-foreground))", fontSize: "0.875rem", margin: 0 }}>
+              Loading gateways...
+            </p>
+          </div>
+        ) : (
         <div className="card" style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-
       {/* Gateway selector */}
       {gatewayNames.length > 0 && (
         <div>
@@ -986,6 +1002,7 @@ export default function WebhookConfig() {
             </div>
           )}
         </div>
+        )}
       </div>
     </section>
 
