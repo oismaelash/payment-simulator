@@ -64,7 +64,7 @@ const HowItWorksSection = () => {
         </div>
 
         {/* Flow Diagram */}
-        <div className="mt-16 code-block p-8 max-w-2xl mx-auto">
+        <div className="mt-16 rounded-lg border border-border p-8 max-w-2xl mx-auto bg-transparent">
           <div className="flex items-center justify-between text-sm">
             {/* Simulator */}
             <div className="text-center">
