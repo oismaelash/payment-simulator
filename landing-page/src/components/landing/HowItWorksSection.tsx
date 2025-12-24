@@ -70,32 +70,35 @@ const HowItWorksSection = () => {
         {/* Flow Diagram */}
         <div className="mt-16 code-block p-8 max-w-2xl mx-auto">
           <div className="flex items-center justify-between text-sm">
-            <div className="text-center">
-              <div className="w-12 h-12 rounded-lg bg-secondary border border-border flex items-center justify-center mx-auto mb-2">
-                <span className="text-primary font-mono text-xs">App</span>
-              </div>
-              <span className="text-muted-foreground text-xs">Your Code</span>
-            </div>
-            
-            <div className="flex-1 mx-4 flex items-center">
-              <div className="flex-1 h-px bg-border" />
-              <ArrowRight className="w-4 h-4 text-primary mx-2" />
-              <div className="flex-1 h-px bg-border" />
-            </div>
-            
+            {/* Simulator */}
             <div className="text-center">
               <div className="w-12 h-12 rounded-lg bg-primary/20 border border-primary/30 flex items-center justify-center mx-auto mb-2">
                 <span className="text-primary font-mono text-xs">Sim</span>
               </div>
               <span className="text-muted-foreground text-xs">Simulator</span>
             </div>
+
+            <div className="flex-1 mx-4 flex items-center">
+              <div className="flex-1 h-px bg-border" />
+              <ArrowRight className="w-4 h-4 text-primary mx-2" />
+              <div className="flex-1 h-px bg-border" />
+            </div>
             
+            {/* Your Code */}
+            <div className="text-center">
+              <div className="w-12 h-12 rounded-lg bg-secondary border border-border flex items-center justify-center mx-auto mb-2">
+                <span className="text-primary font-mono text-xs">App</span>
+              </div>
+              <span className="text-muted-foreground text-xs">Your Code</span>
+            </div>
+
             <div className="flex-1 mx-4 flex items-center">
               <div className="flex-1 h-px bg-border" />
               <Webhook className="w-4 h-4 text-success mx-2" />
               <div className="flex-1 h-px bg-border" />
             </div>
-            
+
+            {/* Webhook */}
             <div className="text-center">
               <div className="w-12 h-12 rounded-lg bg-success/20 border border-success/30 flex items-center justify-center mx-auto mb-2">
                 <span className="text-success font-mono text-xs">:3000</span>

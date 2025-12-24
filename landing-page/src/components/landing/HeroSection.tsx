@@ -1,4 +1,4 @@
-import { Terminal, Github, Zap, ArrowRight } from "lucide-react";
+import { Terminal, Github, Zap, ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const HeroSection = () => {
@@ -31,9 +31,13 @@ const HeroSection = () => {
 
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-slide-up delay-200">
-          <Button variant="hero" size="xl">
+          {/* <Button variant="hero" size="xl">
             <Terminal className="w-5 h-5" />
             Run locally in minutes
+          </Button> */}
+          <Button variant="hero" size="xl">
+            <Play className="w-5 h-5" />
+            Demo
           </Button>
           <Button variant="hero-outline" size="xl">
             <Github className="w-5 h-5" />
