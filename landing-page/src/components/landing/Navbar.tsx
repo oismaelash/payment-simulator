@@ -8,6 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { GITHUB_URL } from "@/config/env";
 
 const Navbar = () => {
   const { t, i18n: i18nInstance } = useTranslation();
@@ -174,7 +175,7 @@ const Navbar = () => {
                   variant="outline" 
                   size="sm" 
                   className="flex-1"
-                  onClick={() => window.open("https://github.com/oismaelash/payment-simulator", "_blank", "noopener,noreferrer")}
+                  onClick={() => window.open(GITHUB_URL, "_blank", "noopener,noreferrer")}
                 >
                   <Github className="w-4 h-4 mr-2" />
                   {t("nav.star")}

@@ -1,6 +1,7 @@
 import { Terminal, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
+import { GITHUB_URL } from "@/config/env";
 
 const CTASection = () => {
   const { t } = useTranslation();
@@ -34,7 +35,7 @@ const CTASection = () => {
             <Button 
               variant="hero-outline" 
               size="xl"
-              onClick={() => window.open("https://github.com/oismaelash/payment-simulator", "_blank", "noopener,noreferrer")}
+              onClick={() => window.open(GITHUB_URL, "_blank", "noopener,noreferrer")}
             >
               <Github className="w-5 h-5" />
               {t("cta.viewOnGitHub")}

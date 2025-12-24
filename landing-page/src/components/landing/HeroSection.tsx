@@ -6,6 +6,7 @@ import {
   Dialog,
   DialogContent,
 } from "@/components/ui/dialog";
+import { GITHUB_URL, YOUTUBE_EMBED_URL } from "@/config/env";
 
 const HeroSection = () => {
   const { t } = useTranslation();
@@ -50,7 +51,7 @@ const HeroSection = () => {
           <Button 
             variant="hero-outline" 
             size="xl"
-            onClick={() => window.open("https://github.com/oismaelash/payment-simulator", "_blank", "noopener,noreferrer")}
+            onClick={() => window.open(GITHUB_URL, "_blank", "noopener,noreferrer")}
           >
             <Github className="w-5 h-5" />
             {t("hero.viewOnGitHub")}
@@ -99,7 +100,7 @@ const HeroSection = () => {
           <div className="relative w-full aspect-video">
             <iframe
               className="w-full h-full rounded-lg"
-              src="https://www.youtube.com/embed/AfZSg9Lpjww"
+              src={YOUTUBE_EMBED_URL}
               title={t("hero.demoTitle")}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen

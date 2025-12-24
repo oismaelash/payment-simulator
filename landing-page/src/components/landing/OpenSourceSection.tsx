@@ -1,5 +1,6 @@
 import { Github, Star, GitFork, Users, Scale } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { GITHUB_URL } from "@/config/env";
 
 const OpenSourceSection = () => {
   return (
@@ -57,7 +58,7 @@ const OpenSourceSection = () => {
           <Button 
             variant="hero-outline" 
             size="lg"
-            onClick={() => window.open("https://github.com/oismaelash/payment-simulator", "_blank", "noopener,noreferrer")}
+            onClick={() => window.open(GITHUB_URL, "_blank", "noopener,noreferrer")}
           >
             <Github className="w-5 h-5" />
             Star on GitHub
