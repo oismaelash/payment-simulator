@@ -27,11 +27,21 @@ When running the simulator via Docker, webhook URLs configured as `localhost` or
 
 ## Features
 
-- **Gateway-agnostic core**: Understands only the canonical `payment.succeeded` event
-- **Gateway adapters**: Stripe, AbacatePay, and Asaas adapters map gateway-specific events to canonical events
-- **Raw payload support**: Payloads are loaded from JSON files and sent without modification
-- **Simple UI**: Minimal Next.js interface for configuring webhooks and triggering events
-- **In-memory state**: No persistence layer - perfect for local development
+- **Gateway-agnostic core**: No enforced normalization — payloads are sent exactly as defined
+- **Gateway adapters**: Stripe, AbacatePay, Asaas, and Pagar.me
+- **Custom webhook configuration per gateway**:
+  - URL base
+  - Query parameters
+  - Custom headers
+- **Editable payloads**:
+  - View and edit payload JSON before sending
+  - Save edited payloads as reusable templates
+- **Payload templates**:
+  - Create custom payload variants per event
+  - Quickly re-send modified payloads without editing JSON again
+- **Raw payload support**: Payloads are sent exactly as defined (no validation, no mutation)
+- **Simple UI**: Minimal Next.js interface for configuring and triggering webhooks
+- **In-memory state**: No persistence layer — perfect for local development
 
 ## Supported Gateways
 
@@ -257,6 +267,22 @@ To add new payload files for existing events:
 
 **Important**: Payloads are sent exactly as-is (no modification, no validation).
 
+## Payload Templates
+
+In addition to the default gateway payloads, the simulator allows you to:
+
+- Edit webhook payloads directly in the UI
+- Save edited payloads as templates
+- Reuse templates across simulations
+
+This is useful for testing:
+- Optional or missing fields
+- Different payment amounts or statuses
+- Edge cases and malformed payloads
+- Backward compatibility with older payload versions
+
+Templates are stored in memory (MVP) and reset on server restart.
+
 ## Configuring Gateway Headers
 
 There are two ways to configure headers:
@@ -369,6 +395,8 @@ Trigger a webhook simulation.
 - `webhookUrl` is optional (uses server-stored config if not provided)
 - `extraHeaders` is optional (uses server-stored config if not provided)
 - `payloadOverride` is optional (if provided, sends this payload instead of loading from file)
+  - `payloadOverride` is useful for sending custom or template-based payloads
+  - When provided, the simulator skips loading the payload file and sends the override as-is
 
 ### GET `/api/config/webhook?gateway=stripe`
 Get webhook configuration for a specific gateway.
