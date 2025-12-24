@@ -61,7 +61,7 @@ const HeroSection = () => {
             <div className="p-6 text-left">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <span className="text-primary">$</span>
-                <span className="text-foreground">curl -fsSL https://paymentsimulator.com/install | bash</span>
+                <span className="text-foreground">curl -fsSL https://paymentsimulator.com/install.sh | bash</span>
               </div>
               <div className="mt-4 space-y-1 text-sm">
                 <p className="text-muted-foreground">
