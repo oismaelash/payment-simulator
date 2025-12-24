@@ -41,21 +41,42 @@ export default function Home() {
   return (
     <>
       <header className="header">
-        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <img src="/icon.png" alt="Payment Simulator" style={{ width: "2rem", height: "2rem", display: "block" }} />
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <div style={{ 
+            background: "linear-gradient(to bottom right, hsl(217 91% 60%), hsl(188 94% 47%))",
+            padding: "0.5rem",
+            borderRadius: "0.5rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow: "0 4px 12px hsl(188 94% 47% / 0.2)"
+          }}>
+            <span className="material-symbols-outlined" style={{ color: "white", fontSize: "1.25rem" }}>dns</span>
+          </div>
           <div>
-            <h1 style={{ fontWeight: 700, fontSize: "0.875rem", color: "hsl(var(--foreground))", lineHeight: 1.2 }}>
-              Payment Simulator
+            <h1 style={{ 
+              fontWeight: 700, 
+              fontSize: "0.875rem", 
+              color: "hsl(var(--foreground))", 
+              lineHeight: 1.2,
+              letterSpacing: "0.05em",
+              textTransform: "uppercase"
+            }}>
+              Gateway Simulator
             </h1>
-            <p style={{ fontSize: "0.75rem", color: "hsl(var(--muted-foreground))", fontFamily: "monospace" }}>
-              localhost:4001
-            </p>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.125rem" }}>
+              <p className="mono" style={{ fontSize: "0.6875rem", color: "hsl(var(--muted-foreground))", letterSpacing: "0.1em" }}>
+                localhost:4001
+              </p>
+              <span style={{ width: "0.25rem", height: "0.25rem", borderRadius: "50%", backgroundColor: "hsl(var(--muted-foreground))" }} />
+              <span style={{ fontSize: "0.6875rem", color: "hsl(var(--primary))", fontWeight: 500 }}>v2.4.0</span>
+            </div>
           </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           {/* Gateway selector */}
           {gatewayNames.length > 0 && (
-            <div style={{ position: "relative" }}>
+            <div className="select-wrapper" style={{ position: "relative" }}>
               <select
                 className="select"
                 value={selectedGateway}
@@ -64,7 +85,7 @@ export default function Home() {
                 style={{
                   appearance: "none",
                   paddingRight: "2.5rem",
-                  paddingLeft: "2.5rem",
+                  paddingLeft: "1rem",
                   minWidth: "10rem",
                   opacity: loadingGateways ? 0.6 : 1,
                   cursor: loadingGateways ? "not-allowed" : "pointer",
@@ -83,38 +104,34 @@ export default function Home() {
                   </>
                 )}
               </select>
-              <span className="material-icons-outlined" style={{ position: "absolute", right: "0.75rem", top: "50%", transform: "translateY(-50%)", color: "hsl(var(--muted-foreground))", pointerEvents: "none", fontSize: "1.25rem" }}>
-                expand_more
+              <span className="material-symbols-outlined icon-sm" style={{ 
+                position: "absolute", 
+                right: "0.75rem", 
+                top: "50%", 
+                transform: "translateY(-50%)", 
+                color: "hsl(var(--muted-foreground))", 
+                pointerEvents: "none",
+                transition: "color 0.2s ease"
+              }}>
+                unfold_more
               </span>
             </div>
           )}
-          <div className="status-online">
+          {/* <div className="status-online">
             <div className="status-online-dot" />
-            <span style={{ fontSize: "0.75rem", fontWeight: 500, color: "hsl(142 76% 36%)" }}>System Online</span>
-          </div>
+            <span style={{ fontSize: "0.6875rem", fontWeight: 600, color: "hsl(142 76% 36%)", textTransform: "uppercase", letterSpacing: "0.1em" }}>System Online</span>
+          </div> */}
+          <div style={{ width: "1px", height: "1.5rem", backgroundColor: "hsl(var(--border))" }} />
           <a
             href="https://github.com/oismaelash/payment-simulator"
             target="_blank"
             rel="noopener noreferrer"
+            className="btn-action"
             style={{
               padding: "0.5rem",
-              color: "hsl(var(--muted-foreground))",
-              borderRadius: "0.5rem",
-              border: "none",
-              background: "transparent",
-              cursor: "pointer",
-              transition: "all 0.2s",
-              display: "inline-flex",
-              alignItems: "center",
               textDecoration: "none",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = "hsl(var(--foreground))";
-              e.currentTarget.style.backgroundColor = "hsl(var(--muted) / 0.3)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = "hsl(var(--muted-foreground))";
-              e.currentTarget.style.backgroundColor = "transparent";
+              textTransform: "none",
+              letterSpacing: "normal"
             }}
             title="GitHub Repository"
           >

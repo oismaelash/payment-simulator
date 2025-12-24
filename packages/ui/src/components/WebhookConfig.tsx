@@ -511,17 +511,18 @@ export default function WebhookConfig({ gateways, loadingGateways, selectedGatew
 
   return (
     <>
-    <section style={{ width: "50%", minWidth: "500px", borderRight: "1px solid hsl(var(--border))", display: "flex", flexDirection: "column", overflowY: "auto", backgroundColor: "hsl(222 47% 8%)" }} className="custom-scrollbar">
-      <div style={{ padding: "2rem", maxWidth: "48rem", margin: "0 auto", width: "100%" }}>
+    <section style={{ width: "50%", minWidth: "500px", borderRight: "1px solid hsl(var(--border))", display: "flex", flexDirection: "column", overflowY: "auto", backgroundColor: "hsl(var(--surface-darker))", position: "relative" }} className="custom-scrollbar">
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "16rem", background: "linear-gradient(to bottom, hsl(var(--primary) / 0.05), transparent)", pointerEvents: "none" }} />
+      <div style={{ padding: "2rem", maxWidth: "48rem", margin: "0 auto", width: "100%", position: "relative", zIndex: 1 }}>
         <div style={{ marginBottom: "2rem" }}>
-          {/* <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "0.5rem" }}>Webhook Configuration</h2> */}
-          <p style={{ color: "hsl(var(--muted-foreground))", fontSize: "0.875rem" }}>
-            Configure endpoint settings and behavior for local webhook dispatching.
+          {/* <h2 style={{ fontSize: "1.25rem", fontWeight: 700, color: "hsl(var(--foreground))", marginBottom: "0.5rem", letterSpacing: "-0.02em" }}>Webhook Configuration</h2> */}
+          <p className="text-sm text-muted">
+            Manage endpoint dispatching rules and parameters.
           </p>
         </div>
         {loadingGateways ? (
           <div className="card" style={{ padding: "2rem", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "1rem" }}>
-            <span className="material-icons-outlined" style={{ fontSize: "2rem", color: "hsl(var(--muted-foreground))", animation: "spin 1s linear infinite" }}>
+            <span className="material-symbols-outlined" style={{ fontSize: "2rem", color: "hsl(var(--muted-foreground))", animation: "spin 1s linear infinite" }}>
               sync
             </span>
             <p style={{ color: "hsl(var(--muted-foreground))", fontSize: "0.875rem", margin: 0 }}>
@@ -534,20 +535,37 @@ export default function WebhookConfig({ gateways, loadingGateways, selectedGatew
         <>
           {/* Webhook URL */}
           <div>
-            <label className="text-sm" style={{ display: "block", marginBottom: "0.5rem", fontWeight: 500, color: "hsl(var(--foreground))" }}>
-              Webhook URL
+            <label className="text-xs" style={{ display: "block", marginBottom: "0.5rem", fontWeight: 600, color: "hsl(var(--muted-foreground))", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+              Destination URL
             </label>
-            <div style={{ display: "flex", alignItems: "center", backgroundColor: "hsl(var(--input-dark))", border: "1px solid hsl(var(--border))", borderRadius: "var(--radius)", overflow: "hidden", transition: "box-shadow 0.2s" }} className="group">
-              <span className="material-icons-outlined" style={{ paddingLeft: "0.75rem", paddingRight: "0.5rem", color: "hsl(var(--muted-foreground))", fontSize: "1.125rem" }}>link</span>
+            <div className="field">
+              <span className="material-symbols-outlined field-icon icon">link</span>
               <input
                 type="text"
                 className="input"
                 value={config.urlBase}
-                onChange={(e) => handleUrlBaseChange(e.target.value)}
+                onChange={(e) => {
+                  handleUrlBaseChange(e.target.value);
+                  // Visual validation (non-blocking)
+                  const url = e.target.value.trim();
+                  if (url) {
+                    try {
+                      new URL(url);
+                      e.target.setAttribute("data-valid", "true");
+                      e.target.removeAttribute("data-invalid");
+                    } catch {
+                      e.target.setAttribute("data-invalid", "true");
+                      e.target.removeAttribute("data-valid");
+                    }
+                  } else {
+                    e.target.removeAttribute("data-valid");
+                    e.target.removeAttribute("data-invalid");
+                  }
+                }}
                 placeholder="http://localhost:3000/api/webhooks/payment"
-                style={{ flex: 1, border: "none", backgroundColor: "transparent", paddingLeft: 0, fontFamily: "monospace", fontSize: "0.875rem" }}
+                style={{ flex: 1, border: "none", backgroundColor: "transparent", paddingLeft: 0, fontFamily: "monospace", fontSize: "0.875rem", color: "hsl(188 94% 70%)" }}
               />
-              <div style={{ padding: "0.25rem 0.5rem", marginRight: "0.5rem", backgroundColor: "hsl(var(--muted))", borderRadius: "0.25rem", fontSize: "0.625rem", fontWeight: 700, color: "hsl(var(--foreground))", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              <div style={{ padding: "0.25rem 0.5rem", marginRight: "0.5rem", backgroundColor: "hsl(217 91% 60% / 0.1)", border: "1px solid hsl(217 91% 60% / 0.2)", borderRadius: "0.25rem", fontSize: "0.625rem", fontWeight: 700, color: "hsl(217 91% 60%)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 POST
               </div>
             </div>
@@ -556,70 +574,26 @@ export default function WebhookConfig({ gateways, loadingGateways, selectedGatew
           {/* Query Params */}
           <div>
             <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "0.5rem",
-                cursor: "pointer",
-                padding: "0.5rem",
-                borderRadius: "var(--radius)",
-                transition: "background-color 0.2s",
-              }}
+              className={`section-header ${isQueryOpen ? "open" : ""}`}
               onClick={() => setIsQueryOpen(!isQueryOpen)}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = `hsl(var(--muted) / 0.3)`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent";
-              }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <span
-                  className="material-icons-outlined"
-                  style={{
-                    fontSize: "0.875rem",
-                    transition: "transform 0.2s",
-                    transform: isQueryOpen ? "rotate(90deg)" : "rotate(0deg)",
-                    color: "hsl(var(--muted-foreground))",
-                  }}
-                >
+                <span className="material-symbols-outlined section-header-icon icon-sm">
                   chevron_right
                 </span>
-                <label className="text-sm" style={{ fontWeight: 500, color: "hsl(var(--foreground))", margin: 0, cursor: "pointer" }}>
-                  Query Parameters ({config.queryParams.length})
+                <label className="text-xs" style={{ fontWeight: 600, color: "hsl(var(--muted-foreground))", margin: 0, cursor: "pointer", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                  Query Parameters <span style={{ color: "hsl(var(--muted-foreground) / 0.6)" }}>({config.queryParams.length})</span>
                 </label>
               </div>
               <button
+                className="btn-action"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleAddQueryParam();
                 }}
-                style={{
-                  fontSize: "0.75rem",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.25rem",
-                  color: "hsl(var(--primary))",
-                  fontWeight: 500,
-                  padding: "0.25rem 0.5rem",
-                  borderRadius: "var(--radius)",
-                  border: "none",
-                  background: "transparent",
-                  cursor: "pointer",
-                  transition: "all 0.2s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "hsl(var(--primary-hover))";
-                  e.currentTarget.style.backgroundColor = "hsl(var(--primary) / 0.1)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "hsl(var(--primary))";
-                  e.currentTarget.style.backgroundColor = "transparent";
-                }}
               >
-                <span className="material-icons-outlined" style={{ fontSize: "0.875rem" }}>add</span>
-                Add
+                <span className="material-symbols-outlined icon-sm">add</span>
+                Add New
               </button>
             </div>
             {isQueryOpen && (
@@ -631,37 +605,42 @@ export default function WebhookConfig({ gateways, loadingGateways, selectedGatew
                       borderRadius: "var(--radius)",
                       padding: "1rem",
                       textAlign: "center",
+                      transition: "border-color 0.2s ease"
                     }}
+                    className="animate-fade-in"
                   >
-                    <p style={{ fontSize: "0.75rem", color: "hsl(var(--muted-foreground))", fontStyle: "italic" }}>
-                      No query parameters configured
+                    <span className="material-symbols-outlined" style={{ fontSize: "1.5rem", color: "hsl(var(--muted-foreground) / 0.5)", marginBottom: "0.5rem", display: "block" }}>code_blocks</span>
+                    <p className="text-xs text-muted" style={{ fontStyle: "italic", margin: 0 }}>
+                      No parameters configured
                     </p>
                   </div>
                 ) : (
-                  <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }} className="animate-fade-in">
                     {config.queryParams.map((param, index) => (
                       <div key={index} style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
                         <input
                           type="text"
-                          className="input"
+                          className="input mono"
                           value={param.key}
                           onChange={(e) => handleQueryParamChange(index, "key", e.target.value)}
-                          placeholder="key"
-                          style={{ flex: 1 }}
+                          placeholder="Key"
+                          style={{ flex: 1, fontSize: "0.75rem" }}
                         />
                         <input
                           type="text"
-                          className="input"
+                          className="input mono"
                           value={param.value}
                           onChange={(e) => handleQueryParamChange(index, "value", e.target.value)}
-                          placeholder="value"
-                          style={{ flex: 1 }}
+                          placeholder="Value"
+                          style={{ flex: 1, fontSize: "0.75rem", color: "hsl(142 76% 60%)" }}
                         />
                         <button
                           onClick={() => handleRemoveQueryParam(index)}
                           className="btn btn-destructive btn-sm"
+                          style={{ minWidth: "2rem", padding: 0 }}
+                          title="Remove parameter"
                         >
-                          ×
+                          <span className="material-symbols-outlined icon-sm">close</span>
                         </button>
                       </div>
                     ))}
@@ -679,70 +658,26 @@ export default function WebhookConfig({ gateways, loadingGateways, selectedGatew
           {/* Headers */}
           <div>
             <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "0.5rem",
-                cursor: "pointer",
-                padding: "0.5rem",
-                borderRadius: "var(--radius)",
-                transition: "background-color 0.2s",
-              }}
+              className={`section-header ${isHeadersOpen ? "open" : ""}`}
               onClick={() => setIsHeadersOpen(!isHeadersOpen)}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = `hsl(var(--muted) / 0.3)`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent";
-              }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <span
-                  className="material-icons-outlined"
-                  style={{
-                    fontSize: "0.875rem",
-                    transition: "transform 0.2s",
-                    transform: isHeadersOpen ? "rotate(90deg)" : "rotate(0deg)",
-                    color: "hsl(var(--muted-foreground))",
-                  }}
-                >
+                <span className="material-symbols-outlined section-header-icon icon-sm">
                   chevron_right
                 </span>
-                <label className="text-sm" style={{ fontWeight: 500, color: "hsl(var(--foreground))", margin: 0, cursor: "pointer" }}>
-                  Custom Headers ({config.headers.length})
+                <label className="text-xs" style={{ fontWeight: 600, color: "hsl(var(--muted-foreground))", margin: 0, cursor: "pointer", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                  Custom Headers <span style={{ color: "hsl(var(--muted-foreground) / 0.6)" }}>({config.headers.length})</span>
                 </label>
               </div>
               <button
+                className="btn-action"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleAddHeader();
                 }}
-                style={{
-                  fontSize: "0.75rem",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.25rem",
-                  color: "hsl(var(--primary))",
-                  fontWeight: 500,
-                  padding: "0.25rem 0.5rem",
-                  borderRadius: "var(--radius)",
-                  border: "none",
-                  background: "transparent",
-                  cursor: "pointer",
-                  transition: "all 0.2s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "hsl(var(--primary-hover))";
-                  e.currentTarget.style.backgroundColor = "hsl(var(--primary) / 0.1)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "hsl(var(--primary))";
-                  e.currentTarget.style.backgroundColor = "transparent";
-                }}
               >
-                <span className="material-icons-outlined" style={{ fontSize: "0.875rem" }}>add</span>
-                Add
+                <span className="material-symbols-outlined icon-sm">add</span>
+                Add New
               </button>
             </div>
             {isHeadersOpen && (
@@ -754,37 +689,42 @@ export default function WebhookConfig({ gateways, loadingGateways, selectedGatew
                       borderRadius: "var(--radius)",
                       padding: "1rem",
                       textAlign: "center",
+                      transition: "border-color 0.2s ease"
                     }}
+                    className="animate-fade-in"
                   >
-                    <p style={{ fontSize: "0.75rem", color: "hsl(var(--muted-foreground))", fontStyle: "italic" }}>
-                      No custom headers configured
+                    <span className="material-symbols-outlined" style={{ fontSize: "1.5rem", color: "hsl(var(--muted-foreground) / 0.5)", marginBottom: "0.5rem", display: "block" }}>code_blocks</span>
+                    <p className="text-xs text-muted" style={{ fontStyle: "italic", margin: 0 }}>
+                      No headers configured
                     </p>
                   </div>
                 ) : (
-                  <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }} className="animate-fade-in">
                     {config.headers.map((header, index) => (
                       <div key={index} style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
                         <input
                           type="text"
-                          className="input"
+                          className="input mono"
                           value={header.key}
                           onChange={(e) => handleHeaderChange(index, "key", e.target.value)}
-                          placeholder="header name"
-                          style={{ flex: 1 }}
+                          placeholder="Header name"
+                          style={{ flex: 1, fontSize: "0.75rem" }}
                         />
                         <input
                           type="text"
-                          className="input"
+                          className="input mono"
                           value={header.value}
                           onChange={(e) => handleHeaderChange(index, "value", e.target.value)}
-                          placeholder="header value"
-                          style={{ flex: 1 }}
+                          placeholder="Header value"
+                          style={{ flex: 1, fontSize: "0.75rem" }}
                         />
                         <button
                           onClick={() => handleRemoveHeader(index)}
                           className="btn btn-destructive btn-sm"
+                          style={{ minWidth: "2rem", padding: 0 }}
+                          title="Remove header"
                         >
-                          ×
+                          <span className="material-symbols-outlined icon-sm">close</span>
                         </button>
                       </div>
                     ))}
@@ -796,8 +736,8 @@ export default function WebhookConfig({ gateways, loadingGateways, selectedGatew
 
           {/* Delay Configuration */}
           <div>
-            <label className="text-sm" style={{ display: "block", marginBottom: "0.5rem", fontWeight: 500, color: "hsl(var(--foreground))" }}>
-              Delay Configuration
+            <label className="text-xs" style={{ display: "block", marginBottom: "0.5rem", fontWeight: 600, color: "hsl(var(--muted-foreground))", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+              Simulation Delay
             </label>
             <div className="segmented-control">
               {(["instant", "5s"] as const).map((option) => (
@@ -807,7 +747,7 @@ export default function WebhookConfig({ gateways, loadingGateways, selectedGatew
                   className={delay === option ? "active" : ""}
                   onClick={() => setDelay(option)}
                 >
-                  {option === "instant" ? "Instant" : option}
+                  {option === "instant" ? "INSTANT" : option.toUpperCase()}
                 </button>
               ))}
             </div>
@@ -815,10 +755,10 @@ export default function WebhookConfig({ gateways, loadingGateways, selectedGatew
 
           {/* Select Event */}
           <div>
-            <label className="text-sm" style={{ display: "block", marginBottom: "0.5rem", fontWeight: 500, color: "hsl(var(--foreground))" }}>
-              Select Event
+            <label className="text-xs" style={{ display: "block", marginBottom: "0.5rem", fontWeight: 600, color: "hsl(var(--muted-foreground))", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+              Event Options
             </label>
-            <div style={{ position: "relative" }}>
+            <div className="select-wrapper">
               <select
                 className="select"
                 value={selectedEvent}
@@ -833,8 +773,8 @@ export default function WebhookConfig({ gateways, loadingGateways, selectedGatew
                   </option>
                 ))}
               </select>
-              <span className="material-icons-outlined" style={{ position: "absolute", right: "0.75rem", top: "50%", transform: "translateY(-50%)", color: "hsl(var(--muted-foreground))", pointerEvents: "none", fontSize: "1.25rem" }}>
-                expand_more
+              <span className="material-symbols-outlined icon-sm" style={{ position: "absolute", right: "0.75rem", top: "50%", transform: "translateY(-50%)", color: "hsl(var(--muted-foreground))", pointerEvents: "none" }}>
+                unfold_more
               </span>
             </div>
           </div>
@@ -908,30 +848,21 @@ export default function WebhookConfig({ gateways, loadingGateways, selectedGatew
           )}
 
           {/* Action Buttons */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "1rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "1rem", borderTop: "1px solid hsl(var(--border))", marginTop: "1rem" }}>
             <button
               onClick={handleRestoreDefaults}
+              className="text-xs text-muted"
               style={{
-                fontSize: "0.75rem",
-                color: "hsl(var(--muted-foreground))",
                 background: "transparent",
                 border: "none",
                 padding: 0,
                 height: "auto",
                 textDecoration: "underline",
                 textUnderlineOffset: "2px",
-                textDecorationColor: "hsl(var(--muted-foreground))",
                 cursor: "pointer",
-                transition: "color 0.2s",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = "hsl(var(--foreground))";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = "hsl(var(--muted-foreground))";
               }}
             >
-              Restore defaults
+              Reset to Default
             </button>
             <button
               onClick={handleSendTestWebhook}
@@ -939,8 +870,8 @@ export default function WebhookConfig({ gateways, loadingGateways, selectedGatew
               className="btn btn-primary"
               style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
             >
-              <span className="material-icons-outlined" style={{ fontSize: "1.125rem" }}>send</span>
-              {sending ? "Sending..." : "Send Test Webhook"}
+              <span className="material-symbols-outlined icon">send</span>
+              <span>{sending ? "Sending..." : "Dispatch Event"}</span>
             </button>
           </div>
 
