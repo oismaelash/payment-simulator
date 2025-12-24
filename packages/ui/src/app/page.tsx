@@ -61,17 +61,15 @@ export default function Home() {
       <header className="header">
         <div style={{ display: "flex", alignItems: "center", gap: "1rem", flex: 1 }}>
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-            <div style={{ 
-              background: "linear-gradient(to bottom right, hsl(217 91% 60%), hsl(188 94% 47%))",
-              padding: "0.5rem",
-              borderRadius: "0.5rem",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0 4px 12px hsl(188 94% 47% / 0.2)"
-            }}>
-              <span className="material-symbols-outlined" style={{ color: "white", fontSize: "1.25rem" }}>dns</span>
-            </div>
+            <img 
+              src="/icon.png" 
+              alt="Payment Simulator Logo" 
+              style={{ 
+                width: "2rem",
+                height: "2rem",
+                borderRadius: "0.5rem"
+              }}
+            />
             <div>
               <h1 style={{ 
                 fontWeight: 700, 
