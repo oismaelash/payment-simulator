@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 const gateways = [
   { name: "AbacatePay", logoSrc: "/gateways/abacatepay.svg", alt: "Abacatepay logo" },
   { name: "Stripe", logoSrc: "/gateways/stripe.svg", alt: "Stripe logo" },
@@ -7,16 +9,17 @@ const gateways = [
 ];
 
 const SupportedGatewaysSection = () => {
+  const { t } = useTranslation();
   return (
     <section id="gateways" className="section-padding relative">
       <div className="section-container relative z-10">
         <div className="text-center mb-12">
-          <p className="text-primary font-mono text-sm mb-4">// SUPPORTED PLATFORMS</p>
+          <p className="text-primary font-mono text-sm mb-4">{t("gateways.sectionLabel")}</p>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
-            Payment gateways you can simulate
+            {t("gateways.title")}
           </h2>
           <p className="text-muted-foreground text-base max-w-2xl mx-auto">
-            Test webhooks and integrations for these platforms locally, without API keys or external services.
+            {t("gateways.subtitle")}
           </p>
         </div>
 

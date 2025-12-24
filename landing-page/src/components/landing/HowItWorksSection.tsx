@@ -1,42 +1,38 @@
 import { CreditCard, Webhook, Settings2, ArrowRight } from "lucide-react";
-
-const steps = [
-  {
-    number: "01",
-    icon: CreditCard,
-    title: "Choose a gateway",
-    description: "Select from Stripe, Mercado Pago, Pagar.me, or add your own custom gateway configuration.",
-  },
-  // {
-  //   number: "02",
-  //   icon: Settings2,
-  //   title: "Create a payment",
-  //   description: "Use the dashboard or API to create a simulated Pix or credit card payment with any amount.",
-  // },
-  {
-    number: "02",
-    icon: Webhook,
-    title: "Configure webhook behavior",
-    description: "Set delays, retries, failure rates, or simulate specific scenarios like chargebacks.",
-  },
-  {
-    number: "03",
-    icon: ArrowRight,
-    title: "Receive real payloads",
-    description: "Your local endpoint receives production-identical webhooks. Test your handlers like it's real.",
-  },
-];
+import { useTranslation } from "react-i18next";
 
 const HowItWorksSection = () => {
+  const { t } = useTranslation();
+  
+  const steps = [
+    {
+      numberKey: "howItWorks.steps.chooseGateway.number",
+      titleKey: "howItWorks.steps.chooseGateway.title",
+      descriptionKey: "howItWorks.steps.chooseGateway.description",
+      icon: CreditCard,
+    },
+    {
+      numberKey: "howItWorks.steps.configureWebhook.number",
+      titleKey: "howItWorks.steps.configureWebhook.title",
+      descriptionKey: "howItWorks.steps.configureWebhook.description",
+      icon: Webhook,
+    },
+    {
+      numberKey: "howItWorks.steps.receivePayloads.number",
+      titleKey: "howItWorks.steps.receivePayloads.title",
+      descriptionKey: "howItWorks.steps.receivePayloads.description",
+      icon: ArrowRight,
+    },
+  ];
   return (
     <section id="how-it-works" className="section-padding relative">
       <div className="absolute inset-0 bg-dot-pattern opacity-20" />
       
       <div className="section-container relative z-10">
         <div className="text-center mb-16">
-          <p className="text-primary font-mono text-sm mb-4">// HOW IT WORKS</p>
+          <p className="text-primary font-mono text-sm mb-4">{t("howItWorks.sectionLabel")}</p>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-            Four steps to payment testing nirvana
+            {t("howItWorks.title")}
           </h2>
         </div>
 
@@ -50,16 +46,16 @@ const HowItWorksSection = () => {
                 <div className="feature-card h-full relative z-10">
                   {/* Step number */}
                   <span className="text-5xl font-bold text-primary/20 font-mono absolute top-4 right-4">
-                    {step.number}
+                    {t(step.numberKey)}
                   </span>
                   
                   <div className="p-3 rounded-lg bg-secondary border border-border inline-flex mb-4">
                     <step.icon className="w-5 h-5 text-primary" />
                   </div>
                   
-                  <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
+                  <h3 className="text-lg font-semibold mb-2">{t(step.titleKey)}</h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">
-                    {step.description}
+                    {t(step.descriptionKey)}
                   </p>
                 </div>
               </div>
@@ -73,9 +69,14 @@ const HowItWorksSection = () => {
             {/* Simulator */}
             <div className="text-center">
               <div className="w-12 h-12 rounded-lg bg-primary/20 border border-primary/30 flex items-center justify-center mx-auto mb-2">
-                <span className="text-primary font-mono text-xs">Sim</span>
+                <img 
+                  src="/icon.png" 
+                  alt="Payment Simulator" 
+                  className="h-6 w-6"
+                  loading="lazy"
+                />
               </div>
-              <span className="text-muted-foreground text-xs">Simulator</span>
+              <span className="text-muted-foreground text-xs">{t("howItWorks.diagram.simulator")}</span>
             </div>
 
             <div className="flex-1 mx-4 flex items-center">
@@ -89,7 +90,7 @@ const HowItWorksSection = () => {
               <div className="w-12 h-12 rounded-lg bg-secondary border border-border flex items-center justify-center mx-auto mb-2">
                 <span className="text-primary font-mono text-xs">App</span>
               </div>
-              <span className="text-muted-foreground text-xs">Your Code</span>
+              <span className="text-muted-foreground text-xs">{t("howItWorks.diagram.yourCode")}</span>
             </div>
 
             <div className="flex-1 mx-4 flex items-center">
@@ -103,7 +104,7 @@ const HowItWorksSection = () => {
               <div className="w-12 h-12 rounded-lg bg-success/20 border border-success/30 flex items-center justify-center mx-auto mb-2">
                 <span className="text-success font-mono text-xs">:3000</span>
               </div>
-              <span className="text-muted-foreground text-xs">Webhook</span>
+              <span className="text-muted-foreground text-xs">{t("howItWorks.diagram.webhook")}</span>
             </div>
           </div>
         </div>

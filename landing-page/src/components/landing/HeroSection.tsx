@@ -1,12 +1,14 @@
 import { Terminal, Github, Zap, ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Dialog,
   DialogContent,
 } from "@/components/ui/dialog";
 
 const HeroSection = () => {
+  const { t } = useTranslation();
   const [isDemoOpen, setIsDemoOpen] = useState(false);
 
   return (
@@ -25,15 +27,14 @@ const HeroSection = () => {
 
         {/* Headline */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 animate-slide-up">
-          <span className="text-foreground">Simulate payment gateways</span>
+          <span className="text-foreground">{t("hero.title")}</span>
           <br />
-          <span className="text-gradient">locally.</span>
+          <span className="text-gradient">{t("hero.titleHighlight")}</span>
         </h1>
 
         {/* Subheadline */}
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 animate-slide-up delay-100">
-          Test webhooks, edge cases, and failures before production. 
-          No signup. No API keys. Just run it locally.
+          {t("hero.subtitle")}
         </p>
 
         {/* CTAs */}
@@ -44,7 +45,7 @@ const HeroSection = () => {
           </Button> */}
           <Button variant="hero" size="xl" onClick={() => setIsDemoOpen(true)}>
             <Play className="w-5 h-5" />
-            Demo
+            {t("hero.demo")}
           </Button>
           <Button 
             variant="hero-outline" 
@@ -52,7 +53,7 @@ const HeroSection = () => {
             onClick={() => window.open("https://github.com/oismaelash/payment-simulator", "_blank", "noopener,noreferrer")}
           >
             <Github className="w-5 h-5" />
-            View on GitHub
+            {t("hero.viewOnGitHub")}
           </Button>
         </div>
 
@@ -66,7 +67,7 @@ const HeroSection = () => {
                 <div className="w-3 h-3 rounded-full bg-warning/60" />
                 <div className="w-3 h-3 rounded-full bg-success/60" />
               </div>
-              <span className="text-xs text-muted-foreground ml-2">terminal</span>
+              <span className="text-xs text-muted-foreground ml-2">{t("hero.terminal")}</span>
             </div>
             {/* Terminal Content */}
             <div className="p-6 text-left">
@@ -76,10 +77,10 @@ const HeroSection = () => {
               </div>
               <div className="mt-4 space-y-1 text-sm">
                 <p className="text-muted-foreground">
-                  <span className="text-success">✓</span> Starting Payment Simulator v1.0.0
+                  <span className="text-success">✓</span> {t("hero.starting")}
                 </p>
                 <p className="text-foreground mt-4">
-                  <span className="text-primary">→</span> Dashboard: <span className="text-primary underline">http://localhost:4001</span>
+                  <span className="text-primary">→</span> {t("hero.dashboard")} <span className="text-primary underline">http://localhost:4001</span>
                 </p>
               </div>
             </div>
@@ -99,7 +100,7 @@ const HeroSection = () => {
             <iframe
               className="w-full h-full rounded-lg"
               src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-              title="Payment Simulator Demo"
+              title={t("hero.demoTitle")}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />

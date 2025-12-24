@@ -1,19 +1,47 @@
-import { Github, Menu, X } from "lucide-react";
+import { Github, Menu, X, Languages, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-
-const navLinks = [
-  { label: "Gateways", href: "#gateways" },
-  { label: "Problem", href: "#problem" },
-  { label: "Solution", href: "#solution" },
-  { label: "How it works", href: "#how-it-works" },
-  { label: "Features", href: "#features" },
-  { label: "Developer Experience", href: "#dx" },
-  // { label: "Open Source", href: "#open-source" },
-];
+import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
+  const { t, i18n: i18nInstance } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState(i18nInstance.language || 'en');
+
+  // Update current language when i18n language changes
+  useEffect(() => {
+    const updateLanguage = () => {
+      const lang = i18nInstance.language || 'en';
+      const normalizedLang = lang.startsWith('pt') ? 'pt' : lang;
+      setCurrentLanguage(normalizedLang);
+    };
+    
+    i18nInstance.on('languageChanged', updateLanguage);
+    updateLanguage();
+    
+    return () => {
+      i18nInstance.off('languageChanged', updateLanguage);
+    };
+  }, [i18nInstance]);
+
+  const navLinks = [
+    { labelKey: "nav.gateways", href: "#gateways" },
+    { labelKey: "nav.problem", href: "#problem" },
+    { labelKey: "nav.solution", href: "#solution" },
+    { labelKey: "nav.howItWorks", href: "#how-it-works" },
+    { labelKey: "nav.features", href: "#features" },
+    { labelKey: "nav.developerExperience", href: "#dx" },
+  ];
+
+  const changeLanguage = (lng: string) => {
+    i18nInstance.changeLanguage(lng);
+  };
 
   const scrollToHero = () => {
     const heroSection = document.getElementById("hero");
@@ -47,13 +75,37 @@ const Navbar = () => {
                 href={link.href}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                {link.label}
+                {t(link.labelKey)}
               </a>
             ))}
           </div>
 
           {/* CTA */}
           <div className="flex items-center gap-3">
+            {/* Language Toggle */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="hidden sm:inline-flex"
+                >
+                  <Languages className="w-4 h-4" />
+                  <span className="ml-2 uppercase">{currentLanguage}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => changeLanguage("en")}>
+                  <span className="flex-1">English</span>
+                  {currentLanguage === "en" && <Check className="w-4 h-4" />}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => changeLanguage("pt")}>
+                  <span className="flex-1">Português</span>
+                  {currentLanguage === "pt" && <Check className="w-4 h-4" />}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
             <Button 
               variant="ghost" 
               size="sm" 
@@ -61,10 +113,10 @@ const Navbar = () => {
               onClick={() => window.open("https://github.com/oismaelash/payment-simulator", "_blank", "noopener,noreferrer")}
             >
               <Github className="w-4 h-4" />
-              <span className="ml-2">Star</span>
+              <span className="ml-2">{t("nav.star")}</span>
             </Button>
             <Button size="sm" className="hidden sm:inline-flex" onClick={scrollToHero}>
-              Get Started
+              {t("nav.getStarted")}
             </Button>
             
             {/* Mobile menu button */}
@@ -88,9 +140,35 @@ const Navbar = () => {
                   onClick={() => setIsOpen(false)}
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  {link.label}
+                  {t(link.labelKey)}
                 </a>
               ))}
+              {/* Mobile Language Toggle */}
+              <div className="flex items-center gap-2 py-2">
+                <Languages className="w-4 h-4 text-muted-foreground" />
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => changeLanguage("en")}
+                    className={`text-sm px-3 py-1 rounded-md transition-colors ${
+                      currentLanguage === "en"
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    EN
+                  </button>
+                  <button
+                    onClick={() => changeLanguage("pt")}
+                    className={`text-sm px-3 py-1 rounded-md transition-colors ${
+                      currentLanguage === "pt"
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    PT
+                  </button>
+                </div>
+              </div>
               <div className="flex gap-3 pt-4">
                 <Button 
                   variant="outline" 
@@ -99,10 +177,10 @@ const Navbar = () => {
                   onClick={() => window.open("https://github.com/oismaelash/payment-simulator", "_blank", "noopener,noreferrer")}
                 >
                   <Github className="w-4 h-4 mr-2" />
-                  Star
+                  {t("nav.star")}
                 </Button>
                 <Button size="sm" className="flex-1" onClick={scrollToHero}>
-                  Get Started
+                  {t("nav.getStarted")}
                 </Button>
               </div>
             </div>

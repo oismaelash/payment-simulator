@@ -1,6 +1,8 @@
 import { Github, FileText, Scale } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
+  const { t } = useTranslation();
   return (
     <footer className="border-t border-border py-12">
       <div className="section-container">
@@ -47,7 +49,7 @@ const Footer = () => {
 
           {/* Tagline */}
           <p className="text-sm text-muted-foreground">
-            Built by developers, for developers
+            {t("footer.tagline")}
           </p>
         </div>
       </div>

@@ -1,0 +1,175 @@
+{
+  "nav": {
+    "gateways": "Gateways",
+    "problem": "Problema",
+    "solution": "Solução",
+    "howItWorks": "Como funciona",
+    "features": "Recursos",
+    "developerExperience": "Experiência do Desenvolvedor",
+    "getStarted": "Começar",
+    "star": "Estrela"
+  },
+  "hero": {
+    "title": "Simule gateways de pagamento",
+    "titleHighlight": "localmente.",
+    "subtitle": "Teste webhooks, casos extremos e falhas antes da produção. Sem cadastro. Sem chaves de API. Apenas execute localmente.",
+    "demo": "Demonstração",
+    "viewOnGitHub": "Ver no GitHub",
+    "terminal": "terminal",
+    "starting": "Iniciando Payment Simulator v1.0.0",
+    "dashboard": "Painel:",
+    "demoTitle": "Demonstração do Payment Simulator"
+  },
+  "gateways": {
+    "sectionLabel": "// PLATAFORMAS SUPORTADAS",
+    "title": "Gateways de pagamento que você pode simular",
+    "subtitle": "Teste webhooks e integrações para essas plataformas localmente, sem chaves de API ou serviços externos."
+  },
+  "problem": {
+    "sectionLabel": "// O PROBLEMA",
+    "title": "Testar pagamentos localmente é um pesadelo",
+    "subtitle": "Todo desenvolvedor backend conhece a dor. Aqui está com o que você está lidando.",
+    "items": {
+      "webhooks": {
+        "title": "Difícil testar webhooks localmente",
+        "description": "Túneis Ngrok, payloads falsos e orações. A combinação clássica para testar integrações de pagamento."
+      },
+      "differentGateways": {
+        "title": "Gateways diferentes, payloads diferentes",
+        "description": "Stripe, Mercado Pago, Pagar.me — cada um com seu próprio formato, peculiaridades e casos extremos."
+      },
+      "failures": {
+        "title": "Sem como simular falhas",
+        "description": "Como você testa uma chargeback? Um timeout? Uma notificação atrasada? Você não testa. Até agora."
+      },
+      "manualHacks": {
+        "title": "Gambiarra manual e soluções alternativas",
+        "description": "Copiar e colar payloads, falsificar assinaturas, hardcodar dados de teste. Funciona até não funcionar."
+      }
+    }
+  },
+  "solution": {
+    "sectionLabel": "// A SOLUÇÃO",
+    "title": "Uma ferramenta. Todos os gateways. Zero configuração.",
+    "subtitle": "Payment Simulator traz todo o fluxo de trabalho de teste de pagamento para sua máquina local.",
+    "items": {
+      "localSimulator": {
+        "title": "Simulador local",
+        "description": "Execute um simulador completo de gateway de pagamento na sua máquina. Sem dependências externas."
+      },
+      "realisticWebhooks": {
+        "title": "Webhooks realistas",
+        "description": "Receba payloads reais dos formatos Stripe, Mercado Pago, Pagar.me. Exatamente como em produção."
+      },
+      "visualDashboard": {
+        "title": "Painel visual",
+        "description": "Interface inspirada no Firebase Emulator. Veja pagamentos, webhooks e logs em tempo real."
+      }
+    }
+  },
+  "howItWorks": {
+    "sectionLabel": "// COMO FUNCIONA",
+    "title": "Quatro passos para o nirvana do teste de pagamentos",
+    "steps": {
+      "chooseGateway": {
+        "number": "01",
+        "title": "Escolha um gateway",
+        "description": "Selecione entre Stripe, Mercado Pago, Pagar.me ou adicione sua própria configuração de gateway personalizada."
+      },
+      "configureWebhook": {
+        "number": "02",
+        "title": "Configure o comportamento do webhook",
+        "description": "Defina atrasos, tentativas, taxas de falha ou simule cenários específicos como chargebacks."
+      },
+      "receivePayloads": {
+        "number": "03",
+        "title": "Receba payloads reais",
+        "description": "Seu endpoint local recebe webhooks idênticos aos de produção. Teste seus handlers como se fosse real."
+      }
+    },
+    "diagram": {
+      "simulator": "Simulador",
+      "yourCode": "Seu Código",
+      "webhook": "Webhook"
+    }
+  },
+  "features": {
+    "sectionLabel": "// RECURSOS",
+    "title": "Grátis para sempre.",
+    "subtitle": "Tudo que você precisa para testar webhooks de pagamento localmente, sem restrições.",
+    "items": {
+      "gatewayAgnostic": {
+        "title": "Núcleo agnóstico de gateway",
+        "description": "Payloads são enviados exatamente como definidos"
+      },
+      "gatewayAdapters": {
+        "title": "Adaptadores de gateway",
+        "description": "Stripe, AbacatePay, Asaas, Pagar.me e mais"
+      },
+      "configurationGateway": {
+        "title": "Configuração de gateway",
+        "description": "URL base, parâmetros de consulta e cabeçalhos personalizados"
+      },
+      "editablePayloads": {
+        "title": "Payloads editáveis",
+        "description": "Visualize e edite JSON de payload antes de enviar"
+      },
+      "payloadTemplates": {
+        "title": "Modelos de payload",
+        "description": "Crie variantes de payload personalizadas por evento"
+      },
+      "rawPayloadSupport": {
+        "title": "Suporte a payload bruto",
+        "description": "Payloads são enviados exatamente como definidos"
+      },
+      "simpleUI": {
+        "title": "Interface simples",
+        "description": "Interface mínima para configurar e acionar webhooks"
+      },
+      "inMemoryState": {
+        "title": "Estado em memória",
+        "description": "Camada de persistência, perfeita para desenvolvimento local"
+      }
+    }
+  },
+  "developerExperience": {
+    "sectionLabel": "// EXPERIÊNCIA DO DESENVOLVEDOR",
+    "title": "Construído para desenvolvedores que valorizam seu tempo",
+    "subtitle": "Já estivemos lá. Horas desperdiçadas configurando testes de pagamento. Por isso tornamos isso extremamente simples.",
+    "items": {
+      "fastSetup": {
+        "title": "Configuração rápida",
+        "description": "Um comando para iniciar. Nenhuma configuração complexa necessária."
+      },
+      "noSignup": {
+        "title": "Sem necessidade de cadastro",
+        "description": "Sem contas, sem chaves de API, sem rastreamento. Apenas baixe e execute."
+      },
+      "worksOffline": {
+        "title": "Funciona offline",
+        "description": "Teste fluxos de pagamento sem internet. Perfeito para aviões e cafés."
+      },
+      "instantFeedback": {
+        "title": "Feedback instantâneo",
+        "description": "Veja webhooks conforme são enviados. Depure em tempo real."
+      }
+    },
+    "terminal": "terminal"
+  },
+  "cta": {
+    "title": "Pronto para parar de lutar com seus testes de pagamento?",
+    "subtitle": "Junte-se a milhares de desenvolvedores que testam pagamentos da forma sensata. Comece localmente, envie com confiança.",
+    "getStarted": "Começar localmente",
+    "viewOnGitHub": "Ver no GitHub",
+    "tagline": "Grátis para sempre • Código aberto • Funciona offline"
+  },
+  "footer": {
+    "tagline": "Construído por desenvolvedores, para desenvolvedores"
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Ops! Página não encontrada",
+    "returnHome": "Voltar para Home"
+  }
+}
+

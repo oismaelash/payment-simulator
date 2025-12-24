@@ -1,0 +1,175 @@
+{
+  "nav": {
+    "gateways": "Gateways",
+    "problem": "Problem",
+    "solution": "Solution",
+    "howItWorks": "How it works",
+    "features": "Features",
+    "developerExperience": "Developer Experience",
+    "getStarted": "Get Started",
+    "star": "Star"
+  },
+  "hero": {
+    "title": "Simulate payment gateways",
+    "titleHighlight": "locally.",
+    "subtitle": "Test webhooks, edge cases, and failures before production. No signup. No API keys. Just run it locally.",
+    "demo": "Demo",
+    "viewOnGitHub": "View on GitHub",
+    "terminal": "terminal",
+    "starting": "Starting Payment Simulator v1.0.0",
+    "dashboard": "Dashboard:",
+    "demoTitle": "Payment Simulator Demo"
+  },
+  "gateways": {
+    "sectionLabel": "// SUPPORTED PLATFORMS",
+    "title": "Payment gateways you can simulate",
+    "subtitle": "Test webhooks and integrations for these platforms locally, without API keys or external services."
+  },
+  "problem": {
+    "sectionLabel": "// THE PROBLEM",
+    "title": "Testing payments locally is a nightmare",
+    "subtitle": "Every backend developer knows the pain. Here's what you're dealing with.",
+    "items": {
+      "webhooks": {
+        "title": "Hard to test webhooks locally",
+        "description": "Ngrok tunnels, fake payloads, and prayer. The classic combo for testing payment integrations."
+      },
+      "differentGateways": {
+        "title": "Different gateways, different payloads",
+        "description": "Stripe, Mercado Pago, Pagar.me — each with their own format, quirks, and edge cases."
+      },
+      "failures": {
+        "title": "No way to simulate failures",
+        "description": "How do you test a chargeback? A timeout? A delayed notification? You don't. Until now."
+      },
+      "manualHacks": {
+        "title": "Manual hacks and workarounds",
+        "description": "Copy-pasting payloads, faking signatures, hardcoding test data. It works until it doesn't."
+      }
+    }
+  },
+  "solution": {
+    "sectionLabel": "// THE SOLUTION",
+    "title": "One tool. All gateways. Zero setup.",
+    "subtitle": "Payment Simulator brings the entire payment testing workflow to your local machine.",
+    "items": {
+      "localSimulator": {
+        "title": "Local simulator",
+        "description": "Run a complete payment gateway simulator on your machine. No external dependencies."
+      },
+      "realisticWebhooks": {
+        "title": "Realistic webhooks",
+        "description": "Receive actual payloads from Stripe, Mercado Pago, Pagar.me formats. Exactly like production."
+      },
+      "visualDashboard": {
+        "title": "Visual dashboard",
+        "description": "Firebase Emulator-inspired UI. See payments, webhooks, and logs in real-time."
+      }
+    }
+  },
+  "howItWorks": {
+    "sectionLabel": "// HOW IT WORKS",
+    "title": "Four steps to payment testing nirvana",
+    "steps": {
+      "chooseGateway": {
+        "number": "01",
+        "title": "Choose a gateway",
+        "description": "Select from Stripe, Mercado Pago, Pagar.me, or add your own custom gateway configuration."
+      },
+      "configureWebhook": {
+        "number": "02",
+        "title": "Configure webhook behavior",
+        "description": "Set delays, retries, failure rates, or simulate specific scenarios like chargebacks."
+      },
+      "receivePayloads": {
+        "number": "03",
+        "title": "Receive real payloads",
+        "description": "Your local endpoint receives production-identical webhooks. Test your handlers like it's real."
+      }
+    },
+    "diagram": {
+      "simulator": "Simulator",
+      "yourCode": "Your Code",
+      "webhook": "Webhook"
+    }
+  },
+  "features": {
+    "sectionLabel": "// FEATURES",
+    "title": "Free forever.",
+    "subtitle": "Everything you need to test payment webhooks locally, without any restrictions.",
+    "items": {
+      "gatewayAgnostic": {
+        "title": "Gateway-agnostic core",
+        "description": "Payloads are sent exactly as defined"
+      },
+      "gatewayAdapters": {
+        "title": "Gateway adapters",
+        "description": "Stripe, AbacatePay, Asaas, and Pagar.me e more"
+      },
+      "configurationGateway": {
+        "title": "Configuration gateway",
+        "description": "URL base, query parameters, and custom headers"
+      },
+      "editablePayloads": {
+        "title": "Editable payloads",
+        "description": "View and edit payload JSON before sending"
+      },
+      "payloadTemplates": {
+        "title": "Payload templates",
+        "description": "Create custom payload variants per event"
+      },
+      "rawPayloadSupport": {
+        "title": "Raw payload support",
+        "description": "Payloads are sent exactly as defined"
+      },
+      "simpleUI": {
+        "title": "Simple UI",
+        "description": "Minimal interface for configuring and triggering webhooks"
+      },
+      "inMemoryState": {
+        "title": "In-memory state",
+        "description": "Persistence layer, perfect for local development"
+      }
+    }
+  },
+  "developerExperience": {
+    "sectionLabel": "// DEVELOPER EXPERIENCE",
+    "title": "Built for developers who value their time",
+    "subtitle": "We've been there. Hours wasted setting up payment testing. That's why we made this stupid simple.",
+    "items": {
+      "fastSetup": {
+        "title": "Fast setup",
+        "description": "One command to start. No complex configuration needed."
+      },
+      "noSignup": {
+        "title": "No signup required",
+        "description": "No accounts, no API keys, no tracking. Just download and run."
+      },
+      "worksOffline": {
+        "title": "Works offline",
+        "description": "Test payment flows without internet. Perfect for airplanes and cafes."
+      },
+      "instantFeedback": {
+        "title": "Instant feedback",
+        "description": "See webhooks as they're sent. Debug in real-time."
+      }
+    },
+    "terminal": "terminal"
+  },
+  "cta": {
+    "title": "Ready to stop fighting your payment tests?",
+    "subtitle": "Join thousands of developers who test payments the sane way. Start locally, ship with confidence.",
+    "getStarted": "Get started locally",
+    "viewOnGitHub": "View on GitHub",
+    "tagline": "Free forever • Open source • Works offline"
+  },
+  "footer": {
+    "tagline": "Built by developers, for developers"
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Oops! Page not found",
+    "returnHome": "Return to Home"
+  }
+}
+

@@ -1,7 +1,9 @@
 import { Terminal, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 const CTASection = () => {
+  const { t } = useTranslation();
   const scrollToHero = () => {
     const heroSection = document.getElementById("hero");
     if (heroSection) {
@@ -18,17 +20,16 @@ const CTASection = () => {
       <div className="section-container relative z-10">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-            Ready to stop fighting your payment tests?
+            {t("cta.title")}
           </h2>
           <p className="text-muted-foreground text-lg mb-10 max-w-xl mx-auto">
-            Join thousands of developers who test payments the sane way. 
-            Start locally, ship with confidence.
+            {t("cta.subtitle")}
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button variant="hero" size="xl" onClick={scrollToHero}>
               <Terminal className="w-5 h-5" />
-              Get started locally
+              {t("cta.getStarted")}
             </Button>
             <Button 
               variant="hero-outline" 
@@ -36,12 +37,12 @@ const CTASection = () => {
               onClick={() => window.open("https://github.com/oismaelash/payment-simulator", "_blank", "noopener,noreferrer")}
             >
               <Github className="w-5 h-5" />
-              View on GitHub
+              {t("cta.viewOnGitHub")}
             </Button>
           </div>
 
           <p className="text-muted-foreground text-sm mt-8">
-            Free forever • Open source • Works offline
+            {t("cta.tagline")}
           </p>
         </div>
       </div>
