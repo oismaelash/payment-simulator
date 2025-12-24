@@ -4,6 +4,7 @@
  */
 
 export interface WebhookLog {
+  id?: number;
   gateway: string;
   event: string;
   timestamp: string;

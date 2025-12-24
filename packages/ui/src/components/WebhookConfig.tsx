@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import PayloadEditorModal from "./PayloadEditorModal";
+import Dropdown, { type DropdownOption } from "./Dropdown";
 import type { WebhookTemplate } from "@/lib/templates";
 import {
   buildWebhookUrl,
@@ -716,7 +717,7 @@ export default function WebhookConfig({ gateways, loadingGateways, selectedGatew
                           value={header.value}
                           onChange={(e) => handleHeaderChange(index, "value", e.target.value)}
                           placeholder="Header value"
-                          style={{ flex: 1, fontSize: "0.75rem" }}
+                          style={{ flex: 1, fontSize: "0.75rem", color: "hsl(142 76% 60%)" }}
                         />
                         <button
                           onClick={() => handleRemoveHeader(index)}
@@ -758,25 +759,21 @@ export default function WebhookConfig({ gateways, loadingGateways, selectedGatew
             <label className="text-xs" style={{ display: "block", marginBottom: "0.5rem", fontWeight: 600, color: "hsl(var(--muted-foreground))", textTransform: "uppercase", letterSpacing: "0.1em" }}>
               Event Options
             </label>
-            <div className="select-wrapper">
-              <select
-                className="select"
-                value={selectedEvent}
-                onChange={(e) => setSelectedEvent(e.target.value)}
-                disabled={!selectedGateway}
-                style={{ appearance: "none", paddingRight: "2.5rem" }}
-              >
-                <option value="">-- Select Event --</option>
-                {selectedGateway && (gateways[selectedGateway]?.events || []).map((event) => (
-                  <option key={event} value={event}>
-                    {event}
-                  </option>
-                ))}
-              </select>
-              <span className="material-symbols-outlined icon-sm" style={{ position: "absolute", right: "0.75rem", top: "50%", transform: "translateY(-50%)", color: "hsl(var(--muted-foreground))", pointerEvents: "none" }}>
-                unfold_more
-              </span>
-            </div>
+            <Dropdown
+              options={
+                selectedGateway
+                  ? (gateways[selectedGateway]?.events || []).map((event) => ({
+                      value: event,
+                      label: event,
+                    }))
+                  : []
+              }
+              value={selectedEvent}
+              onChange={setSelectedEvent}
+              placeholder="-- Select Event --"
+              disabled={!selectedGateway}
+              searchPlaceholder="Search event..."
+            />
           </div>
 
           {/* Templates */}
@@ -787,19 +784,17 @@ export default function WebhookConfig({ gateways, loadingGateways, selectedGatew
                   Templates:
                 </label>
                 <div style={{ display: "flex", gap: "0.5rem" }}>
-                  <select
-                    className="select"
+                  <Dropdown
+                    options={templates.map((template) => ({
+                      value: template.id,
+                      label: template.name,
+                    }))}
                     value={selectedTemplateId}
-                    onChange={(e) => setSelectedTemplateId(e.target.value)}
+                    onChange={setSelectedTemplateId}
+                    placeholder="-- Base Payload --"
+                    searchPlaceholder="Search template..."
                     style={{ flex: 1 }}
-                  >
-                    <option value="">-- Base Payload --</option>
-                    {templates.map((template) => (
-                      <option key={template.id} value={template.id}>
-                        {template.name}
-                      </option>
-                    ))}
-                  </select>
+                  />
                   {selectedTemplateId && (
                     <button
                       onClick={handleDeleteTemplate}

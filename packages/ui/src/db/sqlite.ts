@@ -295,12 +295,13 @@ export const webhookLogs = {
   getAll(): WebhookLog[] {
     const database = getDb();
     const stmt = database.prepare(`
-      SELECT gateway, event, timestamp, http_status, ok, response_body, error, url, headers
+      SELECT id, gateway, event, timestamp, http_status, ok, response_body, error, url, headers
       FROM webhook_logs
       ORDER BY timestamp DESC
       LIMIT ?
     `);
     const rows = stmt.all(MAX_LOGS) as Array<{
+      id: number;
       gateway: string;
       event: string;
       timestamp: string;
@@ -313,6 +314,7 @@ export const webhookLogs = {
     }>;
     
     return rows.map((row) => ({
+      id: row.id,
       gateway: row.gateway,
       event: row.event,
       timestamp: row.timestamp,

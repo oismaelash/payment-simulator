@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import ResponseViewModal from "./ResponseViewModal";
 
 interface WebhookLog {
+  id?: number;
   gateway: string;
   event: string;
   timestamp: string;
@@ -190,25 +191,25 @@ export default function Logs() {
                   <thead>
                     <tr>
                       <th style={{ width: "8rem" }}>Status</th>
-                      <th style={{ width: "10rem" }}>Event ID</th>
-                      <th>Event Type</th>
-                      <th style={{ width: "8rem" }}>Gateway</th>
+                      <th style={{ minWidth: "16rem" }}>Event Type</th>
+                      <th style={{ width: "10rem" }}>Gateway</th>
                       <th style={{ width: "8rem" }}>Time</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredLogs.map((log, index) => {
+                      // Use database ID if available, otherwise fallback to index
+                      const logId = log.id ?? (index + 1);
                       const originalIndex = logs.findIndex(
                         (l) =>
-                          l.gateway === log.gateway &&
+                          (l.id !== undefined && l.id === log.id) ||
+                          (l.gateway === log.gateway &&
                           l.event === log.event &&
                           l.timestamp === log.timestamp &&
-                          l.httpStatus === log.httpStatus
+                          l.httpStatus === log.httpStatus)
                       );
                       const logIndex = originalIndex >= 0 ? originalIndex : index;
                       const isSelected = logIndex === selectedLogIndex;
-                      const eventId = `evt_${String(logIndex).padStart(4, "0")}`;
-                      const shortEventId = eventId.length > 10 ? `${eventId.substring(0, 7)}...` : eventId;
                       // Check if log is in "Sending" state: httpStatus === 0 and no error
                       const isSending = log.httpStatus === 0 && !log.error;
                       const statusClass = isSending ? "badge-sending" : getStatusBadgeClass(log.httpStatus, log.ok);
@@ -217,7 +218,7 @@ export default function Logs() {
                       const logPayload = logIndex === selectedLogIndex ? (() => {
                         try {
                           const basePayload: any = {
-                            id: `evt_${String(logIndex).padStart(4, "0")}`,
+                            id: `evt_${String(logId).padStart(4, "0")}`,
                             object: "event",
                             gateway: log.gateway,
                             type: log.event,
@@ -285,9 +286,8 @@ export default function Logs() {
                                 </span>
                               </div>
                             </td>
-                            <td className="mono" style={{ fontSize: "0.75rem", color: isSelected ? "hsl(var(--foreground))" : "hsl(var(--muted-foreground))" }}>{shortEventId}</td>
-                            <td style={{ fontWeight: 500, color: isSelected ? "hsl(var(--primary))" : "hsl(var(--foreground))" }}>{log.event}</td>
-                            <td style={{ color: "hsl(var(--muted-foreground))" }}>{log.gateway}</td>
+                            <td style={{ fontWeight: 500, color: isSelected ? "hsl(var(--primary))" : "hsl(var(--foreground))", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={log.event}>{log.event}</td>
+                            <td style={{ color: "hsl(var(--muted-foreground))", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={log.gateway}>{log.gateway}</td>
                             <td className="mono" style={{ textAlign: "right", fontSize: "0.75rem", color: "hsl(var(--muted-foreground))", paddingRight: "1.5rem", fontFamily: "sans-serif" }}>
                               {(() => {
                                 const date = new Date(log.timestamp);
@@ -305,13 +305,13 @@ export default function Logs() {
                           </tr>
                           {isSelected && logPayload && (
                             <tr key={`${logIndex}-detail`} style={{ backgroundColor: "hsl(var(--surface-dark))" }}>
-                              <td colSpan={5} style={{ padding: 0, borderTop: "1px solid hsl(var(--border))", borderLeft: "2px solid hsl(188 94% 47%)", textAlign: "left", width: "100%", maxWidth: "100%", overflow: "hidden" }}>
+                              <td colSpan={4} style={{ padding: 0, borderTop: "1px solid hsl(var(--border))", borderLeft: "2px solid hsl(188 94% 47%)", textAlign: "left", width: "100%", maxWidth: "100%", overflow: "hidden" }}>
                                 <div className="panel" style={{ margin: 0, borderRadius: 0, border: "none", padding: "1rem 1.5rem", display: "flex", flexDirection: "column", gap: "0.5rem", minWidth: 0, width: "100%", maxWidth: "100%" }}>
                                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.5rem", minWidth: 0 }}>
                                     <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flex: 1, minWidth: 0 }}>
                                       <span className="material-symbols-outlined icon-sm" style={{ color: "hsl(var(--primary))" }}>data_object</span>
                                       <span className="text-xs" style={{ fontWeight: 700, color: "hsl(var(--muted-foreground))", textTransform: "uppercase", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", letterSpacing: "0.1em" }}>
-                                        Payload: <span style={{ color: "hsl(var(--foreground))" }}>{`evt_${String(logIndex).padStart(4, "0")}`}</span>
+                                        Payload: <span style={{ color: "hsl(var(--foreground))" }}>{`evt_${String(logId).padStart(4, "0")}`}</span>
                                       </span>
                                     </div>
                                     <div style={{ display: "flex", gap: "0.25rem" }}>

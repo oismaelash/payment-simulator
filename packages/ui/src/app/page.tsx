@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import WebhookConfig from "@/components/WebhookConfig";
 import Logs from "@/components/Logs";
+import Dropdown, { type DropdownOption } from "@/components/Dropdown";
 
 interface GatewayMeta {
   events: string[];
@@ -16,6 +17,23 @@ export default function Home() {
   const [gateways, setGateways] = useState<Record<string, GatewayMeta>>({});
   const [loadingGateways, setLoadingGateways] = useState(true);
   const [selectedGateway, setSelectedGateway] = useState<string>("");
+  const [hostInfo, setHostInfo] = useState<string>("");
+
+  // Get host information dynamically
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const hostname = window.location.hostname;
+      const port = window.location.port;
+      // Only show port if it's not the default port (80 for http, 443 for https)
+      const isDefaultPort = 
+        (!port && window.location.protocol === "http:") ||
+        (!port && window.location.protocol === "https:") ||
+        (port === "80" && window.location.protocol === "http:") ||
+        (port === "443" && window.location.protocol === "https:");
+      
+      setHostInfo(isDefaultPort ? hostname : `${hostname}:${port}`);
+    }
+  }, []);
 
   // Load gateways on mount
   useEffect(() => {
@@ -41,87 +59,60 @@ export default function Home() {
   return (
     <>
       <header className="header">
-        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          <div style={{ 
-            background: "linear-gradient(to bottom right, hsl(217 91% 60%), hsl(188 94% 47%))",
-            padding: "0.5rem",
-            borderRadius: "0.5rem",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            boxShadow: "0 4px 12px hsl(188 94% 47% / 0.2)"
-          }}>
-            <span className="material-symbols-outlined" style={{ color: "white", fontSize: "1.25rem" }}>dns</span>
-          </div>
-          <div>
-            <h1 style={{ 
-              fontWeight: 700, 
-              fontSize: "0.875rem", 
-              color: "hsl(var(--foreground))", 
-              lineHeight: 1.2,
-              letterSpacing: "0.05em",
-              textTransform: "uppercase"
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem", flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+            <div style={{ 
+              background: "linear-gradient(to bottom right, hsl(217 91% 60%), hsl(188 94% 47%))",
+              padding: "0.5rem",
+              borderRadius: "0.5rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 4px 12px hsl(188 94% 47% / 0.2)"
             }}>
-              Gateway Simulator
-            </h1>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.125rem" }}>
-              <p className="mono" style={{ fontSize: "0.6875rem", color: "hsl(var(--muted-foreground))", letterSpacing: "0.1em" }}>
-                localhost:4001
-              </p>
-              <span style={{ width: "0.25rem", height: "0.25rem", borderRadius: "50%", backgroundColor: "hsl(var(--muted-foreground))" }} />
-              <span style={{ fontSize: "0.6875rem", color: "hsl(var(--primary))", fontWeight: 500 }}>v2.4.0</span>
+              <span className="material-symbols-outlined" style={{ color: "white", fontSize: "1.25rem" }}>dns</span>
+            </div>
+            <div>
+              <h1 style={{ 
+                fontWeight: 700, 
+                fontSize: "0.875rem", 
+                color: "hsl(var(--foreground))", 
+                lineHeight: 1.2,
+                letterSpacing: "0.05em",
+                textTransform: "uppercase"
+              }}>
+                Payment Simulator
+              </h1>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.125rem" }}>
+                <p className="mono" style={{ fontSize: "0.6875rem", color: "hsl(var(--muted-foreground))", letterSpacing: "0.1em" }}>
+                  {hostInfo || "localhost:4001"}
+                </p>
+                <span style={{ width: "0.25rem", height: "0.25rem", borderRadius: "50%", backgroundColor: "hsl(var(--muted-foreground))" }} />
+                <span style={{ fontSize: "0.6875rem", color: "hsl(var(--primary))", fontWeight: 500 }}>v1.0.0</span>
+              </div>
             </div>
           </div>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           {/* Gateway selector */}
           {gatewayNames.length > 0 && (
-            <div className="select-wrapper" style={{ position: "relative" }}>
-              <select
-                className="select"
+            <>
+              <div style={{ width: "1px", height: "1.5rem", backgroundColor: "hsl(var(--border))" }} />
+              <Dropdown
+                options={gatewayNames.map((name) => ({ value: name, label: name }))}
                 value={selectedGateway}
-                onChange={(e) => setSelectedGateway(e.target.value)}
+                onChange={setSelectedGateway}
+                placeholder="-- Select Gateway --"
                 disabled={loadingGateways}
-                style={{
-                  appearance: "none",
-                  paddingRight: "2.5rem",
-                  paddingLeft: "1rem",
-                  minWidth: "10rem",
-                  opacity: loadingGateways ? 0.6 : 1,
-                  cursor: loadingGateways ? "not-allowed" : "pointer",
-                }}
-              >
-                {loadingGateways ? (
-                  <option value="">Loading...</option>
-                ) : (
-                  <>
-                    <option value="">-- Select Gateway --</option>
-                    {gatewayNames.map((gateway) => (
-                      <option key={gateway} value={gateway}>
-                        {gateway}
-                      </option>
-                    ))}
-                  </>
-                )}
-              </select>
-              <span className="material-symbols-outlined icon-sm" style={{ 
-                position: "absolute", 
-                right: "0.75rem", 
-                top: "50%", 
-                transform: "translateY(-50%)", 
-                color: "hsl(var(--muted-foreground))", 
-                pointerEvents: "none",
-                transition: "color 0.2s ease"
-              }}>
-                unfold_more
-              </span>
-            </div>
+                searchPlaceholder="Search gateway..."
+                style={{ width: "10rem", minWidth: "10rem", maxWidth: "10rem" }}
+              />
+            </>
           )}
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           {/* <div className="status-online">
             <div className="status-online-dot" />
             <span style={{ fontSize: "0.6875rem", fontWeight: 600, color: "hsl(142 76% 36%)", textTransform: "uppercase", letterSpacing: "0.1em" }}>System Online</span>
           </div> */}
-          <div style={{ width: "1px", height: "1.5rem", backgroundColor: "hsl(var(--border))" }} />
           <a
             href="https://github.com/oismaelash/payment-simulator"
             target="_blank"

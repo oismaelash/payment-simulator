@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import PayloadEditorModal from "./PayloadEditorModal";
+import Dropdown, { type DropdownOption } from "./Dropdown";
 import type { WebhookTemplate } from "@/lib/templates";
 import {
   buildWebhookUrl,
@@ -395,36 +396,32 @@ export default function EventSimulator() {
                 </a>
               )}
             </div>
-            <select
-              className="select"
+            <Dropdown
+              options={Object.keys(gateways).map((gateway) => ({
+                value: gateway,
+                label: gateway,
+              }))}
               value={selectedGateway}
-              onChange={(e) => handleGatewayChange(e.target.value)}
-            >
-              <option value="">-- Select Gateway --</option>
-              {Object.keys(gateways).map((gateway) => (
-                <option key={gateway} value={gateway}>
-                  {gateway}
-                </option>
-              ))}
-            </select>
+              onChange={handleGatewayChange}
+              placeholder="-- Select Gateway --"
+              searchPlaceholder="Search gateway..."
+            />
           </div>
           <div>
             <label className="text-sm" style={{ display: "block", marginBottom: "0.3125rem" }}>
               Select Event:
             </label>
-            <select
-              className="select"
+            <Dropdown
+              options={availableEvents.map((event) => ({
+                value: event,
+                label: event,
+              }))}
               value={selectedEvent}
-              onChange={(e) => setSelectedEvent(e.target.value)}
+              onChange={setSelectedEvent}
+              placeholder="-- Select Event --"
               disabled={!selectedGateway || availableEvents.length === 0}
-            >
-              <option value="">-- Select Event --</option>
-              {availableEvents.map((event) => (
-                <option key={event} value={event}>
-                  {event}
-                </option>
-              ))}
-            </select>
+              searchPlaceholder="Search event..."
+            />
           </div>
 
           {selectedGateway && selectedEvent && (
@@ -434,19 +431,17 @@ export default function EventSimulator() {
                   Templates:
                 </label>
                 <div style={{ display: "flex", gap: "0.5rem" }}>
-                  <select
-                    className="select"
+                  <Dropdown
+                    options={templates.map((template) => ({
+                      value: template.id,
+                      label: template.name,
+                    }))}
                     value={selectedTemplateId}
-                    onChange={(e) => setSelectedTemplateId(e.target.value)}
+                    onChange={setSelectedTemplateId}
+                    placeholder="-- Base Payload --"
+                    searchPlaceholder="Search template..."
                     style={{ flex: 1 }}
-                  >
-                    <option value="">-- Base Payload --</option>
-                    {templates.map((template) => (
-                      <option key={template.id} value={template.id}>
-                        {template.name}
-                      </option>
-                    ))}
-                  </select>
+                  />
                   {selectedTemplateId && (
                     <button
                       onClick={handleDeleteTemplate}
