@@ -156,6 +156,58 @@
     },
     "terminal": "terminal"
   },
+  "comparison": {
+    "eyebrow": "Não é um túnel. Não é uma caixa de entrada de webhook.",
+    "title": "Não é apenas mais uma ferramenta de webhook",
+    "subtitle": "PaymentSimulator simula gateways reais e seus comportamentos. Ngrok e webhook.site resolvem problemas diferentes.",
+    "recommended": "Recomendado",
+    "cards": {
+      "paymentSimulator": {
+        "title": "PaymentSimulator",
+        "tagline": "Simula gateways reais",
+        "features": {
+          "events": "Eventos reais (Stripe, Pix, AbacatePay…)",
+          "payloads": "Payloads idênticos à produção",
+          "scenarios": "Sucesso, falha, estorno, retry",
+          "businessLogic": "Teste de lógica e fluxo de negócio"
+        },
+        "footer": "Você testa o comportamento da sua aplicação"
+      },
+      "ngrok": {
+        "title": "Ngrok",
+        "tagline": "Expõe seu localhost",
+        "features": {
+          "publicUrl": "Cria uma URL pública",
+          "receiveWebhooks": "Recebe webhooks reais",
+          "noSimulation": "Não simula eventos",
+          "noPayloads": "Não gera payloads"
+        },
+        "footer": "Resolve infraestrutura, não regras de negócio"
+      },
+      "webhookSite": {
+        "title": "webhook.site",
+        "tagline": "Inspeciona requisições",
+        "features": {
+          "receiveHttp": "Recebe qualquer HTTP request",
+          "inspect": "Visualiza headers e body",
+          "noEvents": "Não dispara eventos",
+          "noDomain": "Não entende domínio de pagamento"
+        },
+        "footer": "Apenas recebe — não simula"
+      }
+    },
+    "oneLiner": "Ngrok conecta. webhook.site recebe. PaymentSimulator simula o mundo real.",
+    "checklist": {
+      "title": "Quando o PaymentSimulator faz sentido?",
+      "testScenarios": "Testar todos os cenários de pagamento",
+      "developWithoutSandbox": "Desenvolver sem depender de sandbox externo",
+      "simulateNationalGateways": "Simular Pix, boleto e gateways nacionais",
+      "createPredictableTests": "Criar testes previsíveis e repetíveis"
+    },
+    "cta": {
+      "text": "Simule pagamentos reais em segundos"
+    }
+  },
   "cta": {
     "title": "Pronto para parar de lutar com seus testes de pagamento?",
     "subtitle": "Junte-se a milhares de desenvolvedores que testam pagamentos da forma sensata. Comece localmente, envie com confiança.",

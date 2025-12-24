@@ -156,6 +156,58 @@
     },
     "terminal": "terminal"
   },
+  "comparison": {
+    "eyebrow": "Not a tunnel. Not a webhook inbox.",
+    "title": "Not just another webhook tool",
+    "subtitle": "PaymentSimulator simulates real gateways and their behaviors. Ngrok and webhook.site solve different problems.",
+    "recommended": "Recommended",
+    "cards": {
+      "paymentSimulator": {
+        "title": "PaymentSimulator",
+        "tagline": "Simulates real gateways",
+        "features": {
+          "events": "Real events (Stripe, Pix, AbacatePay…)",
+          "payloads": "Production-identical payloads",
+          "scenarios": "Success, failure, refund, retry",
+          "businessLogic": "Test business logic and flow"
+        },
+        "footer": "You test your application's behavior"
+      },
+      "ngrok": {
+        "title": "Ngrok",
+        "tagline": "Exposes your localhost",
+        "features": {
+          "publicUrl": "Creates a public URL",
+          "receiveWebhooks": "Receives real webhooks",
+          "noSimulation": "Doesn't simulate events",
+          "noPayloads": "Doesn't generate payloads"
+        },
+        "footer": "Solves infrastructure, not business rules"
+      },
+      "webhookSite": {
+        "title": "webhook.site",
+        "tagline": "Inspects requests",
+        "features": {
+          "receiveHttp": "Receives any HTTP request",
+          "inspect": "Views headers and body",
+          "noEvents": "Doesn't trigger events",
+          "noDomain": "Doesn't understand payment domain"
+        },
+        "footer": "Only receives — doesn't simulate"
+      }
+    },
+    "oneLiner": "Ngrok connects. webhook.site receives. PaymentSimulator simulates the real world.",
+    "checklist": {
+      "title": "When PaymentSimulator makes sense?",
+      "testScenarios": "Test all payment scenarios",
+      "developWithoutSandbox": "Develop without depending on external sandbox",
+      "simulateNationalGateways": "Simulate Pix, boleto and national gateways",
+      "createPredictableTests": "Create predictable and repeatable tests"
+    },
+    "cta": {
+      "text": "Start simulating webhooks"
+    }
+  },
   "cta": {
     "title": "Ready to stop fighting your payment tests?",
     "subtitle": "Join thousands of developers who test payments the sane way. Start locally, ship with confidence.",
