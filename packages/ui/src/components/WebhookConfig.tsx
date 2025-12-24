@@ -149,10 +149,14 @@ export default function WebhookConfig() {
       fetch(`/api/config/webhook?gateway=${selectedGateway}`)
         .then((res) => res.json())
         .then((data) => {
-          if (data.urlBase) {
+          // Prefer parsing from data.url (final URL with query params) if available
+          // Fall back to data.urlBase if data.url is missing
+          const urlToParse = data.url || data.urlBase;
+          
+          if (urlToParse) {
             // Parse URL to extract base and query params
             try {
-              const url = new URL(data.urlBase);
+              const url = new URL(urlToParse);
               const queryParams: Array<{ key: string; value: string }> = [];
               url.searchParams.forEach((value, key) => {
                 queryParams.push({ key, value });
@@ -170,7 +174,7 @@ export default function WebhookConfig() {
               // If URL parsing fails, use as-is
               const newHeaders = headersRecordToArray(data.headers || {});
               const newConfig = {
-                urlBase: data.urlBase || "",
+                urlBase: data.urlBase || data.url || "",
                 queryParams: [],
                 headers: newHeaders,
               };
