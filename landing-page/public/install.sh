@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="${PAYMENT_SIMULATOR_VERSION:-1.0.0}"
+VERSION="${PAYMENT_SIMULATOR_VERSION:-latest}"
 APP_DIR="${PAYMENT_SIMULATOR_DIR:-$HOME/.payment-simulator}"
 UI_PORT="${UI_PORT:-4001}"
 COMPOSE_URL="${PAYMENT_SIMULATOR_COMPOSE_URL:-https://paymentsimulator.com/docker-compose.yml}"
