@@ -70,7 +70,7 @@ const DeveloperExperienceSection = () => {
               </div>
               <div className="mt-4 space-y-1 text-sm">
                 <p className="text-muted-foreground">
-                  <span className="text-success">✓</span> Starting Payment Simulator v1.0.0
+                  <span className="text-success">✓</span> Starting Payment Simulator v1.0.1
                 </p>
                 <p className="text-foreground mt-4">
                   <span className="text-primary">→</span> Dashboard: <span className="text-primary underline">http://localhost:4001</span>

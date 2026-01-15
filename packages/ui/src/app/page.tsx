@@ -86,7 +86,7 @@ export default function Home() {
                   {hostInfo || "localhost:4001"}
                 </p>
                 <span style={{ width: "0.25rem", height: "0.25rem", borderRadius: "50%", backgroundColor: "hsl(var(--muted-foreground))" }} />
-                <span style={{ fontSize: "0.6875rem", color: "hsl(var(--primary))", fontWeight: 500 }}>v1.0.0</span>
+                <span style={{ fontSize: "0.6875rem", color: "hsl(var(--primary))", fontWeight: 500 }}>v1.0.1</span>
               </div>
             </div>
           </div>
