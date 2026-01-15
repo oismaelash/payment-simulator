@@ -24,8 +24,8 @@ const PagueDevHero = () => {
 
         {/* Headline */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 animate-slide-up">
-          <span className="text-foreground">{t("paguedev.hero.title")}</span>
-          <br />
+          {/* <span className="text-foreground">{t("paguedev.hero.title")}</span>
+          <br /> */}
           <span className="text-gradient">{t("paguedev.hero.titleHighlight")}</span>
         </h1>
 

@@ -227,7 +227,7 @@
     "hero": {
       "title": "Pague.dev",
       "titleHighlight": "Gateway de Pagamento Brasileiro",
-      "subtitle": "Gateway de pagamento focado no mercado brasileiro, com suporte completo para PIX, processamento de saques e estornos. Teste todos os eventos localmente com o Payment Simulator.",
+      "subtitle": "Focado no mercado brasileiro, com suporte completo para PIX, processamento de saques e estornos. Teste todos os eventos localmente com o Payment Simulator.",
       "featureBRL": "Moeda BRL",
       "featurePIX": "Suporte PIX",
       "featureWithdrawals": "Saques",
