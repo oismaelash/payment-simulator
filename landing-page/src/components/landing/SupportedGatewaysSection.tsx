@@ -6,6 +6,7 @@ const gateways = [
   { name: "Mercado Pago", logoSrc: "/gateways/mercadopago.png", alt: "Mercado Pago logo" },
   { name: "Asaas", logoSrc: "/gateways/asaas.svg", alt: "Asaas logo" },
   { name: "Pagar.me", logoSrc: "/gateways/pagarme.png", alt: "Pagar.me logo" },
+  { name: "Pague.dev", logoSrc: "/gateways/paguedev.svg", alt: "Pague.dev logo" },
 ];
 
 const SupportedGatewaysSection = () => {

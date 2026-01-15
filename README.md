@@ -155,6 +155,15 @@ When running the simulator via Docker, webhook URLs configured as `localhost` or
   - `subscription.updated` (Subscription updated)
   - `subscription.canceled` (Subscription canceled)
 
+### Pague.dev
+- **Payment Events:**
+  - `payment_completed` (Payment was confirmed successfully)
+- **Refund Events:**
+  - `refund_completed` (Refund was processed)
+- **Withdrawal Events:**
+  - `withdrawal_completed` (Withdrawal was processed successfully)
+  - `withdrawal_failed` (Withdrawal was rejected or failed)
+
 ## Project Structure
 
 ```

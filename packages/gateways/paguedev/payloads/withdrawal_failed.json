@@ -1,0 +1,16 @@
+{
+  "event": "withdrawal_failed",
+  "eventId": "b84f12c3-9a21-4e67-bc88-1d45f6789abc",
+  "timestamp": "2026-01-11T19:15:42.123Z",
+  "data": {
+    "withdrawalId": "b84f12c3-9a21-4e67-bc88-1d45f6789abc",
+    "environment": "sandbox",
+    "amount": 1000.00,
+    "feeAmount": 5.00,
+    "netAmount": 995.00,
+    "currency": "BRL",
+    "status": "failed",
+    "failedAt": "2026-01-11T19:15:42.100Z",
+    "failureReason": "insufficient_funds"
+  }
+}

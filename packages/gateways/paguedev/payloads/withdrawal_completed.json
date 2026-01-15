@@ -1,0 +1,15 @@
+{
+  "event": "withdrawal_completed",
+  "eventId": "e73775b5-70ee-4bad-be4c-4acff9890e27",
+  "timestamp": "2026-01-11T19:08:21.953Z",
+  "data": {
+    "withdrawalId": "e73775b5-70ee-4bad-be4c-4acff9890e27",
+    "environment": "sandbox",
+    "amount": 500.00,
+    "feeAmount": 2.50,
+    "netAmount": 497.50,
+    "currency": "BRL",
+    "status": "completed",
+    "completedAt": "2026-01-11T19:08:21.939Z"
+  }
+}

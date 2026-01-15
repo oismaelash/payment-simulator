@@ -25,6 +25,7 @@ const GATEWAY_DOCUMENTATION_URLS: Record<string, string> = {
   asaas: "https://docs.asaas.com/webhooks",
   mercadopago: "https://www.mercadopago.com.br/developers/pt/docs/checkout-pro/payment-notifications",
   pagarme: "https://docs.pagar.me/docs/webhooks",
+  paguedev: "https://docs.pague.dev",
 };
 
 export default function EventSimulator() {

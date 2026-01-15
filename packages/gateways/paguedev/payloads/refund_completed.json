@@ -1,0 +1,16 @@
+{
+  "event": "refund_completed",
+  "eventId": "c92d45e6-8b33-4f12-a789-2e56f8901def",
+  "timestamp": "2026-01-11T19:22:15.456Z",
+  "data": {
+    "refundTransactionId": "c92d45e6-8b33-4f12-a789-2e56f8901def",
+    "originalTransactionId": "a0b78f10-c7f4-4f5d-98dd-3e36eafeb812",
+    "environment": "sandbox",
+    "amount": 50.00,
+    "feeAmount": 0.25,
+    "netAmount": 49.75,
+    "currency": "BRL",
+    "status": "completed",
+    "completedAt": "2026-01-11T19:22:15.400Z"
+  }
+}
