@@ -222,6 +222,127 @@
     "title": "404",
     "message": "Ops! Página não encontrada",
     "returnHome": "Voltar para Home"
+  },
+  "paguedev": {
+    "hero": {
+      "title": "Pague.dev",
+      "titleHighlight": "Gateway de Pagamento Brasileiro",
+      "subtitle": "Gateway de pagamento focado no mercado brasileiro, com suporte completo para PIX, processamento de saques e estornos. Teste todos os eventos localmente com o Payment Simulator.",
+      "featureBRL": "Moeda BRL",
+      "featurePIX": "Suporte PIX",
+      "featureWithdrawals": "Saques",
+      "featureRefunds": "Estornos"
+    },
+    "install": {
+      "sectionLabel": "// INSTALAÇÃO",
+      "title": "Instale e comece em segundos",
+      "subtitle": "O Payment Simulator pode ser instalado com um único comando. Não é necessário cadastro ou configuração complexa.",
+      "terminal": "terminal",
+      "copy": "Copiar",
+      "copied": "Copiado!",
+      "installing": "Baixando e configurando o Payment Simulator...",
+      "starting": "Iniciando Payment Simulator v1.0.1",
+      "dashboard": "Painel disponível em:",
+      "requirements": {
+        "title": "Requisitos",
+        "docker": "Docker instalado e em execução",
+        "curl": "cURL disponível no sistema"
+      },
+      "alternative": {
+        "title": "Método alternativo (desenvolvimento)",
+        "description": "Para desenvolver localmente a partir do código-fonte:"
+      }
+    },
+    "about": {
+      "sectionLabel": "// SOBRE O GATEWAY",
+      "title": "Gateway focado no mercado brasileiro",
+      "subtitle": "Pague.dev é uma solução de pagamento desenvolvida para atender as necessidades específicas do mercado brasileiro, com suporte nativo para métodos de pagamento locais e operações financeiras comuns.",
+      "features": {
+        "brazilian": {
+          "title": "Mercado Brasileiro",
+          "description": "Desenvolvido especificamente para o mercado brasileiro, com suporte nativo para a moeda BRL"
+        },
+        "pix": {
+          "title": "PIX",
+          "description": "Suporte completo para pagamentos via PIX, o método de pagamento instantâneo do Brasil"
+        },
+        "withdrawals": {
+          "title": "Processamento de Saques",
+          "description": "Gerencie saques com sucesso e falhas, incluindo diferentes cenários de processamento"
+        },
+        "refunds": {
+          "title": "Sistema de Estornos",
+          "description": "Processe estornos completos com rastreamento de transações originais"
+        }
+      }
+    },
+    "events": {
+      "sectionLabel": "// EVENTOS SUPORTADOS",
+      "title": "Eventos disponíveis",
+      "subtitle": "O simulador suporta todos os eventos principais do Pague.dev para testar diferentes cenários de pagamento.",
+      "paymentCompleted": {
+        "title": "Pagamento Concluído",
+        "description": "Evento disparado quando um pagamento é confirmado com sucesso. Inclui informações sobre o valor, taxas, método de pagamento e referência externa."
+      },
+      "refundCompleted": {
+        "title": "Estorno Concluído",
+        "description": "Notificação quando um estorno é processado com sucesso. Contém referência à transação original e valores processados."
+      },
+      "withdrawalCompleted": {
+        "title": "Saque Concluído",
+        "description": "Evento enviado quando um saque é processado com sucesso. Inclui informações sobre valores, taxas e data de conclusão."
+      },
+      "withdrawalFailed": {
+        "title": "Saque Falhou",
+        "description": "Notificação quando um saque falha ou é rejeitado. Contém o motivo da falha para facilitar o tratamento de erros."
+      }
+    },
+    "payloads": {
+      "sectionLabel": "// EXEMPLOS DE PAYLOADS",
+      "title": "Payloads realistas",
+      "subtitle": "Visualize exemplos de payloads JSON para cada tipo de evento. Copie e use nos seus testes.",
+      "paymentCompleted": {
+        "title": "Pagamento"
+      },
+      "refundCompleted": {
+        "title": "Estorno"
+      },
+      "withdrawalCompleted": {
+        "title": "Saque OK"
+      },
+      "withdrawalFailed": {
+        "title": "Saque Falhou"
+      },
+      "copy": "Copiar",
+      "copied": "Copiado!"
+    },
+    "howToUse": {
+      "sectionLabel": "// COMO USAR",
+      "title": "Como simular eventos do Pague.dev",
+      "subtitle": "Em poucos passos, você pode começar a testar webhooks do Pague.dev localmente.",
+      "steps": {
+        "selectGateway": {
+          "number": "01",
+          "title": "Selecione o gateway",
+          "description": "No Payment Simulator, escolha 'Pague.dev' na lista de gateways suportados."
+        },
+        "configureWebhook": {
+          "number": "02",
+          "title": "Configure o webhook",
+          "description": "Defina a URL do seu endpoint local e adicione headers personalizados se necessário."
+        },
+        "selectEvent": {
+          "number": "03",
+          "title": "Escolha o evento",
+          "description": "Selecione um dos eventos disponíveis: payment_completed, refund_completed, withdrawal_completed ou withdrawal_failed."
+        },
+        "test": {
+          "number": "04",
+          "title": "Teste e valide",
+          "description": "Dispara o webhook e valide o recebimento no seu endpoint. Edite o payload se necessário antes de enviar."
+        }
+      }
+    }
   }
 }
 

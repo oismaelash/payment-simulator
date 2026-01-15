@@ -222,6 +222,127 @@
     "title": "404",
     "message": "Oops! Page not found",
     "returnHome": "Return to Home"
+  },
+  "paguedev": {
+    "hero": {
+      "title": "Pague.dev",
+      "titleHighlight": "Brazilian Payment Gateway",
+      "subtitle": "Payment gateway focused on the Brazilian market, with full support for PIX, withdrawal processing, and refunds. Test all events locally with Payment Simulator.",
+      "featureBRL": "BRL Currency",
+      "featurePIX": "PIX Support",
+      "featureWithdrawals": "Withdrawals",
+      "featureRefunds": "Refunds"
+    },
+    "install": {
+      "sectionLabel": "// INSTALLATION",
+      "title": "Install and start in seconds",
+      "subtitle": "Payment Simulator can be installed with a single command. No signup or complex configuration required.",
+      "terminal": "terminal",
+      "copy": "Copy",
+      "copied": "Copied!",
+      "installing": "Downloading and setting up Payment Simulator...",
+      "starting": "Starting Payment Simulator v1.0.1",
+      "dashboard": "Dashboard available at:",
+      "requirements": {
+        "title": "Requirements",
+        "docker": "Docker installed and running",
+        "curl": "cURL available on your system"
+      },
+      "alternative": {
+        "title": "Alternative method (development)",
+        "description": "To develop locally from source code:"
+      }
+    },
+    "about": {
+      "sectionLabel": "// ABOUT THE GATEWAY",
+      "title": "Gateway focused on the Brazilian market",
+      "subtitle": "Pague.dev is a payment solution developed to meet the specific needs of the Brazilian market, with native support for local payment methods and common financial operations.",
+      "features": {
+        "brazilian": {
+          "title": "Brazilian Market",
+          "description": "Developed specifically for the Brazilian market, with native support for BRL currency"
+        },
+        "pix": {
+          "title": "PIX",
+          "description": "Full support for PIX payments, Brazil's instant payment method"
+        },
+        "withdrawals": {
+          "title": "Withdrawal Processing",
+          "description": "Manage withdrawals with success and failure scenarios, including different processing cases"
+        },
+        "refunds": {
+          "title": "Refund System",
+          "description": "Process complete refunds with tracking of original transactions"
+        }
+      }
+    },
+    "events": {
+      "sectionLabel": "// SUPPORTED EVENTS",
+      "title": "Available events",
+      "subtitle": "The simulator supports all main Pague.dev events to test different payment scenarios.",
+      "paymentCompleted": {
+        "title": "Payment Completed",
+        "description": "Event triggered when a payment is successfully confirmed. Includes information about amount, fees, payment method, and external reference."
+      },
+      "refundCompleted": {
+        "title": "Refund Completed",
+        "description": "Notification when a refund is successfully processed. Contains reference to the original transaction and processed amounts."
+      },
+      "withdrawalCompleted": {
+        "title": "Withdrawal Completed",
+        "description": "Event sent when a withdrawal is successfully processed. Includes information about amounts, fees, and completion date."
+      },
+      "withdrawalFailed": {
+        "title": "Withdrawal Failed",
+        "description": "Notification when a withdrawal fails or is rejected. Contains the failure reason to facilitate error handling."
+      }
+    },
+    "payloads": {
+      "sectionLabel": "// PAYLOAD EXAMPLES",
+      "title": "Realistic payloads",
+      "subtitle": "View JSON payload examples for each event type. Copy and use in your tests.",
+      "paymentCompleted": {
+        "title": "Payment"
+      },
+      "refundCompleted": {
+        "title": "Refund"
+      },
+      "withdrawalCompleted": {
+        "title": "Withdrawal"
+      },
+      "withdrawalFailed": {
+        "title": "Failed"
+      },
+      "copy": "Copy",
+      "copied": "Copied!"
+    },
+    "howToUse": {
+      "sectionLabel": "// HOW TO USE",
+      "title": "How to simulate Pague.dev events",
+      "subtitle": "In just a few steps, you can start testing Pague.dev webhooks locally.",
+      "steps": {
+        "selectGateway": {
+          "number": "01",
+          "title": "Select the gateway",
+          "description": "In Payment Simulator, choose 'Pague.dev' from the list of supported gateways."
+        },
+        "configureWebhook": {
+          "number": "02",
+          "title": "Configure webhook",
+          "description": "Set your local endpoint URL and add custom headers if needed."
+        },
+        "selectEvent": {
+          "number": "03",
+          "title": "Choose the event",
+          "description": "Select one of the available events: payment_completed, refund_completed, withdrawal_completed, or withdrawal_failed."
+        },
+        "test": {
+          "number": "04",
+          "title": "Test and validate",
+          "description": "Trigger the webhook and validate receipt at your endpoint. Edit the payload if needed before sending."
+        }
+      }
+    }
   }
 }
 
