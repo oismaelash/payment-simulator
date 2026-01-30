@@ -8,6 +8,7 @@ version: '3.8'
 services:
   ui:
     image: ghcr.io/oismaelash/payment-simulator-ui:latest
+    platform: linux/amd64
     container_name: payment-simulator-ui
     ports:
       - "${UI_PORT:-4001}:${UI_PORT:-4001}"
