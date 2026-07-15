@@ -1,0 +1,24 @@
+# Multi-stage build for the landing-page (Vite React SPA) served by nginx.
+# Build context = repo root:
+#   docker build -f deploy/vps/Dockerfile.landing -t payment-simulator-landing:latest .
+FROM node:24-alpine AS build
+WORKDIR /build
+
+# theme is referenced by landing-page/package.json as file:../packages/theme
+COPY packages/theme ./packages/theme
+
+# install deps first (better layer cache)
+COPY landing-page/package.json landing-page/package-lock.json ./landing-page/
+WORKDIR /build/landing-page
+RUN npm ci
+
+# copy source and build (vite -> dist/)
+COPY landing-page ./
+RUN npm run build
+
+# Production stage: static files via nginx
+FROM nginx:alpine AS serve
+RUN rm -f /etc/nginx/conf.d/default.conf
+COPY deploy/vps/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /build/landing-page/dist /usr/share/nginx/html
+EXPOSE 80

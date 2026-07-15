@@ -1,0 +1,77 @@
+# Production deployment for contabo-vps-iaxp (Traefik reverse proxy on the
+# external `traefik-public` network, automatic Let's Encrypt via the `le` resolver).
+#
+# Usage (from repo root, with the traefik-public network already present):
+#   docker compose -f deploy/vps/docker-compose.yml up -d --build
+#
+# Hosts:
+#   app.paymentsimulator.com   -> ui  (Next.js simulator)
+#   paymentsimulator.com       -> landing (Vite SPA via nginx, also serves /install)
+#   www.paymentsimulator.com   -> 301 redirect to the apex
+services:
+  ui:
+    image: ghcr.io/oismaelash/payment-simulator-ui:latest
+    container_name: payment-simulator-ui
+    environment:
+      - NODE_ENV=production
+      - SQLITE_PATH=/data/payment-simulator.sqlite
+      - PORT=4001
+    volumes:
+      - payment_simulator_data:/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "sh", "-c", "node -e \"require('http').get('http://localhost:' + (process.env.PORT || 4001) + '/api/meta', (r) => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))\""]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - traefik-public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-public"
+      - "traefik.http.routers.paysim.rule=Host(`app.paymentsimulator.com`)"
+      - "traefik.http.routers.paysim.entrypoints=websecure"
+      - "traefik.http.routers.paysim.tls=true"
+      - "traefik.http.routers.paysim.tls.certresolver=le"
+      - "traefik.http.services.paysim.loadbalancer.server.port=4001"
+
+  landing:
+    build:
+      context: ../..
+      dockerfile: deploy/vps/Dockerfile.landing
+    image: payment-simulator-landing:latest
+    container_name: payment-simulator-landing
+    restart: unless-stopped
+    networks:
+      - traefik-public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-public"
+      # apex -> landing
+      - "traefik.http.routers.paysim-landing.rule=Host(`paymentsimulator.com`)"
+      - "traefik.http.routers.paysim-landing.entrypoints=websecure"
+      - "traefik.http.routers.paysim-landing.priority=100"
+      - "traefik.http.routers.paysim-landing.tls=true"
+      - "traefik.http.routers.paysim-landing.tls.certresolver=le"
+      - "traefik.http.services.paysim-landing.loadbalancer.server.port=80"
+      # www -> 301 apex
+      - "traefik.http.routers.paysim-www.rule=Host(`www.paymentsimulator.com`)"
+      - "traefik.http.routers.paysim-www.entrypoints=websecure"
+      - "traefik.http.routers.paysim-www.priority=100"
+      - "traefik.http.routers.paysim-www.tls=true"
+      - "traefik.http.routers.paysim-www.tls.certresolver=le"
+      - "traefik.http.routers.paysim-www.middlewares=paysim-www-redirect"
+      - "traefik.http.middlewares.paysim-www-redirect.redirectregex.regex=^https?://www\\.paymentsimulator\\.com/(.*)"
+      - "traefik.http.middlewares.paysim-www-redirect.redirectregex.replacement=https://paymentsimulator.com/$${1}"
+      - "traefik.http.middlewares.paysim-www-redirect.redirectregex.permanent=true"
+
+volumes:
+  payment_simulator_data:
+    driver: local
+
+networks:
+  traefik-public:
+    external: true
