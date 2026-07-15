@@ -11,6 +11,19 @@ import { GITHUB_URL, YOUTUBE_EMBED_URL, SIMULATOR_URL } from "@/config/env";
 const HeroSection = () => {
   const { t } = useTranslation();
   const [isDemoOpen, setIsDemoOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const INSTALL_CMD = "curl -fsSL https://paymentsimulator.com/install | bash";
+
+  const handleCopyInstall = async () => {
+    try {
+      await navigator.clipboard.writeText(INSTALL_CMD);
+    } catch {
+      /* clipboard blocked — ignore */
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -44,13 +57,17 @@ const HeroSection = () => {
             <Terminal className="w-5 h-5" />
             Run locally in minutes
           </Button> */}
+          <Button variant="hero" size="xl" onClick={handleCopyInstall}>
+            <Terminal className="w-5 h-5" />
+            {copied ? t("hero.installCopied") : t("hero.installLocally")}
+          </Button>
           <Button
-            variant="hero"
+            variant="hero-outline"
             size="xl"
             onClick={() => window.open(SIMULATOR_URL, "_blank", "noopener,noreferrer")}
           >
             <ExternalLink className="w-5 h-5" />
-            {t("hero.openSimulator")}
+            {t("hero.liveDemo")}
           </Button>
           <Button variant="hero-outline" size="xl" onClick={() => setIsDemoOpen(true)}>
             <Play className="w-5 h-5" />

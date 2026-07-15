@@ -10,12 +10,19 @@
 #   www.paymentsimulator.com   -> 301 redirect to the apex
 services:
   ui:
-    image: ghcr.io/oismaelash/payment-simulator-ui:latest
+    # Built from source so the DEMO_MODE banner (packages/ui) is included.
+    # Normal end users run the standalone GHCR image (landing-page/public/docker-compose.yml).
+    build:
+      context: ../..
+      dockerfile: Dockerfile.ui
+    image: payment-simulator-ui:latest
     container_name: payment-simulator-ui
     environment:
       - NODE_ENV=production
       - SQLITE_PATH=/data/payment-simulator.sqlite
       - PORT=4001
+      # Shows a "demo instance" banner on the hosted app. Off for local/self-host.
+      - DEMO_MODE=${DEMO_MODE:-false}
     volumes:
       - payment_simulator_data:/data
     extra_hosts:

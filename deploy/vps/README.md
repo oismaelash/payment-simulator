@@ -20,8 +20,15 @@ From the repo root, with the `traefik-public` network already present:
 docker compose -f deploy/vps/docker-compose.yml up -d --build
 ```
 
-- `ui` pulls the prebuilt image from GHCR.
+- `ui` is built from source (`Dockerfile.ui`) so the demo banner is included.
 - `landing` is built from source via `Dockerfile.landing` (context = repo root).
+
+Set `DEMO_MODE=true` to show a "demo instance — run locally to reach your own
+localhost" banner on the hosted `ui` (default off for local/self-host):
+
+```bash
+DEMO_MODE=true docker compose -f deploy/vps/docker-compose.yml up -d --build
+```
 
 ## DNS / TLS
 
