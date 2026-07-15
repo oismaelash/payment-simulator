@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { GITHUB_URL } from "@/config/env";
+import { GITHUB_URL, SIMULATOR_URL } from "@/config/env";
 
 const Navbar = () => {
   const { t, i18n: i18nInstance } = useTranslation();
@@ -44,11 +44,8 @@ const Navbar = () => {
     i18nInstance.changeLanguage(lng);
   };
 
-  const scrollToHero = () => {
-    const heroSection = document.getElementById("hero");
-    if (heroSection) {
-      heroSection.scrollIntoView({ behavior: "smooth" });
-    }
+  const openSimulator = () => {
+    window.open(SIMULATOR_URL, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -116,7 +113,7 @@ const Navbar = () => {
               <Github className="w-4 h-4" />
               <span className="ml-2">{t("nav.star")}</span>
             </Button> */}
-            <Button size="sm" className="hidden sm:inline-flex" onClick={scrollToHero}>
+            <Button size="sm" className="hidden sm:inline-flex" onClick={openSimulator}>
               {t("nav.getStarted")}
             </Button>
             
@@ -180,7 +177,7 @@ const Navbar = () => {
                   <Github className="w-4 h-4 mr-2" />
                   {t("nav.star")}
                 </Button>
-                <Button size="sm" className="flex-1" onClick={scrollToHero}>
+                <Button size="sm" className="flex-1" onClick={openSimulator}>
                   {t("nav.getStarted")}
                 </Button>
               </div>

@@ -13,6 +13,7 @@
     "title": "Simulate payment gateways",
     "titleHighlight": "locally.",
     "subtitle": "Test webhooks, edge cases, and failures before production. No signup. No API keys. Just run it locally.",
+    "openSimulator": "Open Simulator",
     "demo": "Demo",
     "viewOnGitHub": "View on GitHub",
     "terminal": "terminal",

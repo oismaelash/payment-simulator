@@ -8,6 +8,9 @@
  */
 
 export const GITHUB_URL = import.meta.env.VITE_GITHUB_URL || "https://github.com/oismaelash/payment-simulator";
+
+// Live hosted simulator (the actual app). Override with VITE_SIMULATOR_URL.
+export const SIMULATOR_URL = import.meta.env.VITE_SIMULATOR_URL || "https://app.paymentsimulator.com";
 export const YOUTUBE_VIDEO_ID = import.meta.env.VITE_YOUTUBE_VIDEO_ID || "AfZSg9Lpjww";
 
 // Construct YouTube embed URL from video ID

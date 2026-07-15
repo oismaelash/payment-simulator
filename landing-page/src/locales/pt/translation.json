@@ -13,6 +13,7 @@
     "title": "Simule gateways de pagamento",
     "titleHighlight": "localmente.",
     "subtitle": "Teste webhooks, casos extremos e falhas antes da produção. Sem cadastro. Sem chaves de API. Apenas execute localmente.",
+    "openSimulator": "Abrir Simulador",
     "demo": "Demonstração",
     "viewOnGitHub": "Ver no GitHub",
     "terminal": "terminal",

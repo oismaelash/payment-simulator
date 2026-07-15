@@ -1,4 +1,4 @@
-import { Terminal, Github, Zap, ArrowRight, Play } from "lucide-react";
+import { Terminal, Github, Zap, ArrowRight, Play, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -6,7 +6,7 @@ import {
   Dialog,
   DialogContent,
 } from "@/components/ui/dialog";
-import { GITHUB_URL, YOUTUBE_EMBED_URL } from "@/config/env";
+import { GITHUB_URL, YOUTUBE_EMBED_URL, SIMULATOR_URL } from "@/config/env";
 
 const HeroSection = () => {
   const { t } = useTranslation();
@@ -44,7 +44,15 @@ const HeroSection = () => {
             <Terminal className="w-5 h-5" />
             Run locally in minutes
           </Button> */}
-          <Button variant="hero" size="xl" onClick={() => setIsDemoOpen(true)}>
+          <Button
+            variant="hero"
+            size="xl"
+            onClick={() => window.open(SIMULATOR_URL, "_blank", "noopener,noreferrer")}
+          >
+            <ExternalLink className="w-5 h-5" />
+            {t("hero.openSimulator")}
+          </Button>
+          <Button variant="hero-outline" size="xl" onClick={() => setIsDemoOpen(true)}>
             <Play className="w-5 h-5" />
             {t("hero.demo")}
           </Button>
