@@ -4,6 +4,8 @@ const path = require("path");
 const nextConfig = {
   reactStrictMode: true,
   output: "standalone",
+  // Desativa o otimizador /_next/image (superfície de DoS/SSRF).
+  images: { unoptimized: true },
   transpilePackages: [
     "@payment-simulator/core",
     "@payment-simulator/gateway-stripe",
